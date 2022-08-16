@@ -135,7 +135,7 @@ class PayPalPayment {
 		return $server_output;
 	}
 
-	//peut etre a supprimer
+
 	/**
 	 * Exécute un paiement via l'API PayPal et renvoie la réponse de PayPal
 	 */

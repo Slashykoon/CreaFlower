@@ -269,15 +269,13 @@ var values_opt=[];
 $( document ).ready(function() {
     values_opt = $("select[name='specif_choice']").map(function(){return $(this).val();}).get(); //for ajax updt
 
-    //console.log(values_opt);
 });
 
 //Calcul des changements d'options
 document.querySelectorAll('[id=id_specif_choice],[id=input_qte]').forEach(item => {
   item.addEventListener('change', event => {
         values_opt = $("select[name='specif_choice']").map(function(){return $(this).val();}).get(); //JQUERY A VIRER par javascript pur
-        console.log(values_opt);
-        //var opt_choisie=item.options[event.target.selectedIndex].text;
+
         var total_add = 0.0;
         var qte = 1;
         var constText = "AJOUTER AU PANIER - ";
@@ -368,7 +366,7 @@ function showSlides(n) {
     let i;
     let slides = document.getElementsByClassName("carousel-img-slide");
     let dots = document.getElementsByClassName("thumb");
-    //let captionText = document.getElementById("caption");
+
     if (n > slides.length) {
         slideIndex = 1
     }

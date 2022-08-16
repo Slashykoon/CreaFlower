@@ -8,9 +8,7 @@ require_once "config/Produit_Panier.php";
 
 require_once "PayPalPayment.php";
 
-//require_once 'logger.php';
-//$logger = Logger::get_logger();
-//$logger = Logger::get_logger('/var/www/html/my_project');
+
 
 $users = new Users();
 $produits = new Produits();
@@ -19,7 +17,6 @@ $specifications = new Specifications();
 $paiements = new Paiements();
 $produit_panier = new Produit_Panier();
 
-$logger->log("++PAYPAL_EXECUTE_PAYMENT++");
 
 $success = 0;
 $msg = "Une erreur est survenue, merci de bien vouloir réessayer ultérieurement...";
@@ -37,7 +34,7 @@ if (!empty($_POST['paymentID']) AND !empty($_POST['payerID'])) {
    $payment = $paiements->find($paymentID);
  
    if ($payment) {
-      //$logger->log("Payement trouve en BDD");
+
       $paypal_response = $payer->executePayment($paymentID, $payerID);
       $paypal_response = json_decode($paypal_response);
  
@@ -45,7 +42,7 @@ if (!empty($_POST['paymentID']) AND !empty($_POST['payerID'])) {
 
       if ($paypal_response->state == "approved") {
          $success = 1;
-         //clear le panier TODO
+         //clear le panier TODO remplacer par sauvegarde et renouvellement d'un id de panier pour la sessions courante
          //$ret_supp=$produit_panier->DeleteAllFromPanier($ref);
          $msg = "";
       } else {

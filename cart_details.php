@@ -60,7 +60,7 @@ if(empty($row_session)){
 
 //récupération des produits du panier + quantité
 $rows_produits_panier = $produit_panier->findAllProduct_With_PanierID($row_session["fk_panier"]);
-$nb_panier=0;
+$nb_panier = 0;
 
 if($rows_produits_panier){
     foreach($rows_produits_panier as $prod_panier){
@@ -75,8 +75,6 @@ if($nb_panier<=0){
 else{
     echo "<input id='DisablePaypalBtn' name='DisablePaypalBtn' type='hidden' value='0'>";
 }
-
-
 
 
 ?>

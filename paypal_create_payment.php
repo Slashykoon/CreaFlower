@@ -10,9 +10,6 @@ require_once "config/Sessions.php";
 
 require_once "PayPalPayment.php";
 
-require_once 'logger.php';
-$logger = Logger::get_logger();
-
 
 $users = new Users();
 $produits = new Produits();
@@ -28,7 +25,6 @@ $paiements = new Paiements();
 $success = 0;
 $msg = "Une erreur est survenue, merci de bien vouloir réessayer ultérieurement...!";
 $paypal_response = [];
-//$testref="8ekl6a8kpk706pmpi00b8hm0vj";
 
 // On vérifie la présence de la référence du produit en paramètre d'URL ($_GET)
 $arr_items = array();
@@ -71,8 +67,6 @@ if (!empty($_GET['ref'])) {
          }
       }   
    }
-
-   //$logger->log($sous_total);
 
    // On vérifie que le produit existe bien (<=> qu'il a été trouvé dans la base de données)
    if ($bresult) {
@@ -124,9 +118,6 @@ if (!empty($_GET['ref'])) {
 
          if ($ret_id_paiement>0) {
             $success = 1;
-            //clear le panier
-            //$ret_supp=$produit_panier->DeleteAllFromPanier($ref);
-            //error_log( print_r($ref, TRUE) );
             $msg = "";
          }
 

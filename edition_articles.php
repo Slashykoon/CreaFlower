@@ -268,7 +268,6 @@ function AddSection_SpecificationOptions(){
     dict_Init["prix"] = new Array();
 
     nb_specif_added++;
-    //alert(JSON.stringify(dict_objsp_dict_arropt));
 
     name_opt = "name_opt_";
     prixadd_opt = "prixadd_opt_";
@@ -371,13 +370,8 @@ function ActionOnProduct(selVar, cde_action) {
         dataType: 'json',
         data: formData,
         success: function(data, textStatus, jqXHR) {
-            //alert(data.ret);
             $('#exampleModalBody').text(data.ret);
             $('#exampleModalCenter').modal('show')
-            //$('#status').text(data.message);
-            //if (data.code) //Si mail envoyé alors reset
-            //$('#contact-form').closest('form').find("input[type=text], textarea").val("");
-            //$('#SuccessMessage').removeClass("d-none");;
         },
         error: function(jqXHR, textStatus, errorThrown) {
             alert(textStatus);

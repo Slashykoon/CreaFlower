@@ -34,7 +34,6 @@ $text_retour="Un problème est servenu !";
 //recupere les variables post
 $Reference = $_POST['ref'];
 $qte = $_POST['qte'];
-//error_log(print_r($_POST['arr_opt'], TRUE));
 $arr_opts = $_POST['arr_opt'];
 
 //cherche le produit associé à la ref
@@ -43,9 +42,7 @@ $row_produit = $produits->find($Reference);
 if(!empty($row_produit))
 {
   $row_prod_exist = $produit_panier->findOne_With_ProduitID($row_produit["pk_pr"]);
-  
-  //error_log( print_r($row_produit["pk_pr"], TRUE) );
-  //error_log( print_r($row_prod_exist, TRUE) );
+
   if(!empty($row_prod_exist)){
     //update
     $ret_insert_prod_panier = $produit_panier->edit($row_produit["pk_pr"], $row_session["fk_panier"] , $qte);
@@ -55,7 +52,7 @@ if(!empty($row_produit))
   else {
     //add produit dans panier
     $ret_insert_prod_panier = $produit_panier->add($row_produit["pk_pr"], $row_session["fk_panier"], $qte);
-    //error_log( print_r(gettype($arr_opts), TRUE) );
+
     if(gettype($arr_opts)!= "string") // si il y a une specification alors array sinon string (défini dans requete ajax)
     {
       foreach ($arr_opts as $fk_opt)

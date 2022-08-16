@@ -27,14 +27,14 @@ class Rubriques extends Database
     }*/
 
     // Sélectionner un élément par sa ref
-    public function findAllProduct_With_Rubrique($panier_id)
+    public function findAllProduct_With_Rubrique($pk_rubrique)
     {
-        if ($panier_id) {     
+        if ($pk_rubrique) {     
 
-            return $this->db->prepare("SELECT pk_produit_panier, fk_produit, fk_panier, quantity
+            return $this->db->prepare("SELECT pk_rubrique,fk_produit,nom_description
                                         FROM $this->table
-                                        WHERE fk_panier = :fk_panier",
-                                        array("fk_panier" => $panier_id));
+                                        WHERE fk_produit = :pk_rubrique",
+                                        array("pk_rubrique" => $pk_rubrique));
         }
     }
 

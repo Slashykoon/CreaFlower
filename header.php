@@ -1,11 +1,6 @@
 <!DOCTYPE html>
 
 
-
-<script>
-</script>
-
-
 <!-- Header de navigation -->
 <header style="position:relative;display:flex;flex-direction:column;">
 
@@ -41,6 +36,7 @@
 
 
     <div class="container-collection-navigation">
+
         <a class="h2 collection-navigation-rubrique">
             <h2>Rubrique 1</h2>
         </a>

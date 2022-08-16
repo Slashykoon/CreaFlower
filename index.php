@@ -21,6 +21,7 @@
     require_once "config/Produits.php";
     require_once "config/Options.php";
     require_once "config/Specifications.php";
+    require_once "config/Rubriques.php";
     require_once "config/Paiements.php";
     require_once "config/Paniers.php";
     require_once "config/Produit_Panier.php";
@@ -34,9 +35,10 @@
     $paiements = new Paiements();
     $paniers = new Paniers();
     $produit_panier = new Produit_Panier();
+    $rubriques = new Rubriques();
     $sessions = new Sessions();
 
-    $rows_produits = $produits->findAll(); //utile pour afficher la gallerie
+
 
 ?>
 
@@ -63,6 +65,16 @@ $_SESSION['nb_articles_panier']=$nb_panier;
 
 
 
+$rows_produits = $produits->findAll(); //utile pour afficher la gallerie
+/*if(isset($_GET['rubrique']))
+{
+    $rows_produits_rubrique = $rubriques->findAllProduct_With_Rubrique($_GET['rubrique']);
+    //die('Erreur 404 : Données introuvables');
+}
+else{
+    header('HTTP/1.0 404 Not Found');
+    die;
+}*/
 ?>
 
 
