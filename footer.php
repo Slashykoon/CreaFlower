@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 <!-- Footer -->
-<footer class="text-center" style="margin-top:25px;">
+<footer class="text-center" style="">
     <a href="" class="" style="margin:20px;">
         <i class="fab fa-facebook-f fa-2xl"></i>
     </a>
