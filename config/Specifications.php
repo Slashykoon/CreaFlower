@@ -26,6 +26,18 @@ class Specifications extends Database
         }
     }
 
+   // Sélectionner une specification par sa pk
+   public function find($pk_sp = "")
+   {
+       if ($pk_sp) {     
+           return $this->db->row("SELECT pk_sp,fk_pr,nom_specification
+                                   FROM $this->table
+                                   WHERE pk_sp = :pk_sp
+                                   LIMIT 1",
+                                   array("pk_sp" => $pk_sp));
+       }
+   }
+
     // Ajouter un élément
     public function add($_idprod = "", $_nom = "")
     {

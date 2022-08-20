@@ -143,14 +143,14 @@ echo "<input id='ProdPrice' name='ProdPrice' type='hidden' value='".$row_produit
                         foreach ($rows_specifications as $specification)
                         {
                             $i=0;
-                            echo "<div style='display:flex;padding-bottom:15px'>";
-                                echo "<div style='flex-grow: 1;'>";
+                            echo "<div style='display:flex;padding-bottom:15px;'>";
+                                echo "<div style='flex: 1;padding: .2em 0.8em .2em 0;'>";
                                     echo "<p>";
                                     print_r($specification["nom_specification"]);
                                     echo "</p>";
                                 echo "</div>";
                                 
-                                echo "<select id='id_specif_choice' name='specif_choice' style='flex-grow: 2;'>"; //onchange='SelectOnChange(this.value)'
+                                echo "<select id='id_specif_choice' name='specif_choice' style='flex: 2;'>"; //onchange='SelectOnChange(this.value)'
                                     $rows_options = $options->findAllOptionsOfSpecification($specification['pk_sp']);
                                     foreach ($rows_options as $specif_options)
                                     {
@@ -222,7 +222,7 @@ echo "<input id='ProdPrice' name='ProdPrice' type='hidden' value='".$row_produit
                         </ul>
                         </p>
 
-                        <p> Sur Flowrette, nous vous proposons de livrer votre commande à la date de votre choix. Vous
+                        <p> Sur Crea'Flower, nous vous proposons de livrer votre commande à la date de votre choix pour un evenement particuliers. Vous
                             pouvez sélectionner le jour souhaité directement sur la page panier.
                         <ul class="fa-ul">
                             <li><span class="fa-li"><i class="fa-solid fa-business-time"></i></span>

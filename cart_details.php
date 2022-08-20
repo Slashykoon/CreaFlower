@@ -26,6 +26,8 @@
 
     <!-- Importation de la SDK JavaScript PayPal -->
     <script src="https://www.paypalobjects.com/api/checkout.js"></script>
+    <!-- Importation widget Relais colis -->
+    <!--<script type="text/javascript" src="https://service.relaiscolis.com/WidgetRC/scripts/widget.builder.js"></script>-->
 </head>
 
 <?php
@@ -69,7 +71,7 @@ if($rows_produits_panier){
 }
 $_SESSION['nb_articles_panier']=$nb_panier;
     echo "<input id='CartId' name='CartId' type='hidden' value='".$row_session["fk_panier"]."'>";
-if($nb_panier<=0){
+if($nb_panier <= 0){
     echo "<input id='DisablePaypalBtn' name='DisablePaypalBtn' type='hidden' value='1'>";
 }
 else{
@@ -97,9 +99,11 @@ else{
                 {
                     ?>
                     <div class="cart-product-flex">
-                        <div style="padding-right:25px;">Produit</div>
-                        <div style="padding-right:25px;">Quantité</div>
-                        <div style="padding-right:25px;">Prix</div>
+               
+                        <div style="flex:3;font-weight: bold;">Produit</div>
+                        <div style="flex:1;font-weight: bold;">Quantité</div>
+                        <div style="flex:1;font-weight: bold;">Prix</div>
+                        
                     </div>
                     <?php
                     $sum_opt_prix_total=0.0;
@@ -119,8 +123,9 @@ else{
                         <div>
                             <img src=<?php echo $firstFile;?> style="height:180px;width:180px;" alt="...">
                         </div>
-                        <div class="cart-product-details-flex">
-                            <p>Nom : <?php echo $produit_iter['nom'];?></p>
+                        <div class="cart-product-details-flex" style="">
+
+                            <p style="font-weight: bold;margin-top:2px; "><?php echo $produit_iter['nom'];?></p>
                             <?php
                             $opt_prix_add_total=0.0;
                             
@@ -131,29 +136,37 @@ else{
                                     foreach ($rows_specifications_panier as $sp_panier)
                                     {
                                         
-                                        $row_opt_panier=$options->TestIfOptionExist($sp_panier["fk_option"]); //=> changer nom testif todo
-                                        $temp_prix_add=(( floatval($row_opt_panier["prix_add"]) > 0.0) ? " : +".strval($row_opt_panier["prix_add"])."€"  : "");
-                                        print_r("<p>".$row_opt_panier["nom_option"].$temp_prix_add."</p>");
-                                        $opt_prix_add_total = ($opt_prix_add_total + floatval(($row_opt_panier["prix_add"]) * floatval(($prod_panier["quantity"]) )));
 
+                                        $row_opt_panier = $options->TestIfOptionExist($sp_panier["fk_option"]); //=> changer nom testif todo
+                                        $row_spec = $specifications->find($row_opt_panier["fk_sp"]); //recuperation du nom de la specification
+                                        print_r("<p style='margin-top:5px;margin-bottom:2px;'>: ".$row_spec["nom_specification"]."</p>");
+                                        $temp_prix_add = (( floatval($row_opt_panier["prix_add"]) > 0.0) ? " (+".strval($row_opt_panier["prix_add"])."€)"  : "");
+                                        print_r("<ul class='fa-ul' style='margin-top:0px;margin-bottom:0px;'>");
+                                        print_r("<li><span class='fa-li'><i class='fas fa-broom fa-sm'></i></span>"); 
+                                        
+                                        print_r("<p style='margin-top:0px;margin-bottom:0px;' >".$row_opt_panier["nom_option"].$temp_prix_add."</p>");
+                                        print_r("</li>");
+                                        print_r("</ul>");
+                                        $opt_prix_add_total = ($opt_prix_add_total + floatval(($row_opt_panier["prix_add"]) * floatval(($prod_panier["quantity"]) )));
+                                        
                                     }
                                     $sum_opt_prix_total=$sum_opt_prix_total+$opt_prix_add_total;
                                     //print_r($sum_opt_prix_total);
                                 }
                             ?>
                         </div>
-                        <div class="" style="  padding-left:20px;padding-right:20px;">
-                            <p>Quantité : <?php echo $prod_panier["quantity"];?></p>
+                        <div class="" style="flex:1">
+                            <p><?php echo $prod_panier["quantity"];?></p>
                         </div>
-                        <div class="" style="  padding-left:20px;padding-right:20px;">
-                            <p>Prix : 
+                        <div class="" style="flex:1">
+                            <p> 
                                 <?php 
                                     $temp_total= floatval(($produit_iter["prix"]) * floatval(($prod_panier["quantity"]))) + $opt_prix_add_total;
                                     echo ($temp_total."€") ;
                                 ?> 
                                 </p>
                         </div>
-                        <div class="" style=" padding-left:20px;padding-right:20px;">
+                        <div class="" style="">
                             <button id="<?php echo $produit_iter["ref"];?>" class="btn_supp_prod" style="background-color:#E8CEBF;	cursor: pointer;user-select: none;border: 1px solid black;">✖</button>
                         </div>
                     </div>
@@ -191,21 +204,44 @@ else{
             ?>
             <div class="cart-product-checkout-details">
 
+                <div id="relais-colis-widget-container">Choisissez votre relais colis :
+
+                </div>
+                <div class="section_relais_select" style="display:none;">
+                    <p class="name_relais"></p>
+                    <p class="address_relais"></p>
+                    <p class="city_relais"></p>
+                </div>
+
                 <div>
-                    <p>Indiquez la date de l'evenement (si c'est le cas) :</p>
-                    <p>Date: <input type="text" id="datepicker_livraison"></p>
+                    <p>Indiquez la date de l'evenement (marriage,baptême,etc..) :</p>
+                    <p><input style="width:100%;height:25px;" type="text" id="datepicker_livraison" onkeydown="event.preventDefault()"></p>
+                </div>
+
+                <form>
+                <ul class="wrapper">
+                    <li class="form-row">
+                    <label for="name">Nom</label>
+                    <input type="text" id="name">
+                    </li>
+                    <li class="form-row">
+                    <label for="townborn">Adresse</label>
+                    <input type="text" id="townborn">
+                    </li>
+                    <li class="form-row">
+                    <label for="email">Email</label>
+                    <input type="email" id="email">
+                    </li>
+                </ul>
+                </form>
+
+                <div class="cart-details-totaux-section">
+                        <p style="margin-top:5px;margin-bottom:5px;">Sous total : <?php echo $sous_total; ?> €</p>  
+                        <p style="margin-top:5px;margin-bottom:5px;">Livraison : <?php echo $livraison; ?> €</p>
+                        <p style="margin-top:5px;margin-bottom:5px;">Total : <?php echo $total; ?> €</p>        
                 </div>
                 <div>
-                    <p>Sous total : <?php echo $sous_total; ?> €</p>
-                </div>
-                <div>
-                    <p>Livraison : <?php echo $livraison; ?> €</p>
-                </div>
-                <div>
-                    <p>Total : <?php echo $total; ?> €</p>
-                </div>
-                <div>
-                    <p>Il n'est pas obligatoire de posséder un compte Paypal pour commander.</p>
+                    <p style="margin-bottom:5px;">Il n'est pas obligatoire de posséder un compte Paypal pour commander.</p>
                 </div>
                 
                 <!--Bouton Paypal-->
@@ -237,13 +273,124 @@ else{
 
 
 
+
+<script>
+    function generateHtmlButton(callback) 
+    {
+    var myButton = document.createElement("div");
+    
+    if (location.protocol == "https:") {
+        //myButton.innerHTML = "<img src='https://service.relaiscolis.com/widgetRC/ImagesRelaisColis/rco.png'/>";
+        myButton.innerHTML = "<img style=' animation-name:displaceContent;animation-duration:1.5s;animation-delay:0.5s;animation-iteration-count :2;animation-fill-mode:forwards' src='img/icon_livraison_sm.png'/>";
+    } else {
+        myButton.innerHTML = "<img style=' animation-name:displaceContent;animation-duration:1.5s;animation-delay:0.5s;animation-iteration-count :2;animation-fill-mode:forwards' src='img/icon_livraison_sm.png'/>";
+        //myButton.innerHTML = "<img src='http://service.relaiscolis.com/widgetRC/ImagesRelaisColis/rco.png'/>";
+    }
+
+
+
+    myButton.setAttribute('style', 'cursor: pointer; min-width: 80px;background-color: #DDAF94;border-style: solid;margin-top:8px;display:flex;flex-direction:column;align-items:center;justify-content:center; ');
+    myButton.addEventListener("click", function (e) {
+        displayPopUpRC();
+        return false;
+    }, false);
+
+    //-------- Add iframe Listner
+    window.addEventListener("message", receiveMessage, false);
+    function receiveMessage(event)
+    {
+        //console.log("Received data (iframe) - src : ", event.data);
+        if((event.data).hasOwnProperty("id")  && (event.data).hasOwnProperty("name") )
+        {
+
+            $("#overlay").css({"display": "none"});
+            $("#myIframe").css({"display": "none"});
+            callback(event.data);
+        }
+
+        if (event.origin !== "http://relaiscolis.com:8080")
+            //console.log('origine ')
+            return;
+    }
+    $("#relais-colis-widget-container").append(myButton);
+}
+
+function createIframeMap(callback) 
+{
+    var iframeDiv = document.createElement("iframe");
+    //iframeDiv.setAttribute('id','popupWidget');
+
+    iframeDiv.setAttribute('style', 'border:0; position:absolute; z-index:1000; left: calc(50% - 240px); top:350px ; background-color: #FDF8F5; animation: anim 1.3s ease-in-out;');
+    
+    iframeDiv.setAttribute('width', '490');
+    iframeDiv.setAttribute('height', '590');
+    iframeDiv.setAttribute('id', 'myIframe');
+
+    if (location.protocol == "https:") {
+        iframeDiv.setAttribute('src', 'https://service.relaiscolis.com/widgetrc/');
+    } else {
+        iframeDiv.setAttribute('src', 'http://service.relaiscolis.com/widgetrc/');
+    }
+
+    var overlay = document.createElement("div");
+    overlay.setAttribute('id', 'overlay');
+    overlay.setAttribute('style', 'position: fixed; top: 0;  left: 0;  width: 100%; height: 100%;  background: #000;  opacity: 0.5; filter: alpha(opacity=50);');
+
+    overlay.addEventListener("click", function () {
+        $("#overlay").css({"display": "none"});
+        $("#myIframe").css({"display": "none"});
+    }, false);
+
+    callback(overlay, iframeDiv);
+}
+
+var displayPopUpRCalready = false;
+
+/***
+ * Cette fonction permet de vérifier si une une iframe exisite déja, si oui elle l'affiche,
+ * sinon elle lance la méthode de création
+ */
+function displayPopUpRC()
+{
+    if (!displayPopUpRCalready) 
+    {
+        createIframeMap(function (overlay, iframeDiv) {
+            $("body").append(iframeDiv);
+            $("body").append(overlay);
+        });
+        displayPopUpRCalready = true;
+    } 
+    else 
+    {
+        $("#overlay").css({"display": "block"});
+        $("#myIframe").css({"display": "block"});
+    }
+}
+</script>
+
+
 <!--scripts customisés-->
 <script>
 
 
-  $( function() {
+//Relais colis management
+callback = function(data) {
+                //console.log('data here', data)
+                $(".section_relais_select").css("display", "block");
+                document.querySelector("p.name_relais").innerHTML=data.name;
+                document.querySelector("p.address_relais").innerHTML=data.location.formattedAddressLine;
+                document.querySelector("p.city_relais").innerHTML=data.location.formattedCityLine;
+}
+$('#relais-colis-widget-container').ready = generateHtmlButton(callback);
+
+
+
+//Datepicker JQUERY
+$( function() {
+    
+    //("#datepicker_livraison").datepicker({ minDate: +20, maxDate: "+12M",regional:"fr" });
     $( "#datepicker_livraison" ).datepicker({ minDate: +20, maxDate: "+12M",regional:"fr" });
-  } );
+});
 
 //Modal
 function ShowModalAfterRemove(textToAdd) {
@@ -301,6 +448,23 @@ paypal.Button.render({
         layout: 'vertical',
         shape:  'rect'
     },
+    // onInit is called when the button first renders
+    onInit: function(data, actions) {
+
+    // Disable the buttons
+    //actions.disable();
+
+    // Listen for changes to the checkbox
+    /*document.querySelector('#check')
+    .addEventListener('change', function(event) {
+        // Enable or disable the button when it is checked or unchecked
+        if (event.target.checked) {
+        actions.enable();
+        } else {
+        actions.disable();
+        }
+    });*/
+    },
     payment: function() {
         // créer le paiement
         //var CREATE_URL = 'paypal_create_payment.php?ref=8ekl6a8kpk706pmpi00b8hm0vj';
@@ -350,6 +514,13 @@ paypal.Button.render({
 
 }
 
+
+
+
+
 </script>
+
+
+
 
 </html>

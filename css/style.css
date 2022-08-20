@@ -181,6 +181,7 @@ footer {
   background-color: #E8CEBF;
   flex-direction: row;
   flex-wrap: wrap;
+ 
 }
 
 .collection-navigation-rubrique {
@@ -211,9 +212,9 @@ footer {
   position: absolute;
   top: 0; right: 0; bottom: 0; left: 0;
   inset: 0 0 0 0;
-  background: #fdf8f5;
+  background: #DDAF94;
   opacity: 0.3;
-  z-index: 5000;
+  z-index: 5001;
   transition: transform .3s ease;
 }
 
@@ -225,10 +226,11 @@ footer {
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: 20px;
   background-color: #E8CEBF;
   height:fit-content;
   padding:20px;
+  margin-bottom:20px;
 }
 
 .cart-products-grid {
@@ -255,7 +257,7 @@ footer {
   align-items: center;
   flex-direction: row;
   margin-bottom: 20px;
-  border-bottom: 2px solid #DDAF94;
+  border-bottom: 2px double #DDAF94;
 }
 
 
@@ -265,17 +267,85 @@ footer {
   /*align-items: flex-start!important;*/
   flex-direction: column;
   padding-left:20px;
-  padding-right:20px;
+  /*width:150px;*/
+  flex:2;
+  overflow-y:auto;
+  height:180px;
+  direction: rtl;
 }
 
 
-/* Grid adaptée smartphone */
-@media (max-width: 768px) {
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+ 
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+  
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  /*background: #888; */
+  background: #E8CEBF;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+   background: #555;
+}
+
+
+
+  .wrapper {
+    /*background-color: whitesmoke;*/
+    list-style-type: none;
+    padding: 0;
+    border-radius: 3px;
+  }
+  .form-row {
+    display: flex;
+    justify-content: flex-end;
+    padding: .2em;
+  }
+  .form-row > label {
+    padding: .5em 1em .5em 0;
+    flex: 1;
+  }
+  .form-row > input {
+    flex: 2;
+  }
+  .form-row > input,
+  .form-row > button {
+    padding: .5em;
+  }
+  /*.form-row > button {
+   background: gray;
+   color: white;
+   border: 0;
+  }*/
+
+
+
+
+@keyframes displaceContent {
+  0% {transform: scale(1.0, 1.0) }
+  50% {transform: scale(0.5, 0.5) }
+  100%   { transform: scale(1.0, 1.0) } /* slide down to make room for advertisements */
+}
+
+/* Grid adaptée  */
+@media (max-width: 1080px) {
   .cart-products-grid {
     grid-template-columns: repeat(1, auto);
     grid-template-rows: repeat(2, auto);
   }
-
+  .cart-product-details-flex {
+    flex:3;
+  }
 }
 
 /*-----------------------------------------*/
