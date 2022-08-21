@@ -98,12 +98,10 @@ else{
                 if(!empty($rows_produits_panier))
                 {
                     ?>
-                    <div class="cart-product-flex">
-               
-                        <div style="flex:3;font-weight: bold;">Produit</div>
-                        <div style="flex:1;font-weight: bold;">Quantité</div>
-                        <div style="flex:1;font-weight: bold;">Prix</div>
-                        
+                    <div class="cart-product-flex-title-tab">
+                        <div class="title-tab-name">Produit</div>
+                        <div class="title-tab-qte">Quantité</div>
+                        <div class="title-tab-price">Prix</div> 
                     </div>
                     <?php
                     $sum_opt_prix_total=0.0;
@@ -155,19 +153,21 @@ else{
                                 }
                             ?>
                         </div>
-                        <div class="" style="flex:1">
-                            <p><?php echo $prod_panier["quantity"];?></p>
-                        </div>
-                        <div class="" style="flex:1">
-                            <p> 
-                                <?php 
-                                    $temp_total= floatval(($produit_iter["prix"]) * floatval(($prod_panier["quantity"]))) + $opt_prix_add_total;
-                                    echo ($temp_total."€") ;
-                                ?> 
-                                </p>
-                        </div>
-                        <div class="" style="">
-                            <button id="<?php echo $produit_iter["ref"];?>" class="btn_supp_prod" style="background-color:#E8CEBF;	cursor: pointer;user-select: none;border: 1px solid black;">✖</button>
+                        <div class="cart_product-details-qte-price-erase">
+                            <div class="cart-product-details-qte" >
+                                <p><?php echo $prod_panier["quantity"];?></p>
+                            </div>
+                            <div class="cart-product-details-prix" >
+                                <p> 
+                                    <?php 
+                                        $temp_total= floatval(($produit_iter["prix"]) * floatval(($prod_panier["quantity"]))) + $opt_prix_add_total;
+                                        echo ($temp_total."€") ;
+                                    ?> 
+                                    </p>
+                            </div>
+                            <div class="" style="">
+                                <button id="<?php echo $produit_iter["ref"];?>" class="btn_supp_prod" style="background-color:#E8CEBF;	cursor: pointer;user-select: none;border: 1px solid black;"><i class='fas fa-trash-alt'></i></button>
+                            </div>
                         </div>
                     </div>
                 <?php } 
@@ -320,9 +320,9 @@ function createIframeMap(callback)
     var iframeDiv = document.createElement("iframe");
     //iframeDiv.setAttribute('id','popupWidget');
 
-    iframeDiv.setAttribute('style', 'border:0; position:absolute; z-index:1000; left: calc(50% - 240px); top:350px ; background-color: #FDF8F5; animation: anim 1.3s ease-in-out;');
+    iframeDiv.setAttribute('style', 'border:0; position:absolute; z-index:1000; left: calc(50% - 210px); top:350px ; background-color: #FDF8F5; animation: anim 1.3s ease-in-out;');
     
-    iframeDiv.setAttribute('width', '490');
+    iframeDiv.setAttribute('width', '420');
     iframeDiv.setAttribute('height', '590');
     iframeDiv.setAttribute('id', 'myIframe');
 
@@ -334,10 +334,11 @@ function createIframeMap(callback)
 
     var overlay = document.createElement("div");
     overlay.setAttribute('id', 'overlay');
-    overlay.setAttribute('style', 'position: fixed; top: 0;  left: 0;  width: 100%; height: 100%;  background: #000;  opacity: 0.5; filter: alpha(opacity=50);');
+    overlay.setAttribute('style', 'position: fixed; top: 0;  left: 0;  width: 100%; height: 100%;  background: #000;  opacity: 0.5; filter: alpha(opacity=50);z-index:999;');
 
     overlay.addEventListener("click", function () {
         $("#overlay").css({"display": "none"});
+       
         $("#myIframe").css({"display": "none"});
     }, false);
 

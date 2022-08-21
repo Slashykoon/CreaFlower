@@ -8,9 +8,9 @@
 });*/
 </script>
 <!-- Header de navigation -->
-<header style="position:relative;display:flex;flex-direction:column;margin-bottom:0;overflow: hidden;">
+<header style="">
 
-    <div class="navbar" style="display:flex;align-items:center;justify-content:space-between;">
+    <div class="navbar">
         <a href="index.php">
         <div class="btn_cart">
                 <span class="content"><i class="fa-solid fa-camera fa-xl"></i></span>

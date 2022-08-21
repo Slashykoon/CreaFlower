@@ -123,7 +123,7 @@ echo "<input id='ProdPrice' name='ProdPrice' type='hidden' value='".$row_produit
                 <div class="product-content-nom">
                     <h1><?= $row_produit["nom"] ?></h1>
                 </div>
-                <div class="" style="display:flex;">
+                <div class="product-content-actions">
                     <select name="input_qte" id="input_qte" >
                         <?php 
                         for ($i = 1; $i <= 200; $i++) {
@@ -136,7 +136,7 @@ echo "<input id='ProdPrice' name='ProdPrice' type='hidden' value='".$row_produit
                         <span style="color:white;">AJOUTER AU PANIER - <?= $row_produit["prix"] ?> € </span>
                     </button>
                 </div>
-                <div class="options_produit" >
+                <div class="product-content-opt-spec" >
                     <?php
                     if(!empty($rows_specifications))
                     {
@@ -150,7 +150,7 @@ echo "<input id='ProdPrice' name='ProdPrice' type='hidden' value='".$row_produit
                                     echo "</p>";
                                 echo "</div>";
                                 
-                                echo "<select id='id_specif_choice' name='specif_choice' style='flex: 2;'>"; //onchange='SelectOnChange(this.value)'
+                                echo "<select id='id_specif_choice' name='specif_choice' style='flex: 2;'>"; 
                                     $rows_options = $options->findAllOptionsOfSpecification($specification['pk_sp']);
                                     foreach ($rows_options as $specif_options)
                                     {
