@@ -1,27 +1,22 @@
 <!DOCTYPE html>
 
-<script>
-/*$('.btn_cart').click(function() {
-    //var ref_product = JSON.stringify(getRefProduct(this));
-    window.location.href ="ref_product_details.php?ref="+ ;
+<?php
+require_once "config/Rubriques.php";
+$rubriques = new Rubriques();
+?>
 
-});*/
-</script>
+
 <!-- Header de navigation -->
 <header style="">
 
     <div class="navbar">
+
         <a href="index.php">
-        <div class="btn_cart">
-                <span class="content"><i class="fa-solid fa-camera fa-xl"></i></span>
-            </div>
-        </a>
-        <a href="Collections.php">
         <div class="btn_cart">
                 <span class="content"><i class="fa-solid fa-mobile-screen fa-xl"></i></span>
             </div>
         </a>
-        <a href="#contact">
+        <a href="contact.php">
             <div class="btn_cart">
                 <span class="content"><i class="fa-solid fa-envelope-open-text fa-xl"></i></span>
             </div>
@@ -42,16 +37,16 @@
 
 
     <div class="container-collection-navigation">
-
-        <a class="h2 collection-navigation-rubrique rubrique-fx" href="Collections.php?rubrique=rubrique_1">
-            <h2>Rubrique 1</h2>
+        <?php
+        $rows_rubriques=$rubriques->findAll();
+        if($rows_rubriques)
+        {
+            foreach ($rows_rubriques as $rubrique): 
+        ?>
+        <a class="h2 collection-navigation-rubrique rubrique-fx" href="Collections.php?rubrique=<?= $rubrique->nom;?>">
+            <h2><?= $rubrique->nom;?></h2>
         </a>
-        <a class="h2 collection-navigation-rubrique rubrique-fx">
-            <h2>Rubrique 2</h2>
-        </a>
-        <a class=" collection-navigation-rubrique rubrique-fx">
-            <h2>Rubrique 3</h2>
-        </a>
+        <?php endforeach; } ?>
     </div>
 
 </header>

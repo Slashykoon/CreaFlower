@@ -27,7 +27,6 @@
     require_once "config/Produit_Panier.php";
     require_once "config/Sessions.php";
 
-    
     $users = new Users();
     $produits = new Produits();
     $options = new Options();
@@ -37,8 +36,6 @@
     $produit_panier = new Produit_Panier();
     $rubriques = new Rubriques();
     $sessions = new Sessions();
-
-
 
 ?>
 
@@ -63,21 +60,6 @@ if($rows_produits_panier){
 }
 $_SESSION['nb_articles_panier']=$nb_panier;
 
-
-
-//$rows_produits = $produits->findAll(); //utile pour afficher la gallerie
-
-if(isset($_GET['rubrique']))
-{
-    $row_rubrique = $rubriques->GetPKofRubriqueName($_GET['rubrique']);
-    $rows_produits = $produits->findAll_With_RubriqueFK($row_rubrique['pk_rubrique']);
-    
-    //die('Erreur 404 : Données introuvables');
-}
-else{
-    header('HTTP/1.0 404 Not Found');
-    die;
-}
 ?>
 
 
@@ -88,37 +70,11 @@ else{
 
 
 <div class="global-page">
-<h1 style="margin-top:15px;margin-bottom:25px;"><i class="fas fa-store"></i> Collection <?= $row_rubrique['nom'];?></h1>
-
-    <p class="p-increased p-centered" style=""><?= $row_rubrique['description'];?></p>
-
-    <div class="container-collection-product">
-        <!--Start iteration for all products-->
-        <?php foreach ($rows_produits as $produit): 
-                    //Recuperation de la première image de présentation
-                    $directory = "img_produits/".$produit['ref'];
-                    $files = scandir ($directory);
-                    $firstFile = $directory ."/" . $files[2];
-        ?>
-        <div id=<?=$produit['ref'];?> class="container-product">
-            <div class="product-img-grp">
-                <img src=<?php echo $firstFile;?> class="img-product" alt="...">
-                <div class="product-banner-hover">Découvrir ce produit</div>
-            </div>
-            <div class="product-content-grp">
-                <div class="product-content-title"><?= $produit['nom'];?></div>
-                <div class="product-content-price"><?= $produit['prix'];?> €</div>
-            </div>
-        </div>
-        <?php endforeach; ?>
-        <!--End iteration for all products-->
+<h1 style="margin-top:15px;margin-bottom:25px;"><i class="fas fa-store"></i> Contactez-moi</h1>
+    <div class="" style="min-height:800px;display:flex;  align-items: center;justify-content: center;">
+        <h2>METTRE ICI UN FORMULAIRE DE CONTACT!</h2>
     </div>
-    <button style="height:50px;" class="" onclick="location.href='edition_articles.php';"> <i class="fas fa-reply"></i>
-        ALLER A L'EDITION</button>
-    <button style="height:50px;" class="" onclick="location.href='view_commandes.php';"> <i class="fas fa-reply"></i>
-        VOIR LES COMMANDES</button>
-
-        </div>
+</div>
 
 </body>
 
@@ -126,19 +82,6 @@ else{
 <?php include('footer.php') ?>
 
 <script>
-function getRefProduct(el) {
-    var ref = $(el).attr('id');
-    var refdata = {
-        'ref': ref
-    }
-    return refdata;
-}
-
-$('.container-product').click(function() {
-    var ref_product = JSON.stringify(getRefProduct(this));
-    window.location.href ="ref_product_details.php?ref="+ getRefProduct(this).ref;
-
-});
 </script>
 
 </html>

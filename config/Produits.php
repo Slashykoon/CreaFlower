@@ -16,16 +16,26 @@ class Produits extends Database
     // Sélectionner tous les éléments
     public function findAll()
     {
-        return $this->db->query("SELECT pk_pr,nom,description,composition,dimension,prix,ref
+        return $this->db->query("SELECT pk_pr,nom,description,composition,dimension,prix,ref,fk_rubrique
                                     FROM $this->table");
     }
+    // Sélectionner tous les elements dune rubrique
+    public function findAll_With_RubriqueFK($fk_rub)
+    {
+        if ($fk_rub) {     
 
+            return $this->db->prepare("SELECT pk_pr,nom,description,composition,dimension,prix,ref,fk_rubrique
+                                        FROM $this->table
+                                        WHERE fk_rubrique = :fk_rubrique",
+                                        array("fk_rubrique" => $fk_rub));
+        }
+    }
 
     // Sélectionner un élément par sa ref
     public function find($ref_id = "")
     {
         if ($ref_id) {     
-            return $this->db->row("SELECT pk_pr,nom,description,composition,dimension,prix,ref
+            return $this->db->row("SELECT pk_pr,nom,description,composition,dimension,prix,ref,fk_rubrique
                                     FROM $this->table
                                     WHERE ref = :ref
                                     LIMIT 1",
@@ -37,7 +47,7 @@ class Produits extends Database
     public function findwithPK($pk_id = "")
     {
         if ($pk_id) {     
-            return $this->db->row("SELECT pk_pr,nom,description,composition,dimension,prix,ref
+            return $this->db->row("SELECT pk_pr,nom,description,composition,dimension,prix,ref,fk_rubrique
                                     FROM $this->table
                                     WHERE pk_pr = :pk_pr
                                     LIMIT 1",
@@ -46,12 +56,12 @@ class Produits extends Database
     }
 
     // Ajouter un élément
-    public function add($_nom = "",$_description = "",$_composition = "",$_dimension = "",$_prix= 0.0,$_ref="")
+    public function add($_nom = "",$_description = "",$_composition = "",$_dimension = "",$_prix= 0.0,$_ref="",$_rubrique="")
     {
         if ($_nom) {
-            return $this->db->prepare("INSERT INTO $this->table (nom,description,composition,dimension,prix,ref)
-                                        VALUES (:nom,:description,:composition,:dimension,:prix,:ref)",
-                                        array("nom" => $_nom,"description"=>$_description,"composition"=>$_composition,"dimension"=>$_dimension,"prix"=>$_prix,"ref"=>$_ref ));
+            return $this->db->prepare("INSERT INTO $this->table (nom,description,composition,dimension,prix,ref,fk_rubrique)
+                                        VALUES (:nom,:description,:composition,:dimension,:prix,:ref,:fk_rubrique)",
+                                        array("nom" => $_nom,"description"=>$_description,"composition"=>$_composition,"dimension"=>$_dimension,"prix"=>$_prix,"ref"=>$_ref,"fk_rubrique"=>$_rubrique ));
         }
     }
 

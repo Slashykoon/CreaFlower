@@ -27,14 +27,17 @@ require_once "config/Users.php";
 require_once "config/Produits.php";
 require_once "config/Options.php";
 require_once "config/Specifications.php";
+require_once "config/Rubriques.php";
 
 $users = new Users();
 $produits = new Produits();
 $options = new Options();
 $specifications = new Specifications();
+$rubriques = new Rubriques();
 
 $rows_user = $users->findAll();
 $rows_produits = $produits->findAll();
+$rows_rubriques = $rubriques->findAll();
 
 ?>
 
@@ -49,97 +52,149 @@ $rows_produits = $produits->findAll();
     <!-- Formulaire ajout -->
     <h1 style="text-align:center;">AJOUT/EDITION ARTICLE</h1>
 
-    <form id="contact-form" name="contact-form" action="mail.php" method="POST" onsubmit="return false"
-        data-sb-form-api-token="API_TOKEN">
-        <div class="form-row" style="text-align:center;font-size:1.3em;">
-            <!-- Nom -->
-            <div class="mb-3">
-                <label class="form-label" for="nom">Nom</label>
-                <input class="form-control shadow" id="nom" name="nom" type="text" placeholder="Nom de l'article"
-                    data-sb-validations="required" />
-            </div>
+    <div class="container">
+        <form id="contact-form" name="contact-form" action="mail.php" method="POST" onsubmit="return false"
+            data-sb-form-api-token="API_TOKEN">
+            <div class="form-row" style="text-align:center;font-size:1.3em;">
+                <!-- Nom -->
+                <div class="mb-3">
+                    <label class="form-label" for="nom">Nom</label>
+                    <input class="form-control shadow" id="nom" name="nom" type="text" placeholder="Nom de l'article"
+                        data-sb-validations="required" />
+                </div>
 
-            <!-- Description -->
-            <div class="mb-3">
-                <label class="form-label" for="description">Description</label>
-                <textarea class="form-control shadow " id="description" name="description" type="text"
-                    placeholder="Description du produit" style="height: 10rem;white-space:pre-warp;"
-                    data-sb-validations="required"></textarea>
-            </div>
+                <!-- Description -->
+                <div class="mb-3">
+                    <label class="form-label" for="description">Description</label>
+                    <textarea class="form-control shadow " id="description" name="description" type="text"
+                        placeholder="Description du produit" style="height: 10rem;white-space:pre-warp;"
+                        data-sb-validations="required"></textarea>
+                </div>
 
-            <!-- Composition -->
-            <div class="mb-3">
-                <label class="form-label" for="composition">Composition</label>
-                <textarea class="form-control shadow " id="composition" name="composition" type="text"
-                    placeholder="Composition du produit" style="height: 10rem;"
-                    data-sb-validations="required"></textarea>
-            </div>
+                <!-- Composition -->
+                <div class="mb-3">
+                    <label class="form-label" for="composition">Composition</label>
+                    <textarea class="form-control shadow " id="composition" name="composition" type="text"
+                        placeholder="Composition du produit" style="height: 10rem;"
+                        data-sb-validations="required"></textarea>
+                </div>
 
-            <!-- Dimensions -->
-            <div class="mb-3">
-                <label class="form-label" for="dimensions">Dimensions</label>
-                <textarea class="form-control shadow " id="dimensions" name="dimensions" type="text"
-                    placeholder="Details des dimensions" style="height: 8rem;"
-                    data-sb-validations="required"></textarea>
-            </div>
+                <!-- Dimensions -->
+                <div class="mb-3">
+                    <label class="form-label" for="dimensions">Dimensions</label>
+                    <textarea class="form-control shadow " id="dimensions" name="dimensions" type="text"
+                        placeholder="Details des dimensions" style="height: 8rem;"
+                        data-sb-validations="required"></textarea>
+                </div>
 
-            <!-- Prix -->
-            <div class="mb-3">
-                <label class="form-label" for="prix">Prix</label>
-                <input class="form-control shadow " id="prix" name="prix" type="number" placeholder="Prix TTC" min="1.0"
-                    max="1000.0" step=".01" style="" data-sb-validations="required"></input>
-            </div>
+                <!-- Prix -->
+                <div class="mb-3">
+                    <label class="form-label" for="prix">Prix</label>
+                    <input class="form-control shadow " id="prix" name="prix" type="number" placeholder="Prix TTC" min="1.0"
+                        max="1000.0" step=".01" style="" data-sb-validations="required"></input>
+                </div>
 
+                <!-- Rubrique -->
+                <div class="mb-3">
+                    <label class="form-label" >Choix rubrique</label>
+                    <select class="form-select" name="select_rubrique" aria-label="Choix rubrique">
+                        <?php
+                        if($rows_rubriques)
+                        {
+                            foreach ($rows_rubriques as $rubrique): 
+                        ?>
+                        <option value="<?= $rubrique->pk_rubrique;?>"><?= $rubrique->nom;?></option>
+                        <?php endforeach; }?>
+                    </select>
+                </div>
 
-            <br/>
-            <hr/>
-            <!-- specification-->
-            <!-- Nom specification-->
-            <div class="mb-3">
-                <label class="form-label" for="nom_sp">Nom specification</label>
-                <input class="form-control shadow" id="nom_sp" name="nom_sp" type="text" placeholder="Nom de la specification" data-sb-validations="required" />
-            </div>
-            <!-- Ajouter specification-->
+                <br/>
+                <hr/>
+
+                <!-- specification-->
+                <!-- Nom specification-->
+                <div class="mb-3">
+                    <div class="row align-items-end justify-content-start">
+                        <div class="col-10">
+                            <label class="form-label" for="nom_sp">Nom specification</label>
+                            <input class="form-control shadow" id="nom_sp" name="nom_sp" type="text" placeholder="Nom de la specification" data-sb-validations="required" />
+                        </div>
+                        <div class="col-2 ">
+                        <!-- Ajouter specification-->
+                            <button class="btn btn-warning" onclick="AddSection_SpecificationOptions()"> <i class="fas fa-edit"></i>Ajouter perso</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <div class="row align-items-end">
+                        <!-- Options (generée par code)-->
+                        <div class="section_options"></div>
+                    </div>
+                </div>
+                <br/>
             
-                <button class="btn mt-3 btn-warning" onclick="AddSection_SpecificationOptions()"> <i class="fas fa-edit"></i>
-                    Ajouter perso</button>
-       
-            <!-- Options (generée par code)-->
-            <div class="section_options"></div>
 
-            <br/>
-         
+                <!-- Validation -->
+                <div class="d-grid mb-3">
+                    <button class="btn mt-3 btn-success" style="height: 3rem;" onclick="ActionOnProduct(1,1)"> <i class="	fas fa-edit"></i>
+                        Ajouter l'article (avec photos préalablement uploadées)</button>
+                </div>
 
-            <!-- Validation -->
-            <div class="d-grid mb-3">
-                <button class="btn mt-3 btn-success" style="height: 3rem;" onclick="ActionOnProduct(1,1)"> <i class="	fas fa-edit"></i>
-                    Ajouter l'article (avec photos préalablement uploadées)</button>
             </div>
+        </form> 
+                        
 
+        <!-- Upload photos -->
+        <form method='post' action='' enctype="multipart/form-data">
+            <input type="file" id='files' name="files[]" multiple><br>
+            <input type="button" id="submit" value='Upload'>
+        </form>
+        <div id='preview'></div>
 
+    </div><!--container-->
 
-        </div>
-    </form>
-
-    <!-- TEST -->
-    <form method='post' action='' enctype="multipart/form-data">
-        <input type="file" id='files' name="files[]" multiple><br>
-        <input type="button" id="submit" value='Upload'>
-    </form>
-    <div id='preview'></div>
-
-    <!-- TEST -->
-
+    <hr/>
     </br>
     </br>
+
+    <!-- Formulaire ajout rubrique-->
+    <h1 style="text-align:center;">AJOUT RUBRIQUE</h1>
+    <div class="container">
+        <form id="contact-form" name="contact-form" action="mail.php" method="POST" onsubmit="return false"
+            data-sb-form-api-token="API_TOKEN">
+            <div class="form-row" style="text-align:center;font-size:1.3em;">
+                <!-- Rubriques -->
+                <div class="mb-3">
+                    <label class="form-label" for="nom_rubrique">Rubrique</label>
+                    <input class="form-control shadow" id="nom_rubrique" name="nom_rubrique" type="text" placeholder="Nom de la rubrique"
+                        data-sb-validations="required" />
+                </div>
+                <!-- Dimensions -->
+                <div class="mb-3">
+                    <label class="form-label" for="description_rubrique">Description</label>
+                    <textarea class="form-control shadow " id="description_rubrique" name="description_rubrique" type="text"
+                        placeholder="Details des dimensions" style="height: 6rem;"
+                        data-sb-validations="required"></textarea>
+                </div>
+                <!-- Validation ajout -->
+                <div class="d-grid mb-3">
+                    <button class="btn mt-3 btn-success btn-rub" style="height: 3rem;" onclick="ActionOnRubriques(1)"> <i class="	fas fa-edit"></i>
+                        Ajouter la rubrique</button>
+                </div>
+            </div>
+        </form>
+    </div><!--container rubrique-->
+
     </br>
-    <hr />
-    </br>
+    <hr/>
     </br>
     </br>
     <?php
 
 ?>
+
+
     <!--TABLEAU EDITION -->
     <h1 style="text-align:center;">TABLEAU RECAPITULATIF ARTICLES</h1>
     <table>
@@ -255,6 +310,9 @@ var name_opt ;
 var prixadd_opt ;
 var option_values ;
 
+/*$('.btn-rub').prop('disabled', true);*/
+
+
 $('#exampleModalCenter').on('hidden.bs.modal', function() {
     location.reload();
 })
@@ -298,14 +356,14 @@ function AddSection_SpecificationOptions(){
     dict_objsp_dict_arropt[String(nb_specif_added)]=dict_Init;
     dict_objsp_dict_arropt[String(nb_specif_added)]["specification"]=$('input[name=nom_sp]').val();
 
-    alert(JSON.stringify(dict_objsp_dict_arropt));
+    //alert(JSON.stringify(dict_objsp_dict_arropt));
 }
 
 function AddOptionValue(nb_sp_add,_name_opt,_prix_opt) {
-    alert(nb_sp_add);
+    //alert(nb_sp_add);
     dict_objsp_dict_arropt[String(nb_sp_add)]["option"].push(_name_opt);
     dict_objsp_dict_arropt[String(nb_sp_add)]["prix"].push(_prix_opt);
-    alert(JSON.stringify(dict_objsp_dict_arropt));
+    //alert(JSON.stringify(dict_objsp_dict_arropt));
     $("#option_values_"+nb_sp_add).append("<a>" + _name_opt +" : " + _prix_opt + "€ | </a>");
 }
 
@@ -361,6 +419,7 @@ function ActionOnProduct(selVar, cde_action) {
         'composition': $('textarea[name=composition]').val(),
         'dimensions': $('textarea[name=dimensions]').val(),
         'prix': $('input[name=prix]').val(),
+        'rubrique': $('select[name=select_rubrique]').val(),
         'specif_opt': JSON.stringify(dict_objsp_dict_arropt)
     };
 
@@ -378,6 +437,31 @@ function ActionOnProduct(selVar, cde_action) {
         }
     });
 }
+
+
+function ActionOnRubriques(cde_action) {
+
+formData = {
+    'nom_rubrique': $('input[name=nom_rubrique]').val(),
+    'description_rubrique': $('textarea[name=description_rubrique]').val(),
+    'cde_action': cde_action
+};
+
+$.ajax({
+    type: "POST",
+    url: "Interface_edition_rubriques.php",
+    dataType: 'json',
+    data: formData,
+    success: function(data, textStatus, jqXHR) {
+        $('#exampleModalBody').text(data.ret);
+        $('#exampleModalCenter').modal('show')
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+        alert(textStatus);
+    }
+});
+}
+
 </script>
 
 

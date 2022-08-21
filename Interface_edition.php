@@ -18,6 +18,7 @@ $composition = $_POST['composition'];
 $dimensions = $_POST['dimensions'];
 $prix=$_POST['prix'];
 $dict_specif_opt=$_POST['specif_opt'];
+$rubrique=$_POST['rubrique'];
 
 $TextReturn="";
 
@@ -26,13 +27,15 @@ $TextReturn="";
   if($cde_action == 1)
   {
   
-    if(isset($nom,$description,$composition,$dimensions,$prix))
+    if(isset($nom,$description,$composition,$dimensions,$prix,$rubrique))
     {
       //genere une clé unique pour le dossier
       $VarUniqID=uniqid("", true);
       if (!file_exists('img_produits/'.$VarUniqID)) {
+          //chmod('img_produits/'.$VarUniqID,0777);
           mkdir('img_produits/'.$VarUniqID, 0777, true);
       }
+      
       //copy du temp vers dossier courant
       $src='uploads';
       $dst='img_produits/'.$VarUniqID;
@@ -70,7 +73,7 @@ $TextReturn="";
               unlink($file); 
       }
       // Ajoute le produit
-      $ret_id_prod=$produits->add($nom ,nl2br($description),nl2br($composition),nl2br($dimensions),$prix,$VarUniqID);
+      $ret_id_prod=$produits->add($nom ,nl2br($description),nl2br($composition),nl2br($dimensions),$prix,$VarUniqID,$rubrique);
 
       // Ajoute la/les specifications
       $obj = json_decode($dict_specif_opt);

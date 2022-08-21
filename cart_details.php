@@ -161,7 +161,7 @@ else{
                                 <p> 
                                     <?php 
                                         $temp_total= floatval(($produit_iter["prix"]) * floatval(($prod_panier["quantity"]))) + $opt_prix_add_total;
-                                        echo ($temp_total."€") ;
+                                        echo (number_format((float)$temp_total, 2, '.', '')."€") ;
                                     ?> 
                                     </p>
                             </div>

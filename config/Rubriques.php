@@ -27,28 +27,47 @@ class Rubriques extends Database
     }*/
 
     // Sélectionner un élément par sa ref
-    public function findAllProduct_With_Rubrique($pk_rubrique)
+    /*public function findAllProduct_With_RubriqueName($name)
     {
-        if ($pk_rubrique) {     
+        if ($name) {     
 
-            return $this->db->prepare("SELECT pk_rubrique,fk_produit,nom_description
+            return $this->db->prepare("SELECT pk_rubrique,nom,description
                                         FROM $this->table
-                                        WHERE fk_produit = :pk_rubrique",
-                                        array("pk_rubrique" => $pk_rubrique));
+                                        WHERE nom = :nom",
+                                        array("nom" => $name));
         }
+    }*/
+
+    // Sélectionner un pk par son non de rubrique
+    public function GetPKofRubriqueName($name)
+    {
+        if ($name) {     
+
+            return $this->db->row("SELECT pk_rubrique,nom,description
+                                    FROM $this->table
+                                    WHERE nom = :nom
+                                    LIMIT 1",
+                                    array("nom" => $name));
+        }
+    }
+    
+    // Sélectionner un élément par sa ref
+    public function findAll()
+    {   
+        return $this->db->query("SELECT pk_rubrique,nom,description
+                                    FROM $this->table");
     }
 
 
-
-    // Ajouter un élément
-    /*public function add($fk_produit, $fk_panier, $quantity)
+    // Ajouter une rubrique
+    public function add($nom,$description="")
     {
-        if (true) {
-            return $this->db->prepare("INSERT INTO $this->table (fk_produit,fk_panier,quantity) 
-                                                VALUES (:fk_produit,:fk_panier,:quantity)",
-                                                array("fk_produit" => $fk_produit,"fk_panier" => $fk_panier,"quantity" => $quantity));
+        if ($nom) {
+            return $this->db->prepare("INSERT INTO $this->table (nom,description) 
+                                                VALUES (:nom,:description)",
+                                                array("nom" => $nom,"description" => $description));
         }
-    }*/
+    }
 
 
     // Modifier un élément
