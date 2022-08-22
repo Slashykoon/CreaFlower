@@ -60,13 +60,14 @@ $rows_paiements=$paiements->findAll();
     <h1 style="text-align:center;">TABLEAU RECAPITULATIF DES PAIEMENTS / COMMANDES</h1>
     <table>
         <tr style="border: solid 2px;text-align:center;">
-            <th>Produit ref</th>
+            <th>Ref panier</th>
             <th>Id paiement</th>
             <th>Status paiement</th>
             <th>Montant transaction</th>
             <th>Currency transaction</th>
             <th>Date transaction</th>
             <th>Email client</th>
+            <th>Numéro facture</th>
         </tr>
         <?php 
             foreach ($rows_paiements as $paiement)
@@ -80,6 +81,7 @@ $rows_paiements=$paiements->findAll();
             <td style="border: solid 2px;padding:4px;"><?= $paiement->payment_currency; ?></td>
             <td style="border: solid 2px;padding:4px;"><?= $paiement->payment_date; ?></td>
             <td style="border: solid 2px;padding:4px;"><?= $paiement->payer_email; ?></td>
+            <td style="border: solid 2px;padding:4px;"><?= "FAC_".$paiement->num_facture; ?></td>
             <td style="border: solid 2px;"><button class="btn btn-warning"
                     onclick="ActionOnProduct(<?= $paiement->produit; ?>,2)"><i class="fas fa-marker"></i>Changer status</button></td>
 

@@ -37,6 +37,18 @@ class Rubriques extends Database
                                         array("nom" => $name));
         }
     }*/
+    // Sélectionner un pk par son non de rubrique
+    public function find($pk_rubrique)
+    {
+        if ($pk_rubrique) {     
+
+            return $this->db->row("SELECT pk_rubrique,nom,description
+                                    FROM $this->table
+                                    WHERE pk_rubrique = :pk_rubrique
+                                    LIMIT 1",
+                                    array("pk_rubrique" => $pk_rubrique));
+        }
+    }
 
     // Sélectionner un pk par son non de rubrique
     public function GetPKofRubriqueName($name)

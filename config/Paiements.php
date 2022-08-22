@@ -16,7 +16,7 @@ class Paiements extends Database
     // Sélectionner tous les éléments
     public function findAll()
     {
-        return $this->db->query("SELECT produit, payment_id, payment_status, payment_amount, payment_currency, payment_date, payer_email
+        return $this->db->query("SELECT produit, payment_id, payment_status, payment_amount, payment_currency, payment_date, payer_email,num_facture
                                     FROM $this->table");
     }
 
@@ -25,7 +25,7 @@ class Paiements extends Database
     public function find($ref_id = "")
     {
         if ($ref_id) {     
-            return $this->db->row("SELECT produit, payment_id, payment_status, payment_amount, payment_currency, payment_date, payer_email
+            return $this->db->row("SELECT produit, payment_id, payment_status, payment_amount, payment_currency, payment_date, payer_email,num_facture
                                     FROM $this->table
                                     WHERE payment_id = :payment_id
                                     LIMIT 1",
@@ -34,37 +34,43 @@ class Paiements extends Database
     }
 
     // Ajouter un élément
-    public function add($_produit= "",$_payment_id = "",$_payment_status = "",$_payment_amount = "",$_payment_currency= "")
+    public function add($_produit= "",$_payment_id = "",$_payment_status = "",$_payment_amount = "",$_payment_currency= "",$num_facture="")
     {
         if ($_produit) {
-            return $this->db->prepare("INSERT INTO $this->table (produit, payment_id, payment_status, payment_amount, payment_currency, payment_date, payer_email) 
-                                                VALUES (:produit, :payment_id, :payment_status, :payment_amount, :payment_currency, NOW(),'')",
+            return $this->db->prepare("INSERT INTO $this->table (produit, payment_id, payment_status, payment_amount, payment_currency, payment_date, payer_email,num_facture) 
+                                                VALUES (:produit, :payment_id, :payment_status, :payment_amount, :payment_currency, NOW(),'','')",
                                                 array("produit" => $_produit,"payment_id"=>$_payment_id,"payment_status"=>$_payment_status,"payment_amount"=>$_payment_amount,"payment_currency"=>$_payment_currency ));
         }
     }
 
 
     // Modifier un élément
-    public function edit($payment_status = "",$payer_email="",$payment_id="")
+    public function edit($payment_status = "",$payer_email="",$payment_id="",$num_facture)
     {
         if ($payment_id) {
 
             return $this->db->prepare("UPDATE $this->table 
-                                        SET payment_status = :payment_status, payer_email =:payer_email
+                                        SET payment_status = :payment_status, payer_email =:payer_email,num_facture=:num_facture
                                         WHERE payment_id = :payment_id",
-                                        array("payment_status"=>$payment_status ,"payment_id" => $payment_id,"payer_email"=>$payer_email));
+                                        array("payment_status"=>$payment_status ,"payment_id" => $payment_id,"payer_email"=>$payer_email,"num_facture"=>$num_facture));
         }
+    }
+    // search for last num facture
+    public function search_last_facture()
+    {
+        return $this->db->row("SELECT MAX(num_facture) FROM $this->table");
+
     }
 
     // Supprimer un élément
-    public function delete($_id = "") 
+    /*public function delete($_id = "") 
     {
         if ($_id) {
             return $this->db->prepare("DELETE FROM $this->table
                                         WHERE pk_pr=:id",
                                         array("id" => $_id));
         }
-    }
+    }*/
 
 }
 

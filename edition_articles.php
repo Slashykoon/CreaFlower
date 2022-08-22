@@ -207,6 +207,7 @@ $rows_rubriques = $rubriques->findAll();
             <th>Prix</th>
             <th>Specifications/Options</th>
             <th>Reference</th>
+            <th>Rubrique</th>
             <th>Pictures</th>
             <th>Editer</th>
             <th>Supprimer</th>
@@ -254,12 +255,18 @@ $rows_rubriques = $rubriques->findAll();
             </td>
             <td style="border: solid 2px;"><?= $produit->ref; ?></td>
             <td style="border: solid 2px;">
+            <?php
+                $row_rubrique=$rubriques->find($produit->fk_rubrique);
+                print_r($row_rubrique['nom']);
+            ?>
+            </td>
+            <td style="border: solid 2px;">
                 <?php
                     $dir = "img_produits/". $produit->ref ."/*";
                     // Ouvre le repertoire et recupère toute les photos
                     foreach(glob($dir) as $file)
                     {
-                        echo '<img src='.$file.' height=200 width=240 />';
+                        echo '<img src='.$file.' height=160 width=180 />';
                     }
                 ?>
             </td>

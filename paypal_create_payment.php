@@ -114,7 +114,7 @@ if (!empty($_GET['ref'])) {
       
       if (!empty($paypal_response->id)) {
          // On oublie pas d'ajouter la référence de l'item dans le nouveau champ "produit" de notre table "paiements", afin de garder une trace du produit acheté !
-         $ret_id_paiement=$paiements->add("blabla",$paypal_response->id,$paypal_response->state,$paypal_response->transactions[0]->amount->total,$paypal_response->transactions[0]->amount->currency);
+         $ret_id_paiement=$paiements->add($ref,$paypal_response->id,$paypal_response->state,$paypal_response->transactions[0]->amount->total,$paypal_response->transactions[0]->amount->currency);
 
          if ($ret_id_paiement>0) {
             $success = 1;
