@@ -222,15 +222,15 @@ else{
                 <ul class="wrapper">
                     <li class="form-row">
                     <label for="name">Nom</label>
-                    <input type="text" id="name">
+                    <input type="text" id="name" name="name">
                     </li>
                     <li class="form-row">
-                    <label for="townborn">Adresse</label>
-                    <input type="text" id="townborn">
+                    <label for="city">Adresse</label>
+                    <input type="text" id="city" name="city">
                     </li>
                     <li class="form-row">
                     <label for="email">Email</label>
-                    <input type="email" id="email">
+                    <input type="email" id="email" name="email">
                     </li>
                 </ul>
                 </form>
@@ -451,20 +451,6 @@ paypal.Button.render({
     },
     // onInit is called when the button first renders
     onInit: function(data, actions) {
-
-    // Disable the buttons
-    //actions.disable();
-
-    // Listen for changes to the checkbox
-    /*document.querySelector('#check')
-    .addEventListener('change', function(event) {
-        // Enable or disable the button when it is checked or unchecked
-        if (event.target.checked) {
-        actions.enable();
-        } else {
-        actions.disable();
-        }
-    });*/
     },
     payment: function() {
         // créer le paiement
@@ -495,11 +481,10 @@ paypal.Button.render({
         return paypal.request.post(EXECUTE_URL,data).then(function(data) { //JSON data retour serveur
                 if (data.success) { // Si le paiement a bien été validé, on peut rediriger l'utilisateur vers une nouvelle page, afficher un message indiquant que son paiement a bien été pris en compte.
                     // Exemple : window.location.replace("Une url");
-                    //alert("Paiement approuvé ! Merci !");
                     ShowModalAfterPayment("Votre commande à été correctement effectué. Nous vous remercions pour votre achat.");
+                    window.location.replace("send_mail.php?pid="+data.pay_id);
                 } else {
                     //exécution du paiement a échoué.
-                    //alert("meumeule");
                     alert(data.msg);
                 }
             });

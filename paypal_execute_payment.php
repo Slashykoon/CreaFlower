@@ -42,23 +42,22 @@ if (!empty($_POST['paymentID']) AND !empty($_POST['payerID'])) {
 
       if ($paypal_response->state == "approved") {
          $success = 1;
-
-         $facture=0;
+         //Gestion des numéros de facture
+         $facture = 0;
          $last_paiement=$paiements->search_last_facture();
          //error_log( print_r($last_paiement, TRUE) );
          error_log( print_r($last_paiement['MAX(num_facture)'], TRUE) );
          if(empty($last_paiement)){
-            $facture=1;
+            $facture = 1;
          }
          else{
             //$trimmed_facture=str_replace("FAC", "",$row_last_paiement['num_facture']);
-            $facture=intval($last_paiement['MAX(num_facture)'])+1;
-            error_log( print_r("facture fianl :", TRUE) );
-            error_log( print_r($facture, TRUE) );
+            $facture = intval($last_paiement['MAX(num_facture)'])+1;
          }
-
+         //update du numéro de facture 
          $update_payment=$paiements->edit($paypal_response->state, $paypal_response->payer->payer_info->email, $paymentID,$facture); //update facture
-
+         //changement du numero de panier de la session ou de user
+         
          //clear le panier TODO remplacer par sauvegarde et renouvellement d'un id de panier pour la sessions courante
          //$ret_supp=$produit_panier->DeleteAllFromPanier($ref);
          $msg = "";
@@ -69,4 +68,4 @@ if (!empty($_POST['paymentID']) AND !empty($_POST['payerID'])) {
       $msg = "Votre paiement n'a pas été trouvé dans notre base de données. Merci de réessayer ultérieurement ou contacter un administrateur du site. (Votre compte PayPal n'a pas été débité)";
    }
 }
-echo json_encode(["success" => $success, "msg" => $msg, "paypal_response" => $paypal_response]);
+echo json_encode(["success" => $success, "msg" => $msg, "paypal_response" => $paypal_response,"pay_id"=>$paymentID]);

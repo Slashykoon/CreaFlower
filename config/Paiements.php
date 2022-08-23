@@ -33,6 +33,7 @@ class Paiements extends Database
         }
     }
 
+
     // Ajouter un élément
     public function add($_produit= "",$_payment_id = "",$_payment_status = "",$_payment_amount = "",$_payment_currency= "",$num_facture="")
     {
