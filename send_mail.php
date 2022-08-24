@@ -193,7 +193,7 @@ if ($row_paiement)
       //print json_encode(array('message' => 'Erreur: ' . $mail->ErrorInfo, 'code' => 1));
   } else {
       //METTRE ICI UNE PAGE OU ON INDIQUE QUE LE PAIMENT CEST BIEN PASSE
-      header("Location: http://ecommerce//index.php");
+      header("Location: http://ecommerce//Payment_accepted_redirection.php");
       //print json_encode(array('message' => 'Email a été correctement envoyé!', 'code' => 1));
       //echo 'Message has been sent';
   }

@@ -15,16 +15,18 @@ class Produit_Panier extends Database
 
 
     // Sélectionner session
-    public function findOne_With_ProduitID($pk_prod="")
+    public function findOne_With_ProduitID($pk_prod="",$fk_panier="")
     {
         if ($pk_prod) {
             return $this->db->row("SELECT pk_produit_panier, fk_produit, fk_panier, quantity
                                     FROM $this->table
-                                    WHERE fk_produit = :pk_prod
+                                    WHERE fk_produit = :pk_prod AND fk_panier =:fk_panier
                                     LIMIT 1",
-                                    array("pk_prod" => $pk_prod));
+                                    array("pk_prod" => $pk_prod,"fk_panier"=> $fk_panier));
         }
     }
+
+
 
     // Sélectionner un élément par sa ref
     public function findAllProduct_With_PanierID($panier_id)
@@ -37,6 +39,18 @@ class Produit_Panier extends Database
                                         array("fk_panier" => $panier_id));
         }
     }
+    /*public function findAllProduct_With_PanierID($panier_id)
+    {
+        if ($panier_id) {     
+
+            return $this->db->prepare("SELECT pk_produit_panier, fk_produit, fk_panier, quantity,statut
+                                        FROM produit_panier INNER JOIN paniers ON produit_panier.fk_panier = paniers.pk_panier
+                                        WHERE produit_panier.fk_panier = :fk_panier AND paniers.statut=''",
+                                        array("fk_panier" => $panier_id));
+        }
+    }*/
+
+
 
 
 
@@ -72,7 +86,15 @@ class Produit_Panier extends Database
         }
     }
 
-
+    // Supprimer un élément
+    public function DeleteOneFromPanier($prod_id = "") 
+    {
+        if ($prod_id) {
+            return $this->db->prepare("DELETE FROM $this->table
+                                        WHERE fk_produit=:prod_id",
+                                        array("prod_id" => $prod_id));
+        }
+    }
 
 }
 

@@ -34,25 +34,8 @@ $paniers = new Paniers();
 $produit_panier = new Produit_Panier();
 $sessions = new Sessions();
 
-session_start();
-//Verif si une session est ouverte sur cet id
-$row_session = $sessions->find(session_id());
-if(empty($row_session)){
-    $ret_id_session=$sessions->add(session_id(),"");
-    $ret_id_panier=$paniers->add("Temp_".session_id());
-    $ret_session_updt=$sessions->edit(session_id(),$ret_id_panier);
-    //recherche a nouveau pour recuperer la structure
-    $row_session = $sessions->find(session_id());
-}
-//récupération des produits du panier + quantité
-$rows_produits_panier = $produit_panier->findAllProduct_With_PanierID($row_session["fk_panier"]);
-$nb_panier=0;
-if($rows_produits_panier){
-    foreach($rows_produits_panier as $prod_panier){
-        $nb_panier++;
-    }
-}
-$_SESSION['nb_articles_panier']=$nb_panier;
+require_once "Session_management.php";
+require_once "Cart_Number_Update.php";
 
 
 //Recuperation du détail des produits
@@ -263,18 +246,17 @@ echo "<input id='ProdPrice' name='ProdPrice' type='hidden' value='".$row_produit
 
 <script>
 
-//recup les selects pour verif
+//Premier passage, on recupere les options select pour ajax ajout
 var values_opt=[];
-
 $( document ).ready(function() {
-    values_opt = $("select[name='specif_choice']").map(function(){return $(this).val();}).get(); //for ajax updt
+    values_opt = $("select[name='specif_choice']").map(function(){return $(this).val();}).get(); 
 
 });
 
-//Calcul des changements d'options
+//Calcul des changements d'options puis recupere les options de nouveau pour ajax ajout
 document.querySelectorAll('[id=id_specif_choice],[id=input_qte]').forEach(item => {
   item.addEventListener('change', event => {
-        values_opt = $("select[name='specif_choice']").map(function(){return $(this).val();}).get(); //JQUERY A VIRER par javascript pur
+        values_opt = $("select[name='specif_choice']").map(function(){return $(this).val();}).get(); 
 
         var total_add = 0.0;
         var qte = 1;
@@ -296,8 +278,7 @@ document.querySelectorAll('[id=id_specif_choice],[id=input_qte]').forEach(item =
   })
 });
 
-
-
+//Action ajouter au panier
 function AddToCart() {
     console.log(values_opt.length);
     formData = {
@@ -321,7 +302,7 @@ function AddToCart() {
 }
 
 
-//Modal
+//Modal management
 function ShowModal(textToAdd) {
     $(".modal").css("display", "block");
     $(".message").text(textToAdd);
@@ -329,12 +310,12 @@ function ShowModal(textToAdd) {
 $('.close').click(function() {
     $(".modal").css("display", "none");
 });
-
 function RedirectToCart() {
     window.location = 'cart_details.php';
 }
 
-//Accordion
+
+//Accordion management
 var acc = document.getElementsByClassName("accordion");
 var i;
 
@@ -350,7 +331,7 @@ for (i = 0; i < acc.length; i++) {
     });
 }
 
-//Carousel
+//Carousel management
 let slideIndex = 1;
 showSlides(slideIndex);
 

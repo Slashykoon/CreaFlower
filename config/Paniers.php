@@ -36,20 +36,20 @@ class Paniers extends Database
     }
 
 
-    // Modifier un élément
-    /*public function edit($payment_status = "",$payer_email="",$payment_id="")
+    // Modifier le statut
+    public function edit_statut($pk_panier, $statut = "")
     {
-        if ($payment_id) {
+        if ($pk_panier) {
 
             return $this->db->prepare("UPDATE $this->table 
-                                        SET payment_status = :payment_status, payer_email =:payer_email
-                                        WHERE payment_id = :payment_id",
-                                        array("payment_status"=>$payment_status ,"payment_id" => $payment_id,"payer_email"=>$payer_email));
+                                        SET statut = :statut
+                                        WHERE pk_panier = :pk_panier",
+                                        array("pk_panier"=>$pk_panier,"statut"=>$statut));
         }
     }
 
     // Supprimer un élément
-    public function delete($_id = "") 
+    /*public function delete($_id = "") 
     {
         if ($_id) {
             return $this->db->prepare("DELETE FROM $this->table

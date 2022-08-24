@@ -37,30 +37,12 @@
     $rubriques = new Rubriques();
     $sessions = new Sessions();
 
+
+    require_once "Session_management.php";
+    require_once "Cart_Number_Update.php";
 ?>
 
-<?php
-session_start();
-//Verif si une session est ouverte sur cet id
-$row_session = $sessions->find(session_id());
-if(empty($row_session)){
-    $ret_id_session=$sessions->add(session_id(),"");
-    $ret_id_panier=$paniers->add("Temp_".session_id());
-    $ret_session_updt=$sessions->edit(session_id(),$ret_id_panier);
-    //recherche a nouveau pour recuperer la structure
-    $row_session = $sessions->find(session_id());
-}
-//récupération des produits du panier + quantité
-$rows_produits_panier = $produit_panier->findAllProduct_With_PanierID($row_session["fk_panier"]);
-$nb_panier=0;
-if($rows_produits_panier){
-    foreach($rows_produits_panier as $prod_panier){
-        $nb_panier++;
-    }
-}
-$_SESSION['nb_articles_panier']=$nb_panier;
 
-?>
 
 
 <!-- Header -->

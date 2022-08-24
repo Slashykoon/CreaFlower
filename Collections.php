@@ -38,47 +38,23 @@
     $rubriques = new Rubriques();
     $sessions = new Sessions();
 
+    require_once "Session_management.php";
+    include("Cart_Number_Update.php");
 
-
-?>
-
-<?php
-session_start();
-//Verif si une session est ouverte sur cet id
-$row_session = $sessions->find(session_id());
-if(empty($row_session)){
-    $ret_id_session=$sessions->add(session_id(),"");
-    $ret_id_panier=$paniers->add("Temp_".session_id());
-    $ret_session_updt=$sessions->edit(session_id(),$ret_id_panier);
-    //recherche a nouveau pour recuperer la structure
-    $row_session = $sessions->find(session_id());
-}
-//récupération des produits du panier + quantité
-$rows_produits_panier = $produit_panier->findAllProduct_With_PanierID($row_session["fk_panier"]);
-$nb_panier=0;
-if($rows_produits_panier){
-    foreach($rows_produits_panier as $prod_panier){
-        $nb_panier++;
+    //Gestion des rubriques et produits 
+    if(isset($_GET['rubrique']))
+    {
+        $row_rubrique = $rubriques->GetPKofRubriqueName($_GET['rubrique']);
+        $rows_produits = $produits->findAll_With_RubriqueFK($row_rubrique['pk_rubrique']);
+        
+        //die('Erreur 404 : Données introuvables');
     }
-}
-$_SESSION['nb_articles_panier']=$nb_panier;
-
-
-
-//$rows_produits = $produits->findAll(); //utile pour afficher la gallerie
-
-if(isset($_GET['rubrique']))
-{
-    $row_rubrique = $rubriques->GetPKofRubriqueName($_GET['rubrique']);
-    $rows_produits = $produits->findAll_With_RubriqueFK($row_rubrique['pk_rubrique']);
-    
-    //die('Erreur 404 : Données introuvables');
-}
-else{
-    header('HTTP/1.0 404 Not Found');
-    die;
-}
+    else{
+        header('HTTP/1.0 404 Not Found');
+        die;
+    }
 ?>
+
 
 
 <!-- Header -->

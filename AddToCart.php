@@ -19,16 +19,8 @@ $specification_panier = new Specifications_Panier();
 $sessions = new Sessions();
 
 
-session_start();
-//Verif si une session est ouverte sur cet id
-$row_session = $sessions->find(session_id());
-if(empty($row_session)){
-    $ret_id_session=$sessions->add(session_id(),"");
-    $ret_id_panier=$paniers->add("Temp_".session_id());
-    $ret_session_updt=$sessions->edit(session_id(),$ret_id_panier);
-    //recherche a nouveau pour recuperer la structure
-    $row_session = $sessions->find(session_id());
-}
+require_once "Session_management.php";
+//require_once "Cart_Number_Update.php"; //pas d'update car c'est une requete ajax
 
 $text_retour="Un problème est servenu !";
 //recupere les variables post
@@ -41,7 +33,7 @@ $row_produit = $produits->find($Reference);
 //error_log( print_r($row_produit, TRUE) );
 if(!empty($row_produit))
 {
-  $row_prod_exist = $produit_panier->findOne_With_ProduitID($row_produit["pk_pr"]);
+  $row_prod_exist = $produit_panier->findOne_With_ProduitID($row_produit["pk_pr"],$row_session["fk_panier"]);
 
   if(!empty($row_prod_exist)){
     //update

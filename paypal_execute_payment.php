@@ -5,6 +5,7 @@ require_once "config/Options.php";
 require_once "config/Specifications.php";
 require_once "config/Paiements.php";
 require_once "config/Produit_Panier.php";
+require_once "config/Paniers.php";
 
 require_once "PayPalPayment.php";
 
@@ -16,6 +17,7 @@ $options = new Options();
 $specifications = new Specifications();
 $paiements = new Paiements();
 $produit_panier = new Produit_Panier();
+$paniers = new Paniers();
 
 
 $success = 0;
@@ -29,10 +31,12 @@ if (!empty($_POST['paymentID']) AND !empty($_POST['payerID'])) {
    $payer = new PayPalPayment();
    $payer->setSandboxMode(1);
    $payer->setClientID("AeIBakz8rXg1v2EQmZUO9xOHKzInEDpKlqbvEsT0OwjqBaxo7itYQADAebBeCFNXsUgZUlke0wfry_pT");
-   $payer->setSecret("EI-29-i6d3fOW9SnUBf3wRLe8UoIqq90M0tUVzZn3CGOCPXqL-jTyGzvi0sWOEwqtbwA7wGpPcuJDQYa"); // On indique son Secret
+   $payer->setSecret("EI-29-i6d3fOW9SnUBf3wRLe8UoIqq90M0tUVzZn3CGOCPXqL-jTyGzvi0sWOEwqtbwA7wGpPcuJDQYa"); 
  
    $payment = $paiements->find($paymentID);
- 
+   //$row_panier=$paniers->findwithPK($payment['produit']);
+   
+
    if ($payment) {
 
       $paypal_response = $payer->executePayment($paymentID, $payerID);
@@ -56,8 +60,8 @@ if (!empty($_POST['paymentID']) AND !empty($_POST['payerID'])) {
          }
          //update du numéro de facture 
          $update_payment=$paiements->edit($paypal_response->state, $paypal_response->payer->payer_info->email, $paymentID,$facture); //update facture
-         //changement du numero de panier de la session ou de user
-         
+         //changement du statut  de panier afin de ne plus le rendre visible, mais archivé
+         $ret_edit=$paniers->edit_statut($payment['produit'],"Paye");
          //clear le panier TODO remplacer par sauvegarde et renouvellement d'un id de panier pour la sessions courante
          //$ret_supp=$produit_panier->DeleteAllFromPanier($ref);
          $msg = "";

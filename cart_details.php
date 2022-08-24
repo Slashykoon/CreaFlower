@@ -8,26 +8,17 @@
     <meta name="description" content="Vente de cadres de décoration">
     <meta name="author" content="Tommy Jeanbille, Celine Levrechon">
     <link href="css/style.css" rel="stylesheet">
-    <!-- Librairie JQuery pour requete AJAX
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>-->
-    <!-- Just for datepicker
+    <!-- Librairie JQuery pour requete AJAX-->
     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
-    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>-->
-
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
-  <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-  <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
-  <script src="i18n/datepicker-fr.js"></script>
-
-
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+    <script src="i18n/datepicker-fr.js"></script>
+    <!-- Librairie FontAwesome-->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css"
         integrity="sha384-3AB7yXWz4OeoZcPbieVW64vVXEwADiYyAEhwilzWsLw+9FgqpyjjStpPnpBO8o8S" crossorigin="anonymous">
     <script src="https://kit.fontawesome.com/b0f7e6ecb6.js" crossorigin="anonymous"></script>
-
     <!-- Importation de la SDK JavaScript PayPal -->
     <script src="https://www.paypalobjects.com/api/checkout.js"></script>
-    <!-- Importation widget Relais colis -->
-    <!--<script type="text/javascript" src="https://service.relaiscolis.com/WidgetRC/scripts/widget.builder.js"></script>-->
 </head>
 
 <?php
@@ -49,35 +40,10 @@ $paniers = new Paniers();
 $produit_panier = new Produit_Panier();
 $specification_panier = new Specifications_Panier();
 $sessions = new Sessions();
-session_start();
-//Verif si une session est ouverte sur cet id
-$row_session = $sessions->find(session_id());
-if(empty($row_session)){
-    $ret_id_session=$sessions->add(session_id(),"");
-    $ret_id_panier=$paniers->add("Temp_".session_id());
-    $ret_session_updt=$sessions->edit(session_id(),$ret_id_panier);
-    //recherche a nouveau pour recuperer la structure
-    $row_session = $sessions->find(session_id());
-}
 
-//récupération des produits du panier + quantité
-$rows_produits_panier = $produit_panier->findAllProduct_With_PanierID($row_session["fk_panier"]);
-$nb_panier = 0;
 
-if($rows_produits_panier){
-    foreach($rows_produits_panier as $prod_panier){
-        $nb_panier++;
-    }
-}
-$_SESSION['nb_articles_panier']=$nb_panier;
-    echo "<input id='CartId' name='CartId' type='hidden' value='".$row_session["fk_panier"]."'>";
-if($nb_panier <= 0){
-    echo "<input id='DisablePaypalBtn' name='DisablePaypalBtn' type='hidden' value='1'>";
-}
-else{
-    echo "<input id='DisablePaypalBtn' name='DisablePaypalBtn' type='hidden' value='0'>";
-}
-
+require_once "Session_management.php";
+require_once "Cart_Number_Update.php";
 
 ?>
 
@@ -272,107 +238,12 @@ else{
 </div>
 
 
-
-
-<script>
-    function generateHtmlButton(callback) 
-    {
-    var myButton = document.createElement("div");
-    
-    if (location.protocol == "https:") {
-        //myButton.innerHTML = "<img src='https://service.relaiscolis.com/widgetRC/ImagesRelaisColis/rco.png'/>";
-        myButton.innerHTML = "<img style=' animation-name:displaceContent;animation-duration:1.5s;animation-delay:0.5s;animation-iteration-count :2;animation-fill-mode:forwards' src='img/icon_livraison_sm.png'/>";
-    } else {
-        myButton.innerHTML = "<img style=' animation-name:displaceContent;animation-duration:1.5s;animation-delay:0.5s;animation-iteration-count :2;animation-fill-mode:forwards' src='img/icon_livraison_sm.png'/>";
-        //myButton.innerHTML = "<img src='http://service.relaiscolis.com/widgetRC/ImagesRelaisColis/rco.png'/>";
-    }
-
-
-
-    myButton.setAttribute('style', 'cursor: pointer; min-width: 80px;background-color: #DDAF94;border-style: solid;margin-top:8px;display:flex;flex-direction:column;align-items:center;justify-content:center; ');
-    myButton.addEventListener("click", function (e) {
-        displayPopUpRC();
-        return false;
-    }, false);
-
-    //-------- Add iframe Listner
-    window.addEventListener("message", receiveMessage, false);
-    function receiveMessage(event)
-    {
-        //console.log("Received data (iframe) - src : ", event.data);
-        if((event.data).hasOwnProperty("id")  && (event.data).hasOwnProperty("name") )
-        {
-
-            $("#overlay").css({"display": "none"});
-            $("#myIframe").css({"display": "none"});
-            callback(event.data);
-        }
-
-        if (event.origin !== "http://relaiscolis.com:8080")
-            //console.log('origine ')
-            return;
-    }
-    $("#relais-colis-widget-container").append(myButton);
-}
-
-function createIframeMap(callback) 
-{
-    var iframeDiv = document.createElement("iframe");
-    //iframeDiv.setAttribute('id','popupWidget');
-
-    iframeDiv.setAttribute('style', 'border:0; position:absolute; z-index:1000; left: calc(50% - 210px); top:350px ; background-color: #FDF8F5; animation: anim 1.3s ease-in-out;');
-    
-    iframeDiv.setAttribute('width', '420');
-    iframeDiv.setAttribute('height', '590');
-    iframeDiv.setAttribute('id', 'myIframe');
-
-    if (location.protocol == "https:") {
-        iframeDiv.setAttribute('src', 'https://service.relaiscolis.com/widgetrc/');
-    } else {
-        iframeDiv.setAttribute('src', 'http://service.relaiscolis.com/widgetrc/');
-    }
-
-    var overlay = document.createElement("div");
-    overlay.setAttribute('id', 'overlay');
-    overlay.setAttribute('style', 'position: fixed; top: 0;  left: 0;  width: 100%; height: 100%;  background: #000;  opacity: 0.5; filter: alpha(opacity=50);z-index:999;');
-
-    overlay.addEventListener("click", function () {
-        $("#overlay").css({"display": "none"});
-       
-        $("#myIframe").css({"display": "none"});
-    }, false);
-
-    callback(overlay, iframeDiv);
-}
-
-var displayPopUpRCalready = false;
-
-/***
- * Cette fonction permet de vérifier si une une iframe exisite déja, si oui elle l'affiche,
- * sinon elle lance la méthode de création
- */
-function displayPopUpRC()
-{
-    if (!displayPopUpRCalready) 
-    {
-        createIframeMap(function (overlay, iframeDiv) {
-            $("body").append(iframeDiv);
-            $("body").append(overlay);
-        });
-        displayPopUpRCalready = true;
-    } 
-    else 
-    {
-        $("#overlay").css({"display": "block"});
-        $("#myIframe").css({"display": "block"});
-    }
-}
-</script>
+<!--Relais colis script-->
+<script type="text/javascript" src="js/Relais_Colis_Iframe.js"></script>
 
 
 <!--scripts customisés-->
 <script>
-
 
 //Relais colis management
 callback = function(data) {
@@ -385,11 +256,8 @@ callback = function(data) {
 $('#relais-colis-widget-container').ready = generateHtmlButton(callback);
 
 
-
-//Datepicker JQUERY
+//Datepicker 
 $( function() {
-    
-    //("#datepicker_livraison").datepicker({ minDate: +20, maxDate: "+12M",regional:"fr" });
     $( "#datepicker_livraison" ).datepicker({ minDate: +20, maxDate: "+12M",regional:"fr" });
 });
 
@@ -406,107 +274,117 @@ function ShowModalAfterPayment(textToAdd) {
     $(".afterpayment").css("display", "block");
     $(".message").text(textToAdd);
 }
-
 $('.close').click(function() {
     $(".modal").css("display", "none");
 });
+function RedirectToCart() {
+    window.location = 'cart_details.php';
+}
 
+//Action de suppression d'un article
 $('.btn_supp_prod').click(function() {
-   
     formData = {
         'ref': $(this).attr('id')
     };
-
     $.ajax({
         type: "POST",
         url: "RemoveFromCart.php",
         dataType: 'json',
         data: formData,
-        success: function(data, textStatus, jqXHR) {
-            
+        success: function(data, textStatus, jqXHR) {   
             ShowModalAfterRemove(data.text_ret);
-            
         },
         error: function(jqXHR, textStatus, errorThrown) {
             alert(errorThrown);
         }
     });
-
 });
 
-function RedirectToCart() {
-    window.location = 'cart_details.php';
+
+//Action d'ajout du choix relais colis
+function AddSelectedRelaisColis(){
+    formData = {
+        'name_relais': document.querySelector("p.name_relais").innerHTML,
+        'address_relais': document.querySelector("p.address_relais").innerHTML,
+        'city_relais': document.querySelector("p.city_relais").innerHTML
+    };
+    $.ajax({
+        type: "POST",
+        url: "AddSelectedRelais.php",
+        dataType: 'json',
+        data: formData,
+        success: function(data, textStatus, jqXHR) {   
+            alert(textStatus);
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            alert(errorThrown);
+        }
+    });
 }
 
+//Gestion de Paypal
 if ($('input[name=DisablePaypalBtn]').val() == 0) //evite de charger le btn pour eviter les soucis si aucun article
 {
-paypal.Button.render({
-    env: 'sandbox', // Ou 'production',
-    commit: true, // Affiche le bouton  "Payer maintenant"
-    style: {
-        color: 'gold', // ou 'blue', 'silver', 'black'
-        size: 'responsive', // ou 'small', 'medium', 'large'
-        layout: 'vertical',
-        shape:  'rect'
-    },
-    // onInit is called when the button first renders
-    onInit: function(data, actions) {
-    },
-    payment: function() {
-        // créer le paiement
-        //var CREATE_URL = 'paypal_create_payment.php?ref=8ekl6a8kpk706pmpi00b8hm0vj';
-        var CREATE_URL = 'paypal_create_payment.php?ref='+ $('input[name=CartId]').val();
-        // On exécute notre requête pour créer le paiement
-        return paypal.request.post(CREATE_URL).then(function(data) { //JSON data
-                if (data.success) { // Si success est vrai (<=> 1), on peut renvoyer l'id du paiement généré par PayPal
-                    return data.paypal_response.id;
-                } 
-                else { // Sinon, il y a eu une erreur quelque part. retourne false, pour stopper net le processus de paiement.
-                    alert("paypal_create_payment response :"+ data.msg);
-                    return false;
-                }
-            });
-    },
-    onAuthorize: function(data, actions) {
-        // On indique le chemin vers notre script PHP qui se chargera d'exécuter le paiement (appelé après approbation de l'utilisateur côté client).
-        var EXECUTE_URL = 'paypal_execute_payment.php';
-        //  PayPal se charge de remplir le paramètre data :
-        // - paymentID est l'id du paiement qu'on a demandé à PayPal de générer (côté serveur) 
-        // - payerID est l'id PayPal du client
-        var data = {
-            paymentID: data.paymentID,
-            payerID: data.payerID
-        };
-        //envoie de la requete
-        return paypal.request.post(EXECUTE_URL,data).then(function(data) { //JSON data retour serveur
-                if (data.success) { // Si le paiement a bien été validé, on peut rediriger l'utilisateur vers une nouvelle page, afficher un message indiquant que son paiement a bien été pris en compte.
-                    // Exemple : window.location.replace("Une url");
-                    ShowModalAfterPayment("Votre commande à été correctement effectué. Nous vous remercions pour votre achat.");
-                    window.location.replace("send_mail.php?pid="+data.pay_id);
-                } else {
-                    //exécution du paiement a échoué.
-                    alert(data.msg);
-                }
-            });
-    },
-    onCancel: function(data, actions) {
-        alert("Paiement annulé : vous avez fermé la fenêtre de paiement.");
-    },
-    onError: function(err) {
-        alert(err);
-        alert("Paiement annulé : une erreur est survenue. Merci de bien vouloir réessayer ultérieurement.");
-    }
-}, '#bouton-paypal');
+    paypal.Button.render({
+        env: 'sandbox', // Ou 'production',
+        commit: true, // Affiche le bouton  "Payer maintenant"
+        style: {
+            color: 'gold', // ou 'blue', 'silver', 'black'
+            size: 'responsive', // ou 'small', 'medium', 'large'
+            layout: 'vertical',
+            shape:  'rect'
+        },
+        // onInit is called when the button first renders
+        onInit: function(data, actions) {
+        },
+        payment: function() {
+            // créer le paiement
+            //var CREATE_URL = 'paypal_create_payment.php?ref=8ekl6a8kpk706pmpi00b8hm0vj';
+            var CREATE_URL = 'paypal_create_payment.php?ref='+ $('input[name=CartId]').val();
+            // On exécute notre requête pour créer le paiement
+            return paypal.request.post(CREATE_URL).then(function(data) { //JSON data
+                    if (data.success) { // Si success est vrai (<=> 1), on peut renvoyer l'id du paiement généré par PayPal
+                        return data.paypal_response.id;
+                    } 
+                    else { // Sinon, il y a eu une erreur quelque part. retourne false, pour stopper net le processus de paiement.
+                        alert("paypal_create_payment response :"+ data.msg);
+                        return false;
+                    }
+                });
+        },
+        onAuthorize: function(data, actions) {
+            // On indique le chemin vers notre script PHP qui se chargera d'exécuter le paiement (appelé après approbation de l'utilisateur côté client).
+            var EXECUTE_URL = 'paypal_execute_payment.php';
+            //  PayPal se charge de remplir le paramètre data :
+            // - paymentID est l'id du paiement qu'on a demandé à PayPal de générer (côté serveur) 
+            // - payerID est l'id PayPal du client
+            var data = {
+                paymentID: data.paymentID,
+                payerID: data.payerID
+            };
+            //envoie de la requete
+            return paypal.request.post(EXECUTE_URL,data).then(function(data) { //JSON data retour serveur
+                    if (data.success) { // Si le paiement a bien été validé, on peut rediriger l'utilisateur vers une nouvelle page.
 
+
+                        ShowModalAfterPayment("Votre commande à été correctement effectué. Redirection en cours...");
+                        window.location.replace("send_mail.php?pid="+data.pay_id); //utilisation de la redirection pour afficher une page de remerciement
+                    } else {
+                        //exécution du paiement a échoué.
+                        alert(data.msg);
+                    }
+                });
+        },
+        onCancel: function(data, actions) {
+            //alert("Paiement annulé : vous avez fermé la fenêtre de paiement.");
+        },
+        onError: function(err) {
+            //alert(err);
+            alert("Paiement annulé : une erreur est survenue. Merci de bien vouloir réessayer ultérieurement.");
+        }
+    }, '#bouton-paypal');
 }
 
-
-
-
-
 </script>
-
-
-
 
 </html>

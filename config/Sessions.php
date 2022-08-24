@@ -50,6 +50,7 @@ class Sessions extends Database
         }
     }
 
+
     // Supprimer une Session 
     public function delete($id_session = "") 
     {
