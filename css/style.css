@@ -426,6 +426,11 @@ header {
 }
 
 
+/*Section select addresse relais*/
+.section_relais_select p{
+  margin:0;
+}
+
 
 
 /*Animation btn relais colis */

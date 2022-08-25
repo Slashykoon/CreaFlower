@@ -23,7 +23,7 @@ else{
 
     $row_panier=$paniers->findwithPK($row_session["fk_panier"]);
     //Contrôle du statut du panier associé. Si payé on génère un nouveau panier et on mets à jour le panier de la session
-    if($row_panier["statut"]=='PAYE')
+    if($row_panier["statut"]=='Paye')
     {
         $ret_id_panier=$paniers->add("Temp_".session_id());
         $ret_session_updt=$sessions->edit(session_id(),$ret_id_panier);

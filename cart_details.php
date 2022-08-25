@@ -31,6 +31,7 @@ require_once "config/Paniers.php";
 require_once "config/Produit_Panier.php";
 require_once "config/Sessions.php";
 require_once "config/Specifications_Panier.php";
+require_once "config/Livraison.php";
 
 $users = new Users();
 $produits = new Produits();
@@ -40,6 +41,7 @@ $paniers = new Paniers();
 $produit_panier = new Produit_Panier();
 $specification_panier = new Specifications_Panier();
 $sessions = new Sessions();
+$livraisons = new Livraisons();
 
 
 require_once "Session_management.php";
@@ -191,6 +193,10 @@ require_once "Cart_Number_Update.php";
                     <input type="text" id="name" name="name">
                     </li>
                     <li class="form-row">
+                    <label for="prenom">Prenom</label>
+                    <input type="text" id="prenom" name="prenom">
+                    </li>
+                    <li class="form-row">
                     <label for="city">Adresse</label>
                     <input type="text" id="city" name="city">
                     </li>
@@ -198,6 +204,7 @@ require_once "Cart_Number_Update.php";
                     <label for="email">Email</label>
                     <input type="email" id="email" name="email">
                     </li>
+                    
                 </ul>
                 </form>
 
@@ -308,19 +315,25 @@ function AddSelectedRelaisColis(){
         'address_relais': document.querySelector("p.address_relais").innerHTML,
         'city_relais': document.querySelector("p.city_relais").innerHTML
     };
+
+    
+    //console.log(formData);
     $.ajax({
         type: "POST",
-        url: "AddSelectedRelais.php",
+        url: "AddToLivraisons.php",
         dataType: 'json',
         data: formData,
         success: function(data, textStatus, jqXHR) {   
-            alert(textStatus);
+             //console.log(textStatus);
         },
         error: function(jqXHR, textStatus, errorThrown) {
-            alert(errorThrown);
+            console.log(textStatus);
         }
     });
 }
+
+
+
 
 //Gestion de Paypal
 if ($('input[name=DisablePaypalBtn]').val() == 0) //evite de charger le btn pour eviter les soucis si aucun article
@@ -336,8 +349,11 @@ if ($('input[name=DisablePaypalBtn]').val() == 0) //evite de charger le btn pour
         },
         // onInit is called when the button first renders
         onInit: function(data, actions) {
+            
         },
         payment: function() {
+            //ajoute le point relais colis
+            AddSelectedRelaisColis();
             // créer le paiement
             //var CREATE_URL = 'paypal_create_payment.php?ref=8ekl6a8kpk706pmpi00b8hm0vj';
             var CREATE_URL = 'paypal_create_payment.php?ref='+ $('input[name=CartId]').val();
@@ -365,8 +381,6 @@ if ($('input[name=DisablePaypalBtn]').val() == 0) //evite de charger le btn pour
             //envoie de la requete
             return paypal.request.post(EXECUTE_URL,data).then(function(data) { //JSON data retour serveur
                     if (data.success) { // Si le paiement a bien été validé, on peut rediriger l'utilisateur vers une nouvelle page.
-
-
                         ShowModalAfterPayment("Votre commande à été correctement effectué. Redirection en cours...");
                         window.location.replace("send_mail.php?pid="+data.pay_id); //utilisation de la redirection pour afficher une page de remerciement
                     } else {
