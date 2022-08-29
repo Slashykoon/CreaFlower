@@ -196,8 +196,8 @@ $rows_rubriques = $rubriques->findAll();
 
 
     <!--TABLEAU EDITION -->
-    <h1 style="text-align:center;">TABLEAU RECAPITULATIF ARTICLES</h1>
-    <table>
+    <h1 style="text-align:center; margin-left: auto; margin-right: auto;">TABLEAU RECAPITULATIF ARTICLES</h1>
+    <table style=" margin-left: auto; margin-right: auto;">
         <tr style="border: solid 2px;text-align:center;">
             <th>Id</th>
             <th>Nom</th>
@@ -266,7 +266,7 @@ $rows_rubriques = $rubriques->findAll();
                     // Ouvre le repertoire et recupère toute les photos
                     foreach(glob($dir) as $file)
                     {
-                        echo '<img src='.$file.' height=160 width=180 />';
+                        echo '<img src='.$file.' height=120 width=130 />';
                     }
                 ?>
             </td>

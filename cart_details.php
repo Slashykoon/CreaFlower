@@ -19,6 +19,10 @@
     <script src="https://kit.fontawesome.com/b0f7e6ecb6.js" crossorigin="anonymous"></script>
     <!-- Importation de la SDK JavaScript PayPal -->
     <script src="https://www.paypalobjects.com/api/checkout.js"></script>
+
+    <!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/tomik23/autocomplete@1.8.3/dist/css/autocomplete.min.css"/>-->
+<script src="https://cdn.jsdelivr.net/gh/tomik23/autocomplete@1.8.3/dist/js/autocomplete.min.js"></script>
+
 </head>
 
 <?php
@@ -172,40 +176,45 @@ require_once "Cart_Number_Update.php";
             ?>
             <div class="cart-product-checkout-details">
 
-                <div id="relais-colis-widget-container">Choisissez votre relais colis :
-
-                </div>
+                <div id="relais-colis-widget-container" class="text_bold">Choisissez votre relais colis :</div>
                 <div class="section_relais_select" style="display:none;">
                     <p class="name_relais"></p>
                     <p class="address_relais"></p>
                     <p class="city_relais"></p>
                 </div>
 
-                <div>
-                    <p>Indiquez la date de l'evenement (marriage,baptême,etc..) :</p>
-                    <p><input style="width:100%;height:25px;" type="text" id="datepicker_livraison" onkeydown="event.preventDefault()"></p>
+                <div class="text_bold">Date de l'evenement (marriage,baptême,etc..) :</div>
+                <div class="input-container bottom-10px ">
+                    
+                    <input style="width:100%;height:25px;" type="text" id="datepicker_livraison" onkeydown="event.preventDefault()" readonly="readonly"> 
                 </div>
 
+                <div class="text_bold">Vos coordonnées :</div>
                 <form>
-                <ul class="wrapper">
-                    <li class="form-row">
-                    <label for="name">Nom</label>
-                    <input type="text" id="name" name="name">
-                    </li>
-                    <li class="form-row">
-                    <label for="prenom">Prenom</label>
-                    <input type="text" id="prenom" name="prenom">
-                    </li>
-                    <li class="form-row">
-                    <label for="city">Adresse</label>
-                    <input type="text" id="city" name="city">
-                    </li>
-                    <li class="form-row">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email">
-                    </li>
+                    <div class="input-container">
+                        <input type="text" required="required" name="nom_client" />
+                        <label>Nom</label>		
+                    </div>
+                    <div class="input-container">
+                        <input type="text" required="required" name="prenom_client" />
+                        <label>Prenom</label>		
+                    </div>
+                    <div class="input-container">
+                        <input type="email" required="required" name="email_client" />
+                        <label>Email</label>		
+                    </div>
+                    <div class="auto-search-wrapper input-container bottom-10px" >
+                        <input
+                            type="text"
+                            autocomplete="off"
+                            id="search"
+                            class="full-width"
+                            placeholder="Entrez une adresse"
+                            name="adresse_client"
+                        />
+                        <label>Adresse</label>	
+                    </div>
                     
-                </ul>
                 </form>
 
                 <div class="cart-details-totaux-section">
@@ -214,11 +223,11 @@ require_once "Cart_Number_Update.php";
                         <p style="margin-top:5px;margin-bottom:5px;">Total : <?php echo $total; ?> €</p>        
                 </div>
                 <div>
-                    <p style="margin-bottom:5px;">Il n'est pas obligatoire de posséder un compte Paypal pour commander.</p>
+                    <p style="margin-bottom:5px;font-style: italic;">Il n'est pas obligatoire de posséder un compte Paypal pour commander.</p>
                 </div>
                 
                 <!--Bouton Paypal-->
-                <div id="bouton-paypal"></div>
+                <div id="bouton-paypal" ></div>
             </div>
             <?php } ?>
         </div>
@@ -258,7 +267,7 @@ callback = function(data) {
                 $(".section_relais_select").css("display", "block");
                 document.querySelector("p.name_relais").innerHTML=data.name;
                 document.querySelector("p.address_relais").innerHTML=data.location.formattedAddressLine;
-                document.querySelector("p.city_relais").innerHTML=data.location.formattedCityLine;
+                document.querySelector("p.city_relais").innerHTML=data.location.formattedCityLine;    
 }
 $('#relais-colis-widget-container').ready = generateHtmlButton(callback);
 
@@ -313,11 +322,15 @@ function AddSelectedRelaisColis(){
     formData = {
         'name_relais': document.querySelector("p.name_relais").innerHTML,
         'address_relais': document.querySelector("p.address_relais").innerHTML,
-        'city_relais': document.querySelector("p.city_relais").innerHTML
+        'city_relais': document.querySelector("p.city_relais").innerHTML,
+        'nom_client': document.querySelector("[name=nom_client]").value,
+        'prenom_client': document.querySelector("[name=prenom_client]").value,
+        'email_client': document.querySelector("[name=email_client]").value,
+        'adresse_client': document.querySelector("[name=adresse_client]").value
     };
 
+
     
-    //console.log(formData);
     $.ajax({
         type: "POST",
         url: "AddToLivraisons.php",
@@ -327,10 +340,12 @@ function AddSelectedRelaisColis(){
              //console.log(textStatus);
         },
         error: function(jqXHR, textStatus, errorThrown) {
-            console.log(textStatus);
+            console.log(errorThrown);
         }
     });
 }
+
+
 
 
 
@@ -398,6 +413,70 @@ if ($('input[name=DisablePaypalBtn]').val() == 0) //evite de charger le btn pour
         }
     }, '#bouton-paypal');
 }
+
+
+
+new Autocomplete("search", {
+  // default selects the first item in
+  // the list of results
+  selectFirst: true,
+  // The number of characters entered should start searching
+  howManyCharacters: 2,
+  // onSearch
+  onSearch: ({ currentValue }) => {
+    // You can also use static files
+    // const api = '../static/search.json'
+    const api = `https://nominatim.openstreetmap.org/search?format=geojson&limit=5&street=${encodeURI(
+      currentValue
+    )}`;
+
+    return new Promise((resolve) => {
+      fetch(api)
+        .then((response) => response.json())
+        .then((data) => {
+          resolve(data.features);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    });
+  },
+  // nominatim GeoJSON format parse this part turns json into the list of
+  // records that appears when you type.
+  onResults: ({ currentValue, matches, template }) => {
+    const regex = new RegExp(currentValue, "gi");
+
+    // if the result returns 0 we
+    // show the no results element
+    return matches === 0
+      ? template
+      : matches
+          .map((element) => {
+            return `
+          <li class="loupe">
+            <p>
+              ${element.properties.display_name.replace(
+                regex,
+                (str) => `<b>${str}</b>`
+              )}
+            </p>
+          </li> `;
+          })
+          .join("");
+  },
+  // we add an action to enter or click
+  onSubmit: ({ object }) => {
+    //console.log(object.properties.display_name);
+  },
+  // get index and data from li element after
+  // hovering over li with the mouse or using keyboard
+  onSelectedItem: ({ index, element, object }) => {
+    //console.log("onSelectedItem:", index, element, object);
+  },
+  // the method presents no results element
+  noResults: ({ currentValue, template }) =>
+    template(`<li>Aucun résultat trouvé: "${currentValue}"</li>`),
+});
 
 </script>
 

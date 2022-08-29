@@ -26,6 +26,29 @@ class Livraisons extends Database
     }
 
     // Ajouter un élément
+    public function add_relais_and_domicile($fk_panier,$type_choisi,$nom_relais,$adresse_relais,$cp_relais,$email,$nom_domicile,$prenom_domicile,$adresse_domicile)
+    {
+        if (true) {
+            return $this->db->prepare("INSERT INTO $this->table (fk_panier,type_choisi,nom_relais,adresse_relais,cp_relais,email,nom_domicile,prenom_domicile,adresse_domicile) 
+                                                VALUES (:fk_panier,:type_choisi,:nom_relais,:adresse_relais,:cp_relais,:email,:nom_domicile,:prenom_domicile,:adresse_domicile)",
+                                                array("fk_panier" => $fk_panier,"type_choisi" => $type_choisi,"nom_relais" => $nom_relais,"adresse_relais" => $adresse_relais,"cp_relais" => $cp_relais,"email" => $email,"nom_domicile" => $nom_domicile,"prenom_domicile" => $prenom_domicile,"adresse_domicile" => $adresse_domicile));
+        }
+    }
+
+    // Modifier un élément
+    public function edit_relais_and_domicile($fk_panier,$type_choisi,$nom_relais,$adresse_relais,$cp_relais,$email,$nom_domicile,$prenom_domicile,$adresse_domicile)
+    {
+        if ($fk_panier) {
+
+            return $this->db->prepare("UPDATE $this->table 
+                                        SET type_choisi = :type_choisi, nom_relais =:nom_relais,adresse_relais=:adresse_relais,cp_relais = :cp_relais,email =:email,nom_domicile=:nom_domicile,prenom_domicile=:prenom_domicile,adresse_domicile=:adresse_domicile
+                                        WHERE fk_panier = :fk_panier",
+                                        array("fk_panier"=>$fk_panier ,"type_choisi" => $type_choisi,"nom_relais"=>$nom_relais,"adresse_relais"=>$adresse_relais,"cp_relais"=>$cp_relais,"email"=>$email,"nom_domicile"=>$nom_domicile,"prenom_domicile"=>$prenom_domicile,"adresse_domicile"=>$adresse_domicile));
+        }
+    }
+
+
+    // Ajouter un élément
     public function add_relais($fk_panier,$type_choisi,$nom_relais,$adresse_relais,$cp_relais,$email)
     {
         if (true) {
@@ -43,6 +66,9 @@ class Livraisons extends Database
                                                 array("fk_panier" => $fk_panier,"type_choisi" => $type_choisi,"nom_domicile" => $nom_domicile,"prenom_domicile" => $prenom_domicile,"adresse_domicile" => $adresse_domicile,"cp_domicile" => $cp_domicile,"email"=>$email));
         }
     }
+
+
+
 
     // Modifier le statut
     /*public function edit_statut($pk_panier, $statut = "")
