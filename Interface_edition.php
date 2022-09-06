@@ -80,7 +80,7 @@ $TextReturn="";
       foreach($obj as $mydata)
       {   
               // Ajoute la valeur de specif
-              $ret_id_specif=$specifications->add($ret_id_prod ,$mydata->{'specification'});
+              $ret_id_specif=$specifications->add($ret_id_prod ,$mydata->{'specification'},$mydata->{'type'});
               //Ajoute les options
               for ($i = 0; $i <= count($mydata->{'option'})-1; $i++) {
                 $ret=$options->add($ret_id_specif,$mydata->{'option'}[$i],$mydata->{'prix'}[$i]);

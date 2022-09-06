@@ -106,19 +106,27 @@ require_once "Cart_Number_Update.php";
                                     foreach ($rows_specifications_panier as $sp_panier)
                                     {
                                         
-
+                                        
                                         $row_opt_panier = $options->TestIfOptionExist($sp_panier["fk_option"]); //=> changer nom testif todo
                                         $row_spec = $specifications->find($row_opt_panier["fk_sp"]); //recuperation du nom de la specification
                                         print_r("<p style='margin-top:5px;margin-bottom:2px;'>: ".$row_spec["nom_specification"]."</p>");
-                                        $temp_prix_add = (( floatval($row_opt_panier["prix_add"]) > 0.0) ? " (+".strval($row_opt_panier["prix_add"])."€)"  : "");
-                                        print_r("<ul class='fa-ul' style='margin-top:0px;margin-bottom:0px;'>");
-                                        print_r("<li><span class='fa-li'><i class='fas fa-broom fa-sm'></i></span>"); 
+                                       
+                                            $temp_prix_add = (( floatval($row_opt_panier["prix_add"]) > 0.0) ? " (+".strval($row_opt_panier["prix_add"])."€)"  : "");
+                                            print_r("<ul class='fa-ul' style='margin-top:0px;margin-bottom:0px;'>");
+                                            print_r("<li><span class='fa-li'><i class='fas fa-broom fa-sm'></i></span>"); 
+                                            if($row_spec["type"] == 0) //seul les option select on des prix
+                                            {
+                                                print_r("<p style='margin-top:0px;margin-bottom:0px;' >".$row_opt_panier["nom_option"].$temp_prix_add."</p>");
+                                            }
+                                            if($row_spec["type"] == 4 || $row_spec["type"] == 1) //saisi ou date
+                                            {
+                                                print_r("<p style='margin-top:0px;margin-bottom:0px;' >".$sp_panier["txt_saisi"]."</p>");
+                                            }
+                                            print_r("</li>");
+                                            print_r("</ul>");
+                                            $opt_prix_add_total = ($opt_prix_add_total + floatval(($row_opt_panier["prix_add"]) * floatval(($prod_panier["quantity"]) )));
                                         
-                                        print_r("<p style='margin-top:0px;margin-bottom:0px;' >".$row_opt_panier["nom_option"].$temp_prix_add."</p>");
-                                        print_r("</li>");
-                                        print_r("</ul>");
-                                        $opt_prix_add_total = ($opt_prix_add_total + floatval(($row_opt_panier["prix_add"]) * floatval(($prod_panier["quantity"]) )));
-                                        
+
                                     }
                                     $sum_opt_prix_total=$sum_opt_prix_total+$opt_prix_add_total;
                                     //print_r($sum_opt_prix_total);

@@ -115,9 +115,19 @@ $rows_rubriques = $rubriques->findAll();
                 <!-- Nom specification-->
                 <div class="mb-3">
                     <div class="row align-items-end justify-content-start">
-                        <div class="col-10">
+                        <div class="col-6">
                             <label class="form-label" for="nom_sp">Nom specification</label>
                             <input class="form-control shadow" id="nom_sp" name="nom_sp" type="text" placeholder="Nom de la specification" data-sb-validations="required" />
+                        </div>
+                        <div class="col-4">
+                            <label for="type_specif">Type</label>
+                            <select name="type_specif" id="type_specif">
+                                <option value="0">Selection</option>
+                                <option value="1">Saisie libre</option>
+                                <option value="2">Image</option>
+                                <option value="3">PDF</option>
+                                <option value="4">Date</option>
+                            </select>
                         </div>
                         <div class="col-2 ">
                         <!-- Ajouter specification-->
@@ -232,8 +242,8 @@ $rows_rubriques = $rubriques->findAll();
                     {
                         $i=0;
                         echo "<hr/>";
-                        print_r($specification["nom_specification"]);
-                        echo "<hr/>";
+                        print_r("<b>".$specification["nom_specification"]."</b>");
+                        echo "<br/>";
                         $rows_options = $options->findAllOptionsOfSpecification($specification['pk_sp']);
                         
                         foreach ($rows_options as $specif_options)
@@ -333,6 +343,7 @@ function AddSection_SpecificationOptions(){
     dict_Init["prix"] = new Array();
 
     nb_specif_added++;
+   
 
     name_opt = "name_opt_";
     prixadd_opt = "prixadd_opt_";
@@ -340,15 +351,34 @@ function AddSection_SpecificationOptions(){
     name_opt +=  String(nb_specif_added);
     prixadd_opt +=  String(nb_specif_added);
     option_values +=  String(nb_specif_added);
-     
+
+    //console.log();
+
     //Ajouter les rubriques
     $('.section_options').append("<h4>"+$('input[name=nom_sp]').val()+"</h4>");
     $('.section_options').append("<br/>");
     //
-    $('.section_options').append("<label for='name_opt'>Option :</label>");
-    $('.section_options').append("<input class='form-control shadow' id='name_opt' name='name_opt' type='text' placeholder='Nom de loption' />");
-    $('.section_options').append("<label class='form-label' for='prixadd_opt'>Prix additionel :</label>");
-    $('.section_options').append("<input class='form-control shadow ' id='prixadd_opt' name='prixadd_opt' type='number' placeholder='Prix TTC' min='0.0' step='.01'></input>");
+
+    if($('select[name=type_specif]').val() == 0)
+    {
+        $('.section_options').append("<label for='name_opt'>Option :</label>");
+        $('.section_options').append("<input class='form-control shadow' id='name_opt' name='name_opt' type='text' placeholder='Nom de loption' />");
+        $('.section_options').append("<label class='form-label' for='prixadd_opt'>Prix additionel :</label>");
+        $('.section_options').append("<input class='form-control shadow ' id='prixadd_opt' name='prixadd_opt' type='number' placeholder='Prix TTC' min='0.0' step='.01'></input>");
+    }
+    else{
+        $('.section_options').append("<label for='name_opt'>Option :</label>");
+        $('.section_options').append("<input class='form-control shadow' id='name_opt' name='name_opt' type='text' placeholder='Nom de loption' />");
+        $('input[name=name_opt]').val($('input[name=nom_sp]').val()); //add
+        $('input[name=name_opt]').attr('disabled', 'disabled');
+        //
+        $('.section_options').append("<label class='form-label' for='prixadd_opt'>Prix additionel :</label>");
+        $('.section_options').append("<input class='form-control shadow ' id='prixadd_opt' name='prixadd_opt' type='number' placeholder='Prix TTC' min='0.0' step='.01'></input>");
+        $('input[name=prixadd_opt]').val(0.0); //add
+        $('input[name=prixadd_opt]').attr('disabled', 'disabled');
+        //
+        //AddOptionValue(nb_specif_added,$("+name_opt+").val(),$("+prixadd_opt+").val());
+    }
     //
     $('.section_options').append("<button class='btn mt-3 btn-info' onclick='AddOptionValue("+nb_specif_added+",$("+name_opt+").val(),$("+prixadd_opt+").val())'> <i class='fas fa-edit'></i>Ajouter option</button>");
     //
@@ -362,7 +392,8 @@ function AddSection_SpecificationOptions(){
 
     dict_objsp_dict_arropt[String(nb_specif_added)]=dict_Init;
     dict_objsp_dict_arropt[String(nb_specif_added)]["specification"]=$('input[name=nom_sp]').val();
-
+    dict_objsp_dict_arropt[String(nb_specif_added)]["type"]=$('select[name=type_specif]').val();
+    //console.log(dict_objsp_dict_arropt);
     //alert(JSON.stringify(dict_objsp_dict_arropt));
 }
 
@@ -371,6 +402,7 @@ function AddOptionValue(nb_sp_add,_name_opt,_prix_opt) {
     dict_objsp_dict_arropt[String(nb_sp_add)]["option"].push(_name_opt);
     dict_objsp_dict_arropt[String(nb_sp_add)]["prix"].push(_prix_opt);
     //alert(JSON.stringify(dict_objsp_dict_arropt));
+    //console.log(dict_objsp_dict_arropt);
     $("#option_values_"+nb_sp_add).append("<a>" + _name_opt +" : " + _prix_opt + "€ | </a>");
 }
 

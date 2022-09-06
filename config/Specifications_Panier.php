@@ -31,7 +31,7 @@ class Specifications_Panier extends Database
     {
         if ($fk_prod_panier) {     
 
-            return $this->db->prepare("SELECT pk_specification_panier,fk_produit_panier,fk_option
+            return $this->db->prepare("SELECT pk_specification_panier,fk_produit_panier,fk_option,txt_saisi
                                     FROM $this->table 
                                     WHERE fk_produit_panier = :fk_prod_panier",
                                     array("fk_prod_panier" => $fk_prod_panier));
@@ -39,15 +39,16 @@ class Specifications_Panier extends Database
     }
       
 
-    // Ajouter un élément
-    public function addChosenOption($fk_produit_panier = "", $fk_option = "")
+    // Ajouter un élément depuis option select ou input
+    public function addChosenOption($fk_produit_panier = "", $fk_option = "",$txt_saisi="")
     {
-        if ($fk_option) {
-            return $this->db->prepare("INSERT INTO $this->table (fk_produit_panier,fk_option)
-                                        VALUES (:fk_produit_panier,:fk_option)",
-                                        array("fk_produit_panier" => $fk_produit_panier,"fk_option"=>$fk_option));
+        if ($fk_produit_panier) {
+            return $this->db->prepare("INSERT INTO $this->table (fk_produit_panier,fk_option,txt_saisi)
+                                        VALUES (:fk_produit_panier,:fk_option,:txt_saisi)",
+                                        array("fk_produit_panier" => $fk_produit_panier,"fk_option"=>$fk_option,"txt_saisi"=>$txt_saisi));
         }
     }
+
 
 
     // Modifier un élément

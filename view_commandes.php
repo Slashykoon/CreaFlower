@@ -75,11 +75,9 @@ $rows_paiements=$paiements->findAll();
             <th>Numéro facture</th>
         </tr>
         <?php 
-                    foreach ($rows_paiements as $paiement)
-                    {
-                        //$row_livraison=$livraisons->findwithPKPanier($paiement->produit);
-
-                ?>
+        foreach ($rows_paiements as $paiement)
+        {
+        ?>
         <tr style="border: solid 2px;font-size:1.1em;">
             <td style="border: solid 2px;padding:4px;"><?= $paiement->produit; ?></td>
             <td style="border: solid 2px;padding:4px;"><?= $paiement->payment_id; ?></td>
@@ -97,8 +95,9 @@ $rows_paiements=$paiements->findAll();
                     status</button></td>
 
         </tr>
-
-        <?php } ?>
+        <?php 
+        } 
+        ?>
     </table>
 
 
@@ -147,7 +146,7 @@ $rows_paiements=$paiements->findAll();
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="ModalLongTitle_panier">Livraison associée</h5>
+                    <h5 class="modal-title" id="ModalLongTitle_panier">Panier associé à la commande</h5>
                 </div>
                 <div class="modal-body" id="ModalBody_panier">
                     <div class="container-fluid">

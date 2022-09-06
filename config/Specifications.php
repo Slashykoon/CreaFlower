@@ -19,18 +19,19 @@ class Specifications extends Database
     {
         if ($id_prod) {     
 
-            return $this->db->prepare("SELECT pk_sp,fk_pr,nom_specification
+            return $this->db->prepare("SELECT pk_sp,fk_pr,nom_specification,type
                                         FROM specifications INNER JOIN produits ON specifications.fk_pr = produits.pk_pr
                                         WHERE specifications.fk_pr = :id_prod",
                                         array("id_prod" => $id_prod));
         }
     }
 
+
    // Sélectionner une specification par sa pk
    public function find($pk_sp = "")
    {
        if ($pk_sp) {     
-           return $this->db->row("SELECT pk_sp,fk_pr,nom_specification
+           return $this->db->row("SELECT pk_sp,fk_pr,nom_specification,type
                                    FROM $this->table
                                    WHERE pk_sp = :pk_sp
                                    LIMIT 1",
@@ -39,12 +40,12 @@ class Specifications extends Database
    }
 
     // Ajouter un élément
-    public function add($_idprod = "", $_nom = "")
+    public function add($_idprod = "", $_nom = "",$_type = "")
     {
         if ($_nom) {
-            return $this->db->prepare("INSERT INTO $this->table (fk_pr,nom_specification)
-                                        VALUES (:fk_pr,:nom_specification)",
-                                        array("fk_pr" => $_idprod,"nom_specification"=>$_nom));
+            return $this->db->prepare("INSERT INTO $this->table (fk_pr,nom_specification,type)
+                                        VALUES (:fk_pr,:nom_specification,:type)",
+                                        array("fk_pr" => $_idprod,"nom_specification"=>$_nom,"type"=>$_type));
         }
     }
 

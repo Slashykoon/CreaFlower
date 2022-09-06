@@ -127,28 +127,46 @@ echo "<input id='ProdPrice' name='ProdPrice' type='hidden' value='".$row_produit
                         {
                             $i=0;
                             echo "<div style='display:flex;padding-bottom:15px;'>";
+
+                                //affiche le nom de la specif car different du nom d'option
                                 echo "<div style='flex: 1;padding: .2em 0.8em .2em 0;'>";
                                     echo "<p>";
-                                    print_r($specification["nom_specification"]);
+                                        print_r($specification["nom_specification"]);
                                     echo "</p>";
                                 echo "</div>";
-                                
-                                echo "<select id='id_specif_choice' name='specif_choice' style='flex: 2;'>"; 
-                                    $rows_options = $options->findAllOptionsOfSpecification($specification['pk_sp']);
-                                    foreach ($rows_options as $specif_options)
-                                    {
-                                        echo "<option class='opt-data' id='".$rows_options[$i]["pk_op"]."' value='".$rows_options[$i]["pk_op"]."'>";
-                                        echo "<p>";
-                                        print_r($rows_options[$i]["nom_option"]);
-                                        print_r(" : ");
-                                        print_r($rows_options[$i]["prix_add"]);
-                                        print_r("€");
-                                        print_r("<br/>");
-                                        echo "</p>";
-                                        $i=$i+1;
-                                        echo "</option>";
-                                    }
-                                echo "</select>";
+                                //option select => select
+                                if($specification["type"] == 0)
+                                {
+                                    echo "<select id='id_specif_choice' name='specif_choice' style='flex: 2;'>"; 
+                                        $rows_options = $options->findAllOptionsOfSpecification($specification['pk_sp']);
+                                        foreach ($rows_options as $specif_options)
+                                        {
+                                            echo "<option class='opt-data' id='".$rows_options[$i]["pk_op"]."' value='".$rows_options[$i]["pk_op"]."'>";
+                                            echo "<p>";
+                                            print_r($rows_options[$i]["nom_option"]);
+                                            print_r(" : ");
+                                            print_r($rows_options[$i]["prix_add"]);
+                                            print_r("€");
+                                            print_r("<br/>");
+                                            echo "</p>";
+                                            $i=$i+1;
+                                            echo "</option>";
+                                        }
+                                    echo "</select>";
+                                }
+                                //option saisie => input text
+                                if($specification["type"] == 1)
+                                {
+                                    $row_option = $options->findOptionOfSpecification($specification['pk_sp']);
+                                    echo "<input type='text' id='id_specif_choice_input' name='specif_choice' class='".$row_option['pk_op']."' style='flex: 2;'>"; 
+                                }
+                                //option saisie => input date
+                                if($specification["type"] == 4)
+                                {
+                                    $row_option = $options->findOptionOfSpecification($specification['pk_sp']);
+                                    echo "<input type='date' id='id_specif_choice_input' name='specif_choice' class='".$row_option['pk_op']."' style='flex: 2;'>"; 
+                                }
+
                             echo "</div>";
                         }
                     }
@@ -248,16 +266,18 @@ echo "<input id='ProdPrice' name='ProdPrice' type='hidden' value='".$row_produit
 
 //Premier passage, on recupere les options select pour ajax ajout
 var values_opt=[];
+var values_opt_input=[];
 $( document ).ready(function() {
     values_opt = $("select[name='specif_choice']").map(function(){return $(this).val();}).get(); 
+    //values_saisie_opt = $("input[name='specif_choice']").map(function(){return $(this).val();}).get(); 
 
 });
 
-//Calcul des changements d'options puis recupere les options de nouveau pour ajax ajout
+//Calcul des changements d'options select puis recupere les options de nouveau pour ajax ajout
 document.querySelectorAll('[id=id_specif_choice],[id=input_qte]').forEach(item => {
   item.addEventListener('change', event => {
         values_opt = $("select[name='specif_choice']").map(function(){return $(this).val();}).get(); 
-
+        //console.log(values_opt); 
         var total_add = 0.0;
         var qte = 1;
         var constText = "AJOUTER AU PANIER - ";
@@ -278,13 +298,26 @@ document.querySelectorAll('[id=id_specif_choice],[id=input_qte]').forEach(item =
   })
 });
 
+// Recupere les options input 
+document.querySelectorAll('[id=id_specif_choice_input]').forEach(item => {
+  item.addEventListener('change', event => {
+    values_opt_input=[]; //reset lors du changement pour enlever les push
+    tmp_values_saisie_opt = $("input[name='specif_choice']").map(function(){return $(this).val();}).get(); 
+    tmp_values_saisie_id = $("input[name='specif_choice']").map(function(){return $(this).attr("class");}).get(); 
+    for (var i = 0; i < tmp_values_saisie_opt.length; i++) {
+        values_opt_input.push([tmp_values_saisie_id[i],tmp_values_saisie_opt[i]]);
+    }
+    //console.log(values_opt_input); 
+  })
+});
+
 //Action ajouter au panier
 function AddToCart() {
-    console.log(values_opt.length);
     formData = {
         'ref': $("button.btn-add-cart").attr("id"),
         'qte': parseInt($("#input_qte option:selected").text()),
-        'arr_opt': (values_opt.length>0 ? values_opt : "no")
+        'arr_opt': (values_opt.length > 0 ? values_opt : "no"),
+        'arr_opt_input': (values_opt_input.length > 0 ? values_opt_input : "no")
     };
 
     $.ajax({

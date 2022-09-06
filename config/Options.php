@@ -13,8 +13,7 @@ class Options extends Database
         $this->db = new Database();
     }
 
-
-    // Sélectionner un élément par sa ref
+    //used for select (1 specif => n options )
     public function findAllOptionsOfSpecification($id_sp= "")
     {
         if ($id_sp) {     
@@ -25,7 +24,19 @@ class Options extends Database
                                     array("id_sp" => $id_sp));
         }
     }
-  
+    //used for input text or other (1 specif => 1 option )
+    public function findOptionOfSpecification($id_sp= "")
+    {
+        if ($id_sp) {     
+
+            return $this->db->row("SELECT pk_op,fk_sp,nom_specification,nom_option,prix_add 
+                                    FROM specifications INNER JOIN options ON specifications.pk_sp = options.fk_sp
+                                    WHERE options.fk_sp = :id_sp
+                                    LIMIT 1",
+                                    array("id_sp" => $id_sp));
+        }
+    }
+    //used to verify if option exist
     public function TestIfOptionExist($pk_op= "")
     {
         if ($pk_op) {
@@ -37,9 +48,7 @@ class Options extends Database
         }
     }
 
-
-
-    // Ajouter un élément
+    // Ajouter une option
     public function add($_fk_sp = "",$_nom_option = "",$_prix_add = "")
     {
         if ($_nom_option) {
