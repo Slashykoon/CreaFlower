@@ -89,7 +89,7 @@ $rows_paiements=$paiements->findAll();
             <td style="border: solid 2px;padding:4px;"><?= "FAC_".$paiement->num_facture; ?></td>
             <td style="border: solid 2px;"><button class="btn btn-info btn_open_livraison"
                     id="<?= $paiement->produit; ?>"><i class="fas fa-marker"></i>Info Livraison</button></td>
-            <td style="border: solid 2px;"><button class="btn btn-warning"><i class="fas fa-marker"></i>Info
+            <td style="border: solid 2px;"><button class="btn btn-warning btn_open_panier" id="<?= $paiement->produit; ?>"><i class="fas fa-marker"></i>Info
                     Panier</button></td>
             <td style="border: solid 2px;"><button class="btn btn-danger"><i class="fas fa-marker"></i>Changer
                     status</button></td>
@@ -113,6 +113,10 @@ $rows_paiements=$paiements->findAll();
                     <div class="container-fluid">
                         <div class="row mb-3">
                             <div class="col-md-12 content_type_choisi fw-bold">Pas de données</div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-12 fw-bold">Date de l'evenement</div>
+                            <div class="col-md-12 content_date_evt">Pas de données</div>
                         </div>
                         <div class="row mb-3">
                             <div class="col-md-12 fw-bold">Coordonnées du point relais</div>
@@ -140,6 +144,7 @@ $rows_paiements=$paiements->findAll();
             </div>
         </div>
     </div>
+
    <!-- Modal Contenu panier-->
    <div class="modal fade" id="ModalCenter_panier" tabindex="-1" role="dialog"
         aria-labelledby="ModalCenterTitle_panier" aria-hidden="true">
@@ -151,26 +156,8 @@ $rows_paiements=$paiements->findAll();
                 <div class="modal-body" id="ModalBody_panier">
                     <div class="container-fluid">
                         <div class="row mb-3">
-                            <div class="col-md-12 content_type_choisi fw-bold">Pas de données</div>
+                            <div class="col-md-12 content_produits_options">Pas de données</div>
                         </div>
-                        <div class="row mb-3">
-                            <div class="col-md-12 fw-bold">Coordonnées du point relais</div>
-                            <div class="col-md-12 content_relais_name">Pas de données</div>
-                            <div class="col-md-12 content_relais_adresse">Pas de données</div>
-                            <div class="col-md-12 content_relais_cp">Pas de données</div>
-                        </div>
-                        <div class="row mb-3">
-                            <div class="col-md-12 fw-bold">Coordonnées du clients</div>
-                            <div class="col-md-3">Nom :</div>
-                            <div class="col-md-9 content_nom_client">Pas de données</div>
-                            <div class="col-md-3">Prenom :</div>
-                            <div class="col-md-9 content_prenom_client">Pas de données</div>
-                            <div class="col-md-3">Adresse :</div>
-                            <div class="col-md-9 content_adresse_client">Pas de données</div>
-                            <div class="col-md-3">Email :</div>
-                            <div class="col-md-9 content_email_client">Pas de données</div>
-                        </div>
-
                     </div>
                 </div>
                 <div class="modal-footer" id="ModalFooter_panier">
@@ -183,10 +170,11 @@ $rows_paiements=$paiements->findAll();
 </body>
 
 <script>
-function ShowModalLivraison(type_choisi, nom_relais, adresse_relais, cp_relais, nom_domicile, prenom_domicile,
+function ShowModalLivraison(type_choisi,date_evt, nom_relais, adresse_relais, cp_relais, nom_domicile, prenom_domicile,
     adresse_domicile, cp_domicile, email) {
 
     $(".content_type_choisi").text(type_choisi);
+    $(".content_date_evt").text(date_evt);
     $(".content_relais_name").text(nom_relais);
     $(".content_relais_adresse").text(adresse_relais);
     $(".content_relais_cp").text(cp_relais);
@@ -197,11 +185,17 @@ function ShowModalLivraison(type_choisi, nom_relais, adresse_relais, cp_relais, 
 
     $('#ModalCenter_livraison').modal('show');
 }
+function ShowModalProduits(data) {
+    $(".content_produits_options").empty();
+    $(".content_produits_options").append(data);
+    $('#ModalCenter_panier').modal('show');
+}
 $('#ModalFooter_livraison .btn').click(function() {
-
     $('#ModalCenter_livraison').modal('hide');
 });
-
+$('#ModalFooter_panier .btn').click(function() {
+    $('#ModalCenter_panier').modal('hide');
+});
 
 //Action de suppression d'un article
 $('.btn_open_livraison').click(function() {
@@ -215,7 +209,7 @@ $('.btn_open_livraison').click(function() {
         dataType: 'json',
         data: formData,
         success: function(data, textStatus, jqXHR) {
-            ShowModalLivraison(data.type_choisi, data.nom_relais, data.adresse_relais, data
+            ShowModalLivraison(data.type_choisi,data.date_evt, data.nom_relais, data.adresse_relais, data
                 .cp_relais, data.nom_domicile, data.prenom_domicile, data.adresse_domicile, data
                 .cp_domicile, data.email);
         },
@@ -224,6 +218,28 @@ $('.btn_open_livraison').click(function() {
         }
     });
 });
+
+
+//Action de suppression d'un article
+$('.btn_open_panier').click(function() {
+    formData = {
+        'fk_panier': $(this).attr('id')
+    };
+    console.log(formData);
+    $.ajax({
+        type: "POST",
+        url: "View_Commande_Produits.php",
+        dataType: 'json',
+        data: formData,
+        success: function(data, textStatus, jqXHR) {
+            ShowModalProduits(data.ret_content_txt);
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            alert(errorThrown);
+        }
+    });
+});
+
 </script>
 
 

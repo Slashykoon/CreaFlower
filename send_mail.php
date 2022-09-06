@@ -95,13 +95,22 @@ if ($row_paiement)
           {
               $row_opt_panier = $options->TestIfOptionExist($sp_panier["fk_option"]); //=> changer nom testif todo
               $row_spec = $specifications->find($row_opt_panier["fk_sp"]); //recuperation du nom de la specification
+
               $content = $content."<b>".$row_spec["nom_specification"]." : </b>";
               //print_r("<p style='margin-top:5px;margin-bottom:2px;'>: ".$row_spec["nom_specification"]."</p>");
               $temp_prix_add = (( floatval($row_opt_panier["prix_add"]) > 0.0) ? " (+".strval($row_opt_panier["prix_add"])."e)"  : "");
               //$content=$content."<ul style='margin-top:0px;margin-bottom:0px;background-color: #FDF8F5;'>";
               //$content=$content."<li>";
               //$content=$content."<p style='margin-top:0px;margin-bottom:0px;background-color: #FDF8F5;' >";
-              $content=$content.$row_opt_panier["nom_option"]." ".$temp_prix_add."<br/>";
+              if($row_spec["type"] == 0) //seul les option select on des prix
+              {
+                $content=$content.$row_opt_panier["nom_option"]." ".$temp_prix_add."<br/>";
+              }
+              if($row_spec["type"] == 4 || $row_spec["type"] == 1) //saisi ou date
+              {
+                $content=$content.$sp_panier["txt_saisi"]." ".$temp_prix_add."<br/>";
+              }
+
               //$content=$content."</p>";
               //$content=$content."</li>";
               //$content=$content."</ul>";

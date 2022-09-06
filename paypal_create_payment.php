@@ -31,9 +31,9 @@ $arr_items = array();
 if (!empty($_GET['ref'])) {
    //recherche des produits du panier
    $ref = htmlspecialchars($_GET['ref']);
-   error_log( print_r($ref, TRUE) );
+   //error_log( print_r($ref, TRUE) );
    $rows_produits_panier = $produit_panier->findAllProduct_With_PanierID($ref);
-   error_log( print_r($rows_produits_panier, TRUE) );
+   //error_log( print_r($rows_produits_panier, TRUE) );
 
    $bresult=false;
    $sous_total=0;

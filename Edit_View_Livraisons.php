@@ -50,6 +50,7 @@ if(!empty($row_livraison)){
   $retour = array(
     'text_ret' => $text_retour,
     'type_choisi' => $type_choisi,
+    'date_evt' => $row_livraison['date_evt'],
     'nom_relais' =>  $row_livraison['nom_relais'],
     'adresse_relais' =>  $row_livraison['adresse_relais'],
     'cp_relais' =>  $row_livraison['cp_relais'],
@@ -65,6 +66,7 @@ else{
   $retour = array(
     'text_ret' => $text_retour,
     'type_choisi' => $empty_txt,
+    'date_evt' => $empty_txt,
     'nom_relais' =>  $empty_txt,
     'adresse_relais' =>  $empty_txt,
     'cp_relais' =>  $empty_txt,

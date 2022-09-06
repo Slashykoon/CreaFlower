@@ -17,7 +17,7 @@ class Livraisons extends Database
     public function findwithPKPanier($fk_panier)
     {
         if ($fk_panier) {  
-            return $this->db->row("SELECT pk_livraison, fk_panier,type_choisi,nom_relais,adresse_relais,cp_relais,nom_domicile,prenom_domicile,adresse_domicile,cp_domicile,email
+            return $this->db->row("SELECT pk_livraison, fk_panier,type_choisi,nom_relais,adresse_relais,cp_relais,nom_domicile,prenom_domicile,adresse_domicile,cp_domicile,email,date_evt
                                     FROM $this->table
                                     WHERE fk_panier = :fk_panier
                                     LIMIT 1",
@@ -26,24 +26,24 @@ class Livraisons extends Database
     }
 
     // Ajouter un élément
-    public function add_relais_and_domicile($fk_panier,$type_choisi,$nom_relais,$adresse_relais,$cp_relais,$email,$nom_domicile,$prenom_domicile,$adresse_domicile)
+    public function add_relais_and_domicile($fk_panier,$type_choisi,$nom_relais,$adresse_relais,$cp_relais,$email,$nom_domicile,$prenom_domicile,$adresse_domicile,$date_evt)
     {
         if (true) {
-            return $this->db->prepare("INSERT INTO $this->table (fk_panier,type_choisi,nom_relais,adresse_relais,cp_relais,email,nom_domicile,prenom_domicile,adresse_domicile) 
-                                                VALUES (:fk_panier,:type_choisi,:nom_relais,:adresse_relais,:cp_relais,:email,:nom_domicile,:prenom_domicile,:adresse_domicile)",
-                                                array("fk_panier" => $fk_panier,"type_choisi" => $type_choisi,"nom_relais" => $nom_relais,"adresse_relais" => $adresse_relais,"cp_relais" => $cp_relais,"email" => $email,"nom_domicile" => $nom_domicile,"prenom_domicile" => $prenom_domicile,"adresse_domicile" => $adresse_domicile));
+            return $this->db->prepare("INSERT INTO $this->table (fk_panier,type_choisi,nom_relais,adresse_relais,cp_relais,email,nom_domicile,prenom_domicile,adresse_domicile,date_evt) 
+                                                VALUES (:fk_panier,:type_choisi,:nom_relais,:adresse_relais,:cp_relais,:email,:nom_domicile,:prenom_domicile,:adresse_domicile,:date_evt)",
+                                                array("fk_panier" => $fk_panier,"type_choisi" => $type_choisi,"nom_relais" => $nom_relais,"adresse_relais" => $adresse_relais,"cp_relais" => $cp_relais,"email" => $email,"nom_domicile" => $nom_domicile,"prenom_domicile" => $prenom_domicile,"adresse_domicile" => $adresse_domicile,"date_evt"=>$date_evt));
         }
     }
 
     // Modifier un élément
-    public function edit_relais_and_domicile($fk_panier,$type_choisi,$nom_relais,$adresse_relais,$cp_relais,$email,$nom_domicile,$prenom_domicile,$adresse_domicile)
+    public function edit_relais_and_domicile($fk_panier,$type_choisi,$nom_relais,$adresse_relais,$cp_relais,$email,$nom_domicile,$prenom_domicile,$adresse_domicile,$date_evt)
     {
         if ($fk_panier) {
 
             return $this->db->prepare("UPDATE $this->table 
-                                        SET type_choisi = :type_choisi, nom_relais =:nom_relais,adresse_relais=:adresse_relais,cp_relais = :cp_relais,email =:email,nom_domicile=:nom_domicile,prenom_domicile=:prenom_domicile,adresse_domicile=:adresse_domicile
+                                        SET type_choisi = :type_choisi, nom_relais =:nom_relais,adresse_relais=:adresse_relais,cp_relais = :cp_relais,email =:email,nom_domicile=:nom_domicile,prenom_domicile=:prenom_domicile,adresse_domicile=:adresse_domicile,date_evt=:date_evt
                                         WHERE fk_panier = :fk_panier",
-                                        array("fk_panier"=>$fk_panier ,"type_choisi" => $type_choisi,"nom_relais"=>$nom_relais,"adresse_relais"=>$adresse_relais,"cp_relais"=>$cp_relais,"email"=>$email,"nom_domicile"=>$nom_domicile,"prenom_domicile"=>$prenom_domicile,"adresse_domicile"=>$adresse_domicile));
+                                        array("fk_panier"=>$fk_panier ,"type_choisi" => $type_choisi,"nom_relais"=>$nom_relais,"adresse_relais"=>$adresse_relais,"cp_relais"=>$cp_relais,"email"=>$email,"nom_domicile"=>$nom_domicile,"prenom_domicile"=>$prenom_domicile,"adresse_domicile"=>$adresse_domicile,"date_evt"=>$date_evt));
         }
     }
 

@@ -113,13 +113,15 @@ require_once "Cart_Number_Update.php";
                                        
                                             $temp_prix_add = (( floatval($row_opt_panier["prix_add"]) > 0.0) ? " (+".strval($row_opt_panier["prix_add"])."€)"  : "");
                                             print_r("<ul class='fa-ul' style='margin-top:0px;margin-bottom:0px;'>");
-                                            print_r("<li><span class='fa-li'><i class='fas fa-broom fa-sm'></i></span>"); 
+                                            
                                             if($row_spec["type"] == 0) //seul les option select on des prix
                                             {
+                                                print_r("<li><span class='fa-li'><i class='fas fa-broom fa-sm'></i></span>"); 
                                                 print_r("<p style='margin-top:0px;margin-bottom:0px;' >".$row_opt_panier["nom_option"].$temp_prix_add."</p>");
                                             }
                                             if($row_spec["type"] == 4 || $row_spec["type"] == 1) //saisi ou date
                                             {
+                                                print_r("<li><span class='fa-li'><i class='	fas fa-pencil-alt fa-sm'></i></span>"); 
                                                 print_r("<p style='margin-top:0px;margin-bottom:0px;' >".$sp_panier["txt_saisi"]."</p>");
                                             }
                                             print_r("</li>");
@@ -194,7 +196,7 @@ require_once "Cart_Number_Update.php";
                 <div class="text_bold">Date de l'evenement (marriage,baptême,etc..) :</div>
                 <div class="input-container bottom-10px ">
                     
-                    <input style="width:100%;height:25px;" type="text" id="datepicker_livraison" onkeydown="event.preventDefault()" readonly="readonly"> 
+                    <input style="width:100%;height:25px;" type="text" id="datepicker_livraison" name="datepicker_livraison" onkeydown="event.preventDefault()" readonly="readonly"> 
                 </div>
 
                 <div class="text_bold">Vos coordonnées :</div>
@@ -334,9 +336,10 @@ function AddSelectedRelaisColis(){
         'nom_client': document.querySelector("[name=nom_client]").value,
         'prenom_client': document.querySelector("[name=prenom_client]").value,
         'email_client': document.querySelector("[name=email_client]").value,
-        'adresse_client': document.querySelector("[name=adresse_client]").value
+        'adresse_client': document.querySelector("[name=adresse_client]").value,
+        'date_evt': document.querySelector("[name=datepicker_livraison]").value
     };
-
+    console.log(document.querySelector("[name=datepicker_livraison]").value);
 
     
     $.ajax({
