@@ -72,6 +72,7 @@
 p {
   font-size: 1em;
   text-align: left;
+  line-height: 1.4em;
 }
 
 .p-increased {
@@ -116,6 +117,12 @@ body {
 }
 .text_bold{
   font-weight: bold;
+}
+
+.responsive-img {
+  width: 100%;
+  height: auto;
+  max-height :80vh;
 }
 
 .wave-header {
@@ -252,9 +259,46 @@ header {
     background-attachment: fixed;
   }
 
+  .navbar a:nth-child(2){
+    display: none;
+  }
+  .navbar a:nth-child(3){
+    display: none;
+  }
 
 }
 
+/*-------------------------------------*/
+/*               ACCUEIL               */
+/*-------------------------------------*/
+.accueil-section{
+  display:flex;  
+  flex-direction: column; 
+  align-items: center;
+  row-gap:40px;
+}
+.accueil-section-first{
+  display:flex;  
+  flex-direction: row; 
+  align-items: center;
+  column-gap:35px;
+}
+.accueil-section-second{
+  display:flex;  
+  flex-direction: row; 
+  align-items: center;
+  column-gap:35px;
+}
+
+/* smartphones, portrait iPhone, portrait 480x320 phones (Android) */
+@media (max-width:480px) {
+  .accueil-section-first{
+    flex-direction: column; 
+  }
+  .accueil-section-second{
+    flex-direction: column-reverse;
+  }
+}
 /*-----------------------------------------*/
 /*                RUBRIQUES                */
 /*-----------------------------------------*/
@@ -1140,4 +1184,82 @@ li.loupe:before {
 
 .hidden {
 	display: none
+}
+
+
+
+/*GESTION DU BURGER MENU*/
+#menu__toggle {
+  opacity: 0;
+}
+#menu__toggle:checked + .menu__btn > span {
+  transform: rotate(45deg);
+}
+#menu__toggle:checked + .menu__btn > span::before {
+  top: 0;
+  transform: rotate(0deg);
+}
+#menu__toggle:checked + .menu__btn > span::after {
+  top: 0;
+  transform: rotate(90deg);
+}
+#menu__toggle:checked ~ .menu__box {
+  left: 0 !important;
+}
+.menu__btn {
+  position: fixed;
+  top: 30px;
+  left: 20px;
+  width: 26px;
+  height: 26px;
+  cursor: pointer;
+  z-index: 6001;
+
+}
+.menu__btn > span,
+.menu__btn > span::before,
+.menu__btn > span::after {
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background-color: black;
+  transition-duration: .25s;
+}
+.menu__btn > span::before {
+  content: '';
+  top: -8px;
+}
+.menu__btn > span::after {
+  content: '';
+  top: 8px;
+}
+.menu__box {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  left: -100%;
+  width: 320px;
+  height: 100%;
+  margin: 0;
+  padding: 80px 0;
+  list-style: none;
+  background-color: #E8CEBF;
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, .4);
+  transition-duration: .25s;
+  z-index: 6000;
+}
+.menu__item {
+  display: block;
+  padding: 16px 28px;
+  color: #333;
+  font-family: 'Roboto', sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  text-decoration: none;
+  transition-duration: .25s;
+}
+.menu__item:hover {
+  background-color: #266150;
 }

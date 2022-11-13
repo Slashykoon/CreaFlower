@@ -72,10 +72,25 @@ if (!empty($_GET['ref'])) {
    if ($bresult) {
 
       $payer = new PayPalPayment();
-      $payer->setSandboxMode(1);
-      $payer->setClientID("AeIBakz8rXg1v2EQmZUO9xOHKzInEDpKlqbvEsT0OwjqBaxo7itYQADAebBeCFNXsUgZUlke0wfry_pT");
-      $payer->setSecret("EI-29-i6d3fOW9SnUBf3wRLe8UoIqq90M0tUVzZn3CGOCPXqL-jTyGzvi0sWOEwqtbwA7wGpPcuJDQYa"); 
+      $payer->setSandboxMode(0);
+      
+      /*$payer->setClientID("AeIBakz8rXg1v2EQmZUO9xOHKzInEDpKlqbvEsT0OwjqBaxo7itYQADAebBeCFNXsUgZUlke0wfry_pT"); //sandbox
+      $payer->setSecret("EI-29-i6d3fOW9SnUBf3wRLe8UoIqq90M0tUVzZn3CGOCPXqL-jTyGzvi0sWOEwqtbwA7wGpPcuJDQYa"); //sandbox*/
 
+      $payer->setClientID("ARKQUjK2cTEq3rLR6UT2RjaQ4voJZOtdKfVN-P-WZjQIK8yNl5g_CSMvPDCmeVuA9eZpfMBRNFsUv_3_");
+      $payer->setSecret("ELMfWD1ij4Sx6jDGsvc7ej9ltGRCqA4StAnhK9wtvgjgG3g4Piq-PHZJA_K73xVEnb__82fDbrb_pPOr"); 
+
+      /*if ($payer->sandbox_mode) {
+         $payer->setClientID("AeIBakz8rXg1v2EQmZUO9xOHKzInEDpKlqbvEsT0OwjqBaxo7itYQADAebBeCFNXsUgZUlke0wfry_pT"); //sandbox
+         $payer->setSecret("EI-29-i6d3fOW9SnUBf3wRLe8UoIqq90M0tUVzZn3CGOCPXqL-jTyGzvi0sWOEwqtbwA7wGpPcuJDQYa"); //sandbox
+      }
+      else{
+         $payer->setClientID("ARKQUjK2cTEq3rLR6UT2RjaQ4voJZOtdKfVN-P-WZjQIK8yNl5g_CSMvPDCmeVuA9eZpfMBRNFsUv_3_");
+         $payer->setSecret("ELMfWD1ij4Sx6jDGsvc7ej9ltGRCqA4StAnhK9wtvgjgG3g4Piq-PHZJA_K73xVEnb__82fDbrb_pPOr"); 
+      }*/
+
+   
+      //error_log( print_r($payer, TRUE) );
 
       //Init du header de transaction Paypal
       $payment_data = array(
@@ -110,8 +125,9 @@ if (!empty($_GET['ref'])) {
           
       //error_log( print_r($payment_data, TRUE) );
       $paypal_response = $payer->createPayment($payment_data);
+      error_log( print_r($paypal_response , TRUE) );
       $paypal_response = json_decode($paypal_response);
-      
+
       if (!empty($paypal_response->id)) {
          // On oublie pas d'ajouter la référence de l'item dans le nouveau champ "produit" de notre table "paiements", afin de garder une trace du produit acheté !
          $ret_id_paiement=$paiements->add($ref,$paypal_response->id,$paypal_response->state,$paypal_response->transactions[0]->amount->total,$paypal_response->transactions[0]->amount->currency);

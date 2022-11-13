@@ -44,8 +44,8 @@ $rows_rubriques = $rubriques->findAll();
 
 <body style="background-color:#ECECEC">
     <div class="mb-2">
-        <button class="btn mt-3 btn-info" onclick="location.href='index.php';"> <i class="fas fa-reply"></i>
-            RETOUR A LA GALLERIE</button>
+        <button class="btn mt-3 btn-info" onclick="location.href='administration.php';"> <i class="fas fa-reply"></i>
+            RETOUR A LA VUE ADMIN</button>
     </div>
 
 

@@ -89,10 +89,7 @@
         <?php endforeach; ?>
         <!--End iteration for all products-->
     </div>
-    <button style="height:50px;" class="" onclick="location.href='edition_articles.php';"> <i class="fas fa-reply"></i>
-        ALLER A L'EDITION</button>
-    <button style="height:50px;" class="" onclick="location.href='view_commandes.php';"> <i class="fas fa-reply"></i>
-        VOIR LES COMMANDES</button>
+
 
         </div>
 

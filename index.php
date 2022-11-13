@@ -49,10 +49,33 @@
 <body style="background-color:#FDF8F5">
 
 
-<div class="global-page">
+<div class="global-page" style="min-height:900px;">
 <h1 style="margin-top:15px;margin-bottom:25px;"><i class="fas fa-store"></i> Accueil</h1>
-    <div class="" style="min-height:800px;display:flex;  align-items: center;justify-content: center;">
-        <h2>METTRE ICI CONTENU D'ACCUEIL !</h2>
+    <div class="accueil-section">
+        <div class="accueil-section-first">
+            <span style="min-width:400px">
+                <h2>Bienvenue sur Créa’ Flower, votre boutique en ligne d’objets artisanaux en fleurs séchées !</h2>
+                <p>Ici, vous trouverez différents objets tels que des porte-noms originaux pour votre mariage, un anniversaire ou le baptême de votre enfant, des cadres à personnaliser pour une naissance, ou encore des cadres avec photo pour déclarer votre amour. </br>
+                Tous ces objets sont faits main en Lorraine de manière artisanale et avec le plus grand soin.</br> 
+                Toutes les fleurs séchées sont 100% naturelles, je n’utilise aucune fleur artificielle.</br>
+                </p>
+            </span>
+            <span>
+                <img src="img/flower_accueil.jpg" alt="Nature" class="responsive-img" width="600" height="400">
+            </span>
+        </div>
+        <div class="accueil-section-second">
+                <span>
+                    <img src="img/flower2_accueil.jpg" alt="Nature" class="responsive-img" width="600" height="400">
+                </span>
+                <span style="min-width:400px">
+                    <h2>Qui suis-je en quelque mots </h2> <p>je m’appelle Céline et j’ai toujours adoré les fleurs. Leurs couleurs, leurs odeurs, leur fragilité, il n’y en a pas une pareille ! Et puis j’ai découvert avec bonheur qu’il était possible de préserver la beauté de certaines fleurs dans le temps grâce au procédé des fleurs séchées.</br>
+                    Après plusieurs années à avoir exercé un autre métier, il était temps pour moi de faire quelque chose qui me passionnait et était concret.</p>
+                    <p>C’est pourquoi je me suis lancée dans ce beau projet de création d’objets en fleurs séchées, mais avec mon petit truc en plus : la possibilité de personnaliser vos objets afin qu’ils vous ressemblent le plus possible.</br>
+                    Mon plus grand souhait serait que mes objets fassent partis des événements marquants de votre vie, ou bien illumine votre quotidien !</br>
+                    Je vous souhaite une excellente visite sur Créa’ Flower !</p>
+                </span>
+        </div>
     </div>
 </div>
 

@@ -29,9 +29,22 @@ if (!empty($_POST['paymentID']) AND !empty($_POST['payerID'])) {
    $payerID = htmlspecialchars($_POST['payerID']);
  
    $payer = new PayPalPayment();
-   $payer->setSandboxMode(1);
-   $payer->setClientID("AeIBakz8rXg1v2EQmZUO9xOHKzInEDpKlqbvEsT0OwjqBaxo7itYQADAebBeCFNXsUgZUlke0wfry_pT");
-   $payer->setSecret("EI-29-i6d3fOW9SnUBf3wRLe8UoIqq90M0tUVzZn3CGOCPXqL-jTyGzvi0sWOEwqtbwA7wGpPcuJDQYa"); 
+   $payer->setSandboxMode(0);
+   
+   /*$payer->setClientID("AeIBakz8rXg1v2EQmZUO9xOHKzInEDpKlqbvEsT0OwjqBaxo7itYQADAebBeCFNXsUgZUlke0wfry_pT"); //sandbox
+   $payer->setSecret("EI-29-i6d3fOW9SnUBf3wRLe8UoIqq90M0tUVzZn3CGOCPXqL-jTyGzvi0sWOEwqtbwA7wGpPcuJDQYa"); //sandbox*/
+
+   $payer->setClientID("ARKQUjK2cTEq3rLR6UT2RjaQ4voJZOtdKfVN-P-WZjQIK8yNl5g_CSMvPDCmeVuA9eZpfMBRNFsUv_3_");
+   $payer->setSecret("ELMfWD1ij4Sx6jDGsvc7ej9ltGRCqA4StAnhK9wtvgjgG3g4Piq-PHZJA_K73xVEnb__82fDbrb_pPOr"); 
+
+   /*if ($payer->sandbox_mode) {
+      $payer->setClientID("AeIBakz8rXg1v2EQmZUO9xOHKzInEDpKlqbvEsT0OwjqBaxo7itYQADAebBeCFNXsUgZUlke0wfry_pT"); //sandbox
+      $payer->setSecret("EI-29-i6d3fOW9SnUBf3wRLe8UoIqq90M0tUVzZn3CGOCPXqL-jTyGzvi0sWOEwqtbwA7wGpPcuJDQYa"); //sandbox
+   }
+   else{
+      $payer->setClientID("ARKQUjK2cTEq3rLR6UT2RjaQ4voJZOtdKfVN-P-WZjQIK8yNl5g_CSMvPDCmeVuA9eZpfMBRNFsUv_3_");
+      $payer->setSecret("ELMfWD1ij4Sx6jDGsvc7ej9ltGRCqA4StAnhK9wtvgjgG3g4Piq-PHZJA_K73xVEnb__82fDbrb_pPOr"); 
+   }*/
  
    $payment = $paiements->find($paymentID);
    //$row_panier=$paniers->findwithPK($payment['produit']);
@@ -50,7 +63,7 @@ if (!empty($_POST['paymentID']) AND !empty($_POST['payerID'])) {
          $facture = 0;
          $last_paiement=$paiements->search_last_facture();
          //error_log( print_r($last_paiement, TRUE) );
-         error_log( print_r($last_paiement['MAX(num_facture)'], TRUE) );
+         //error_log( print_r($last_paiement['MAX(num_facture)'], TRUE) );
          if(empty($last_paiement)){
             $facture = 1;
          }

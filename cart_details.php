@@ -365,7 +365,7 @@ function AddSelectedRelaisColis(){
 if ($('input[name=DisablePaypalBtn]').val() == 0) //evite de charger le btn pour eviter les soucis si aucun article
 {
     paypal.Button.render({
-        env: 'sandbox', // Ou 'production',
+        env: 'production', // Ou 'production',
         commit: true, // Affiche le bouton  "Payer maintenant"
         style: {
             color: 'gold', // ou 'blue', 'silver', 'black'
@@ -389,7 +389,7 @@ if ($('input[name=DisablePaypalBtn]').val() == 0) //evite de charger le btn pour
                         return data.paypal_response.id;
                     } 
                     else { // Sinon, il y a eu une erreur quelque part. retourne false, pour stopper net le processus de paiement.
-                        alert("paypal_create_payment response :"+ data.msg);
+                        alert("paypal_create_payment response  :"+ data.msg);
                         return false;
                     }
                 });
@@ -419,7 +419,7 @@ if ($('input[name=DisablePaypalBtn]').val() == 0) //evite de charger le btn pour
             //alert("Paiement annulé : vous avez fermé la fenêtre de paiement.");
         },
         onError: function(err) {
-            //alert(err);
+            alert(err);
             alert("Paiement annulé : une erreur est survenue. Merci de bien vouloir réessayer ultérieurement.");
         }
     }, '#bouton-paypal');
@@ -492,3 +492,6 @@ new Autocomplete("search", {
 </script>
 
 </html>
+
+
+

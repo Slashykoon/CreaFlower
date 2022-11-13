@@ -7,13 +7,37 @@ $rubriques = new Rubriques();
 
 
 <!-- Header de navigation -->
-<header style="">
+<header >
 
     <div class="navbar">
 
+        <div class="hamburger-menu">
+            <input id="menu__toggle" type="checkbox" />
+            <label class="menu__btn" for="menu__toggle">
+                <span></span>
+            </label>
+            <ul class="menu__box">
+                <li><a class="menu__item" href="index.php">Accueil</a></li>
+                <li><a class="menu__item" href="contact.php">Me contacter</a></li>
+                <?php
+                    $rows_rubriques=$rubriques->findAll();
+                    if($rows_rubriques)
+                    {
+                        foreach ($rows_rubriques as $rubrique): 
+                    ?>
+                    <li>        
+                        <a class="menu__item" href="Collections.php?rubrique=<?= $rubrique->nom;?>">
+                            <?= $rubrique->nom;?>
+                        </a>
+                    </li>
+                <?php endforeach; } ?>
+
+            </ul>
+        </div>
+
         <a href="index.php">
-        <div class="btn_cart">
-                <span class="content"><i class="fa-solid fa-mobile-screen fa-xl"></i></span>
+            <div class="btn_cart">
+                <span class="content"><i class="fas fa-home fa-xl"></i></span>
             </div>
         </a>
         <a href="contact.php">
@@ -32,7 +56,7 @@ $rubriques = new Rubriques();
     <!-- Banniere -->
     <div class="wave-header text-center">
         <h1 class="header_title">Créa' Flower</h1></span>
-        <h2>Vente de décorations artisanales</h2>
+        <h2>Créations artisanales en fleurs séchées</h2>
     </div>
 
 
