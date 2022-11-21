@@ -53,8 +53,29 @@
 
 <div class="global-page">
 <h1 style="margin-top:15px;margin-bottom:25px;"><i class="fas fa-store"></i> Contactez-moi</h1>
-    <div class="" style="min-height:800px;display:flex;  align-items: center;justify-content: center;">
-        <h2>METTRE ICI UN FORMULAIRE DE CONTACT!</h2>
+    <div class="" style="min-height:800px;display:flex; flex-direction:column; align-items: center;justify-content: center;">
+
+            <p><i class="fas fa-calendar-alt fa-lg"></i> Une réponse vous sera apportée sous 48h ouvrées</p><br/>
+            
+            <div class="container-contact">
+                <form action="/form/submit" method="POST">
+                    <label for="input_prenom">Prenom</label>
+                    <input type="text" id="input_prenom" name="name" placeholder="Entrez votre prenom">
+                    <label for="input_nom">Nom</label>
+                    <input type="text" id="input_nom" name="surname" placeholder="Entrez votre nom">
+                    <label for="input_email">Adresse mail</label>
+                    <input type="text" id="input_email" name="email" placeholder="Entrez votre e-mail">
+                    <label for="ci">Motif</label>
+                    <select id="input_raison" name="raison">
+                        <option value="1">Question sur un article</option>
+                        <option value="2">Envoi de photos</option>
+                        <option value="3">Question générale</option>
+                    </select>
+                    <label for="message">Message</label>
+                    <textarea id="message" name="message" placeholder="Entrez votre message" style="height:200px"></textarea>
+                    <input type="submit" value="Envoyer">
+                </form>
+            </div>
     </div>
 </div>
 

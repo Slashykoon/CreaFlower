@@ -3,6 +3,7 @@ require_once "config/Users.php";
 require_once "config/Produits.php";
 require_once "config/Options.php";
 require_once "config/Specifications.php";
+require_once "config/Specifications_Panier.php";
 require_once "config/Paiements.php";
 require_once "config/Paniers.php";
 require_once "config/Produit_Panier.php";
@@ -15,6 +16,7 @@ $users = new Users();
 $produits = new Produits();
 $options = new Options();
 $specifications = new Specifications();
+$specification_panier = new Specifications_Panier();
 $paniers = new Paniers();
 $produit_panier = new Produit_Panier();
 $sessions = new Sessions();
@@ -37,27 +39,50 @@ if (!empty($_GET['ref'])) {
 
    $bresult=false;
    $sous_total=0;
+   $prix_total_opt_incl=0.0;
+
    if(!empty($rows_produits_panier))
    {
       $bresult=true;
       foreach($rows_produits_panier as $prod_panier)
       {
          $_produit = $produits->findwithPK($prod_panier["fk_produit"]);
-
+         
          if(!empty($_produit))
          {
             $bresult = $bresult && true;
-            //on pourra remettre ici les articles de la cart car verif en bdd
-           $arr_temp_item = array(
-               "sku" => $_produit["ref"], // Stock Keeping Unit
-               "quantity" => strval($prod_panier["quantity"]), // Quantity
-               "name" => $_produit["nom"], // titre du produit
-               "price" => strval($_produit["prix"]), // prix au format chaîne de caractères
-               "currency" => "EUR"
-           );
+            
+            //Calcul des options
+            $rows_specifications_panier=$specification_panier->findAllOptionsOfProdPanier($prod_panier["pk_produit_panier"]);
+            $sum_opt_prix_total=0.0;
+            $opt_prix_add_total=0.0;
+                     
+            if(!empty($rows_specifications_panier))
+            {
+               foreach ($rows_specifications_panier as $sp_panier)
+               {
+                  $row_opt_panier = $options->TestIfOptionExist($sp_panier["fk_option"]); //=> changer nom testif todo
+                  //$row_spec = $specifications->find($row_opt_panier["fk_sp"]); //recuperation du nom de la specification
+                  $opt_prix_add_total = $opt_prix_add_total + floatval($row_opt_panier["prix_add"]);      
+               }
+               $sum_opt_prix_total=$sum_opt_prix_total+$opt_prix_add_total;
+               //print_r($sum_opt_prix_total);
+            }
+            //Calcul du prix total produit option inclues
+            $prix_total_opt_incl=floatval($_produit["prix"])+$sum_opt_prix_total;
 
-           //calcul du sous total 
-           $sous_total=$sous_total + (float)$_produit["prix"]*(float)$prod_panier["quantity"];
+            //on pourra remettre ici les articles de la cart car verif en bdd
+            $arr_temp_item = array(
+               "sku" => $_produit["ref"], // Stock Keeping Unit
+               "quantity" => strval($prod_panier["quantity"]), // Quantity 
+               "name" => $_produit["nom"], // titre du produit
+               "price" => strval($prix_total_opt_incl), // prix au format chaîne de caractères $_produit["prix"]
+               "currency" => "EUR"
+            );
+
+            //calcul du sous total 
+            //$sous_total=$sous_total + (float)$_produit["prix"]*(float)$prod_panier["quantity"];
+            $sous_total=$sous_total + (float)$prix_total_opt_incl*(float)$prod_panier["quantity"];
 
             array_push($arr_items, $arr_temp_item);
          }

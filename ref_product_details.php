@@ -160,6 +160,19 @@ echo "<input id='ProdPrice' name='ProdPrice' type='hidden' value='".$row_produit
                                     $row_option = $options->findOptionOfSpecification($specification['pk_sp']);
                                     echo "<input type='text' id='id_specif_choice_input' name='specif_choice' class='".$row_option['pk_op']."' style='flex: 2;'>"; 
                                 }
+                                //option media => input image
+                                if($specification["type"] == 2)
+                                {
+                                    $row_option = $options->findOptionOfSpecification($specification['pk_sp']);
+                                    //echo "<input type='text' id='id_specif_choice_media' name='specif_choice' class='".$row_option['pk_op']."' style='flex: 2;'>"; 
+                                    echo "<form method='post' action='' enctype='multipart/form-data'>";
+                                    echo"<input type='file' id='files' name='files[]' multiple   ><br>";
+                                    echo "<input type='button' id='submit' value='Charger'>";
+                                    echo "</form>";
+                                    //<div id='preview'></div>
+
+
+                                }
                                 //option saisie => input date
                                 if($specification["type"] == 4)
                                 {
@@ -189,37 +202,18 @@ echo "<input id='ProdPrice' name='ProdPrice' type='hidden' value='".$row_produit
                     </div>
                     <button class="accordion">Livraison</button>
                     <div class="panel">
-                        <p>Nous proposons quatre solutions :
+                        <p>Nous proposons trois solutions :
                         <ul class="fa-ul">
-                            <li><span class="fa-li"><i class="fa-solid fa-box-open"></i></span>Chronopost à domicile –
-                                9,6€
-                            </li>
-                            <li><span class="fa-li"><i class="fa-solid fa-box-open"></i></span>Chronopost en point relay
-                                –
-                                5,9€</li>
-                            <li><span class="fa-li"><i class="fa-solid fa-box-open"></i></span>Colissimo à domicile – 6€
-                            </li>
-                            <li><span class="fa-li"><i class="fa-solid fa-box-open"></i></span>Lettre suivie – 3,9€
-                                (uniquement pour les bijoux et les cartes)</li>
+                            <li><span class="fa-li"><i class="fa-solid fa-box-open"></i></span>Chronopost en point relay – 4.50€</li>
+                            <li><span class="fa-li"><i class="fa-solid fa-box-open"></i></span>Colissimo à domicile – 6.00€</li>
                         </ul>
                         </p>
 
                         <p>
                             Les délais de livraison :
                         <ul class="fa-ul">
-                            <li><span class="fa-li"><i class="fa-solid fa-calendar-days"></i></span>Chronopost à
-                                domicile –
-                                24h
-                            </li>
-                            <li><span class="fa-li"><i class="fa-solid fa-calendar-days"></i></span>Chronopost en point
-                                relais –
-                                24h</li>
-                            <li><span class="fa-li"><i class="fa-solid fa-calendar-days"></i></span>Colissimo à domicile
-                                –
-                                48h
-                            </li>
-                            <li><span class="fa-li"><i class="fa-solid fa-calendar-days"></i></span>Lettre suivie – 48h
-                            </li>
+                            <li><span class="fa-li"><i class="fa-solid fa-calendar-days"></i></span>Chronopost en point relais – 24h</li>
+                            <li><span class="fa-li"><i class="fa-solid fa-calendar-days"></i></span>Colissimo à domicile – 48h</li>
                         </ul>
                         </p>
 
@@ -228,11 +222,7 @@ echo "<input id='ProdPrice' name='ProdPrice' type='hidden' value='".$row_produit
                         <ul class="fa-ul">
                             <li><span class="fa-li"><i class="fa-solid fa-business-time"></i></span>
                                 Les délais sont exprimés en jours ouvrés et sont à compter à partir de la remise des
-                                commandes
-                                au transporteur. Nous remettons toutes les commandes passées avant 13h tous les jours
-                                (lundi
-                                /
-                                vendredi).
+                                commandes au transporteur. Nous remettons toutes les commandes passées avant 13h tous les jours (lundi / vendredi).
                             </li>
                         </ul>
                         </p>
@@ -263,6 +253,49 @@ echo "<input id='ProdPrice' name='ProdPrice' type='hidden' value='".$row_produit
 
 
 <script>
+//Upload des images via php dans un dossier
+$(document).ready(function() {
+
+$('#submit').click(function() {
+
+    //Utilisation du formdata pour passer des files
+    var form_data = new FormData();
+
+    // Read selected files
+    var totalfiles = document.getElementById('files').files.length;
+
+    for (var index = 0; index < totalfiles; index++) {
+        form_data.append("files[]", document.getElementById('files').files[index]);
+    }
+    
+    // AJAX request
+    $.ajax({
+        url: 'upload_customer_img.php',
+        type: 'post',
+        data: form_data,
+        dataType: 'json',
+        contentType: false,
+        processData: false,
+        success: function(response) {
+            /*for (var index = 0; index < response.length; index++) {
+                var src = response[index];
+                // Add img element in <div id='preview'>
+                $('#preview').append('<img src="' + src +
+                    '" width="200px;" height="200px">');
+            }*/
+            alert("l'image a été correctement telechargée");
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            alert(textStatus);
+        }
+    });
+
+});
+
+});
+
+
+
 
 //Premier passage, on recupere les options select pour ajax ajout
 var values_opt=[];

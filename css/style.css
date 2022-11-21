@@ -222,6 +222,7 @@ header {
   padding: 0 100px;
   background-color: #FDF8F5 !important;
   overflow: hidden;
+  min-height: calc(70vh);
 }
 
 /* Grid adaptée tablette*/
@@ -231,8 +232,18 @@ header {
     margin-left: 0px;
     margin-right: 0px;
     padding: 0 0px;
+   
   }
-
+  .navbar a:nth-child(2){
+    display: none;
+  }
+  .navbar a:nth-child(3){
+    display: none;
+  }
+  h1.header_title {
+    color: black !important;
+  }
+  
 }
 
 /* smartphones, portrait iPhone, portrait 480x320 phones (Android) */
@@ -259,14 +270,43 @@ header {
     background-attachment: fixed;
   }
 
-  .navbar a:nth-child(2){
-    display: none;
-  }
-  .navbar a:nth-child(3){
-    display: none;
-  }
+
 
 }
+
+/*--------------------------------------*/
+/*           CONTACT                   */
+/*-------------------------------------*/
+
+.container-contact>form>input[type=text],
+.container-contact>form>select,
+.container-contact>form>textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #eeeeee;
+  border-radius: 4px;
+  box-sizing: border-box;
+  margin-top: 8px;
+  margin-bottom: 16px;
+  resize: vertical;
+}
+.container-contact>form>input[type=submit] {
+  background-color: #eeeeee;
+  color: black;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 7px;
+  cursor: pointer;
+}
+.container-contact>form>input[type=submit]:hover {
+  background-color: #eeeeee;
+}
+.container-contact {
+  border-radius: 8px;
+  background-color: #E8CEBF;
+  padding: 15px;
+}
+
 
 /*-------------------------------------*/
 /*               ACCUEIL               */
@@ -277,27 +317,30 @@ header {
   align-items: center;
   row-gap:40px;
 }
-.accueil-section-first{
-  display:flex;  
-  flex-direction: row; 
-  align-items: center;
-  column-gap:35px;
-}
-.accueil-section-second{
+.accueil-section-first,.accueil-section-second{
   display:flex;  
   flex-direction: row; 
   align-items: center;
   column-gap:35px;
 }
 
+.accueil-section-first>span,.accueil-section-second>span{
+  min-width: 400px;
+}
+
+
 /* smartphones, portrait iPhone, portrait 480x320 phones (Android) */
 @media (max-width:480px) {
   .accueil-section-first{
     flex-direction: column; 
   }
+  .accueil-section-first>span,.accueil-section-second>span{
+    min-width: 100px;
+  }
   .accueil-section-second{
     flex-direction: column-reverse;
   }
+
 }
 /*-----------------------------------------*/
 /*                RUBRIQUES                */

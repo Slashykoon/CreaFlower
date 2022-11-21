@@ -53,7 +53,7 @@
 <h1 style="margin-top:15px;margin-bottom:25px;"><i class="fas fa-store"></i> Accueil</h1>
     <div class="accueil-section">
         <div class="accueil-section-first">
-            <span style="min-width:400px">
+            <span >
                 <h2>Bienvenue sur Créa’ Flower, votre boutique en ligne d’objets artisanaux en fleurs séchées !</h2>
                 <p>Ici, vous trouverez différents objets tels que des porte-noms originaux pour votre mariage, un anniversaire ou le baptême de votre enfant, des cadres à personnaliser pour une naissance, ou encore des cadres avec photo pour déclarer votre amour. </br>
                 Tous ces objets sont faits main en Lorraine de manière artisanale et avec le plus grand soin.</br> 
@@ -68,7 +68,7 @@
                 <span>
                     <img src="img/flower2_accueil.jpg" alt="Nature" class="responsive-img" width="600" height="400">
                 </span>
-                <span style="min-width:400px">
+                <span >
                     <h2>Qui suis-je en quelque mots </h2> <p>je m’appelle Céline et j’ai toujours adoré les fleurs. Leurs couleurs, leurs odeurs, leur fragilité, il n’y en a pas une pareille ! Et puis j’ai découvert avec bonheur qu’il était possible de préserver la beauté de certaines fleurs dans le temps grâce au procédé des fleurs séchées.</br>
                     Après plusieurs années à avoir exercé un autre métier, il était temps pour moi de faire quelque chose qui me passionnait et était concret.</p>
                     <p>C’est pourquoi je me suis lancée dans ce beau projet de création d’objets en fleurs séchées, mais avec mon petit truc en plus : la possibilité de personnaliser vos objets afin qu’ils vous ressemblent le plus possible.</br>

@@ -125,7 +125,7 @@ $rows_rubriques = $rubriques->findAll();
                                 <option value="0">Selection</option>
                                 <option value="1">Saisie libre</option>
                                 <option value="2">Image</option>
-                                <option value="3">PDF</option>
+                                <option value="3">PDF(en dev)</option>
                                 <option value="4">Date</option>
                             </select>
                         </div>
