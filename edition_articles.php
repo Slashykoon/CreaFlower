@@ -352,22 +352,31 @@ function AddSection_SpecificationOptions(){
     prixadd_opt +=  String(nb_specif_added);
     option_values +=  String(nb_specif_added);
 
-    //console.log();
-
     //Ajouter les rubriques
     $('.section_options').append("<h4>"+$('input[name=nom_sp]').val()+"</h4>");
+    $('.section_options').append("(");
+    $('.section_options').append($('select[name=type_specif] :selected').text());
+    $('.section_options').append(")");
     $('.section_options').append("<br/>");
-    //
 
-    if($('select[name=type_specif]').val() == 0)
-    {
+    //console.log(nb_specif_added);
+
+    //probleme ici
+    //if($('select[name=type_specif]').val() == 0)
+    //{
         $('.section_options').append("<label for='name_opt'>Option :</label>");
         $('.section_options').append("<input class='form-control shadow' id='name_opt' name='name_opt' type='text' placeholder='Nom de loption' />");
         $('.section_options').append("<label class='form-label' for='prixadd_opt'>Prix additionel :</label>");
         $('.section_options').append("<input class='form-control shadow ' id='prixadd_opt' name='prixadd_opt' type='number' placeholder='Prix TTC' min='0.0' step='.01'></input>");
-    }
-    else{
-        $('.section_options').append("<label for='name_opt'>Option :</label>");
+
+        //
+        $('.section_options').append("<button class='btn mt-3 btn-info' onclick='AddOptionValue("+nb_specif_added+",$("+name_opt+").val(),$("+prixadd_opt+").val())'> <i class='fas fa-edit'></i>Ajouter option</button>");
+        //
+        $('.section_options').append("<div class='' id='option_values'></div>");
+        $('.section_options').append("<hr/>");
+    //}
+    //else{
+        /*$('.section_options').append("<label for='name_opt'>Option :</label>");
         $('.section_options').append("<input class='form-control shadow' id='name_opt' name='name_opt' type='text' placeholder='Nom de loption' />");
         $('input[name=name_opt]').val($('input[name=nom_sp]').val()); //add
         $('input[name=name_opt]').attr('disabled', 'disabled');
@@ -376,14 +385,16 @@ function AddSection_SpecificationOptions(){
         $('.section_options').append("<input class='form-control shadow ' id='prixadd_opt' name='prixadd_opt' type='number' placeholder='Prix TTC' min='0.0' step='.01'></input>");
         $('input[name=prixadd_opt]').val(0.0); //add
         $('input[name=prixadd_opt]').attr('disabled', 'disabled');
+
+        $('.section_options').append("<div class='' id='option_values'></div>");
+        $('.section_options').append("<hr/>");
         //
-        //AddOptionValue(nb_specif_added,$("+name_opt+").val(),$("+prixadd_opt+").val());
-    }
-    //
-    $('.section_options').append("<button class='btn mt-3 btn-info' onclick='AddOptionValue("+nb_specif_added+",$("+name_opt+").val(),$("+prixadd_opt+").val())'> <i class='fas fa-edit'></i>Ajouter option</button>");
-    //
-    $('.section_options').append("<div class='' id='option_values'></div>");
-    $('.section_options').append("<hr/>");
+        AddOptionValue(nb_specif_added,$("+name_opt+").val(),$("+prixadd_opt+").val());
+        //dict_objsp_dict_arropt[String(nb_specif_added)]["option"].push($("+name_opt+").val());
+        //dict_objsp_dict_arropt[String(nb_specif_added)]["prix"].push($("+prixadd_opt+").val());
+        //$("#option_values_"+String(nb_specif_added)).append("<a>" + $("+name_opt+").val() +" : " + $("+prixadd_opt+").val() + "€ | </a>");*/
+    //}
+
 
     //Renomme les id
     $("#name_opt").attr("id", name_opt);
@@ -393,6 +404,9 @@ function AddSection_SpecificationOptions(){
     dict_objsp_dict_arropt[String(nb_specif_added)]=dict_Init;
     dict_objsp_dict_arropt[String(nb_specif_added)]["specification"]=$('input[name=nom_sp]').val();
     dict_objsp_dict_arropt[String(nb_specif_added)]["type"]=$('select[name=type_specif]').val();
+
+
+
     //console.log(dict_objsp_dict_arropt);
     //alert(JSON.stringify(dict_objsp_dict_arropt));
 }
@@ -449,7 +463,7 @@ $(document).ready(function() {
 
 
 function ActionOnProduct(selVar, cde_action) {
-
+    console.log(dict_objsp_dict_arropt);
     formData = {
         'id_article': selVar,
         'cde_action': cde_action,

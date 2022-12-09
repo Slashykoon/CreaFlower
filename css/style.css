@@ -785,6 +785,15 @@ header {
 
 }
 
+.btn-add-cart-disabled {
+  background-color: gray;
+  color: black;
+  height: 55px;
+  cursor: not-allowed;
+  font-size: 1em;
+  border: black;
+}
+
 
 
 

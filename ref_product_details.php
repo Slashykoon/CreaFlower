@@ -49,6 +49,7 @@ $files = scandir ($directory);
 
 //pour variable globale javascript
 echo "<input id='ProdPrice' name='ProdPrice' type='hidden' value='".$row_produit["prix"]."'>";
+
 ?>
 
 
@@ -170,7 +171,7 @@ echo "<input id='ProdPrice' name='ProdPrice' type='hidden' value='".$row_produit
                                     echo "<input type='button' id='submit' value='Charger'>";
                                     echo "</form>";
                                     //<div id='preview'></div>
-
+                                    echo "<input id='BlockBtnBuy' name='BlockBtnBuy' type='hidden' value='1'>";
 
                                 }
                                 //option saisie => input date
@@ -253,8 +254,17 @@ echo "<input id='ProdPrice' name='ProdPrice' type='hidden' value='".$row_produit
 
 
 <script>
+
 //Upload des images via php dans un dossier
 $(document).ready(function() {
+
+var element_blk_btn= document.querySelector("input[name=BlockBtnBuy]");
+if (element_blk_btn.value == 1)
+{
+    document.querySelector("[class=btn-add-cart]").disabled = true;
+    document.querySelector("[class=btn-add-cart]").className = "btn-add-cart-disabled";
+}
+
 
 $('#submit').click(function() {
 
@@ -267,6 +277,8 @@ $('#submit').click(function() {
     for (var index = 0; index < totalfiles; index++) {
         form_data.append("files[]", document.getElementById('files').files[index]);
     }
+
+    form_data.append("num_files_limit",5); //todo
     
     // AJAX request
     $.ajax({
@@ -283,7 +295,16 @@ $('#submit').click(function() {
                 $('#preview').append('<img src="' + src +
                     '" width="200px;" height="200px">');
             }*/
-            alert("l'image a été correctement telechargée");
+            if(response.length > 0){
+                alert(response);
+            }
+            else{
+                var element_blk_btn= document.querySelector("input[name=BlockBtnBuy]");
+                element_blk_btn.value = 0;
+                document.querySelector("[class=btn-add-cart-disabled]").disabled = false;
+                document.querySelector("[class=btn-add-cart-disabled]").className = "btn-add-cart";
+            }
+
         },
         error: function(jqXHR, textStatus, errorThrown) {
             alert(textStatus);
@@ -303,7 +324,7 @@ var values_opt_input=[];
 $( document ).ready(function() {
     values_opt = $("select[name='specif_choice']").map(function(){return $(this).val();}).get(); 
     //values_saisie_opt = $("input[name='specif_choice']").map(function(){return $(this).val();}).get(); 
-
+    
 });
 
 //Calcul des changements d'options select puis recupere les options de nouveau pour ajax ajout
@@ -386,6 +407,11 @@ var acc = document.getElementsByClassName("accordion");
 var i;
 
 for (i = 0; i < acc.length; i++) {
+    //deroule tout avant
+    acc[i].classList.toggle("active");
+    var panel = acc[i].nextElementSibling;
+    panel.style.maxHeight = panel.scrollHeight + "px";
+    //
     acc[i].addEventListener("click", function() {
         this.classList.toggle("active");
         var panel = this.nextElementSibling;
