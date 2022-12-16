@@ -150,7 +150,7 @@ if (!empty($_GET['ref'])) {
           
       //error_log( print_r($payment_data, TRUE) );
       $paypal_response = $payer->createPayment($payment_data);
-      error_log( print_r($paypal_response , TRUE) );
+      //error_log( print_r($paypal_response , TRUE) );
       $paypal_response = json_decode($paypal_response);
 
       if (!empty($paypal_response->id)) {

@@ -28,6 +28,7 @@ $Reference = $_POST['ref'];
 $qte = $_POST['qte'];
 $arr_opts = $_POST['arr_opt'];
 $arr_opts_input = $_POST['arr_opt_input'];
+$arr_opts_file = $_POST['arr_opt_file'];
 
 //cherche le produit associé à la ref
 $row_produit = $produits->find($Reference);
@@ -45,6 +46,8 @@ if(!empty($row_produit))
   else {
     //add produit dans panier
     $ret_insert_prod_panier = $produit_panier->add($row_produit["pk_pr"], $row_session["fk_panier"], $qte);
+    $text_retour="L'article a été ajouté au panier. Vous pouvez passer à l'achat ou continuer votre shopping.";
+
     //add options select
     if(gettype($arr_opts)!= "string") // si il y a une specification alors array sinon string (défini dans requete ajax)
     {
@@ -77,11 +80,25 @@ if(!empty($row_produit))
 
       }
     }
+    //add option file
+    if(gettype($arr_opts_file)!= "string") 
+    {
+      foreach ($arr_opts_file as $arr_opt_file)
+      {
+        $ret_exist=$options->TestIfOptionExist($arr_opt_file[0]); //0=id option,1=chemin fichier
+        if(!empty($ret_exist)){
+          //recupere l'id du prod panier et ajoute les options choisies
+          $ret_insert_opt = $specification_panier->addChosenOption($ret_insert_prod_panier,$arr_opt_file[0],$arr_opt_file[1]);
+        }
+        else{
+          $text_retour="Erreur d'ajout : Les options files saisies sont incorrectes";
+        }
+
+      }
+    }
     
-    $text_retour="L'article a été ajouté au panier. Vous pouvez passer à l'achat ou continuer votre shopping.";
   }
 }
-
 
 
 $retour = array(

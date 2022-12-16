@@ -6,15 +6,15 @@ function generateHtmlButton(callback)
     
     if (location.protocol == "https:") {
         //myButton.innerHTML = "<img src='https://service.relaiscolis.com/widgetRC/ImagesRelaisColis/rco.png'/>";
-        myButton.innerHTML = "<img style=' animation-name:displaceContent;animation-duration:1.5s;animation-delay:0.5s;animation-iteration-count :2;animation-fill-mode:forwards' src='img/icon_livraison_sm.png'/>";
+        myButton.innerHTML = "<img style=' animation-name:displaceContent;animation-duration:1.5s;animation-delay:0.5s;animation-iteration-count :2;animation-fill-mode:forwards;width:60px;' src='img/relais-colis-logo.svg'; />";
     } else {
-        myButton.innerHTML = "<img style=' animation-name:displaceContent;animation-duration:1.5s;animation-delay:0.5s;animation-iteration-count :2;animation-fill-mode:forwards' src='img/icon_livraison_sm.png'/>";
+        myButton.innerHTML = "<img style=' animation-name:displaceContent;animation-duration:1.5s;animation-delay:0.5s;animation-iteration-count :2;animation-fill-mode:forwards;width:60px;' src='img/relais-colis-logo.svg'/>";
         //myButton.innerHTML = "<img src='http://service.relaiscolis.com/widgetRC/ImagesRelaisColis/rco.png'/>";
     }
 
 
 
-    myButton.setAttribute('style', 'cursor: pointer; min-width: 80px;background-color: #DDAF94;border-style: solid;margin-top:8px;display:flex;flex-direction:column;align-items:center;justify-content:center; ');
+    myButton.setAttribute('style', 'cursor: pointer; min-width: 80px;background-color: #DDAF94;border-style: solid;display:flex;flex-direction:column;align-items:center;justify-content:center; ');
     myButton.addEventListener("click", function (e) {
         displayPopUpRC();
         return false;

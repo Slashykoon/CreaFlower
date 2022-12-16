@@ -70,6 +70,10 @@ if(!empty($rows_produits_panier)){
               {
                 $content=$content.$sp_panier["txt_saisi"]."<br/>";
               }
+              if($row_spec["type"] == 2) //image
+              {
+                $content=$content."<a href=".$sp_panier["txt_saisi"].">Cliquez pour agrandir</a><br/>";
+              }
           }
       }
       $content=$content."<hr style='height:2px;border-width:0;color:gray;background-color:gray'>"; 

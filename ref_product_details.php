@@ -166,9 +166,10 @@ echo "<input id='ProdPrice' name='ProdPrice' type='hidden' value='".$row_produit
                                 {
                                     $row_option = $options->findOptionOfSpecification($specification['pk_sp']);
                                     //echo "<input type='text' id='id_specif_choice_media' name='specif_choice' class='".$row_option['pk_op']."' style='flex: 2;'>"; 
-                                    echo "<form method='post' action='' enctype='multipart/form-data'>";
-                                    echo"<input type='file' id='files' name='files[]' multiple   ><br>";
-                                    echo "<input type='button' id='submit' value='Charger'>";
+                                    echo "<form method='post' action='' enctype='multipart/form-data' style='display:flex;flex-direction:column;align-items: center;justify-content: center;'>";
+                                    echo"<input type='file' id='files' class='input_file' name='files[]' data-index-number = '".$row_option['pk_op']."' >";
+                                    
+                                    //echo "<input type='button' id='submit' value='Charger' >";
                                     echo "</form>";
                                     //<div id='preview'></div>
                                     echo "<input id='BlockBtnBuy' name='BlockBtnBuy' type='hidden' value='1'>";
@@ -205,15 +206,15 @@ echo "<input id='ProdPrice' name='ProdPrice' type='hidden' value='".$row_produit
                     <div class="panel">
                         <p>Nous proposons trois solutions :
                         <ul class="fa-ul">
-                            <li><span class="fa-li"><i class="fa-solid fa-box-open"></i></span>Chronopost en point relay – 4.50€</li>
-                            <li><span class="fa-li"><i class="fa-solid fa-box-open"></i></span>Colissimo à domicile – 6.00€</li>
+                            <li><span class="fa-li"><i class="fa-solid fa-box-open"></i></span>Relais colis – 4.50€</li>
+                            <li><span class="fa-li"><i class="fa-solid fa-box-open"></i></span>Colissimo à domicile – 6.90€</li>
                         </ul>
                         </p>
 
                         <p>
                             Les délais de livraison :
                         <ul class="fa-ul">
-                            <li><span class="fa-li"><i class="fa-solid fa-calendar-days"></i></span>Chronopost en point relais – 24h</li>
+                            <li><span class="fa-li"><i class="fa-solid fa-calendar-days"></i></span>Relais colis – 72h</li>
                             <li><span class="fa-li"><i class="fa-solid fa-calendar-days"></i></span>Colissimo à domicile – 48h</li>
                         </ul>
                         </p>
@@ -266,51 +267,60 @@ if (element_blk_btn.value == 1)
 }
 
 
-$('#submit').click(function() {
-
+//$('#submit').click(function() {
+$('.input_file').change(function(e) {
+    e.preventDefault();
     //Utilisation du formdata pour passer des files
     var form_data = new FormData();
+    if(e.currentTarget.files.length > 0)
+    {
 
-    // Read selected files
-    var totalfiles = document.getElementById('files').files.length;
+        form_data.append("files[]", e.currentTarget.files[0]);
+        //console.log(e.currentTarget.files[0]);
+        form_data.append("num_files_limit",5); //not used
+        
+        // AJAX request
+        $.ajax({
+            url: 'upload_customer_img.php',
+            type: 'post',
+            data: form_data,
+            dataType: 'json',
+            contentType: false,
+            processData: false,
+            success: function(response) {
+                /*for (var index = 0; index < response.length; index++) {
+                    var src = response[index];
+                    // Add img element in <div id='preview'>
+                    $('#preview').append('<img src="' + src +
+                        '" width="200px;" height="200px">');
+                }*/
+                
+                if(response.errors != ""){
+                    alert(response.errors);
+                }
+                else
+                {
+                    values_opt_file.push([e.currentTarget.getAttribute('data-index-number'),response.pathfile]); //todo push si pas existant en clé
 
-    for (var index = 0; index < totalfiles; index++) {
-        form_data.append("files[]", document.getElementById('files').files[index]);
+                    var element_blk_btn= document.querySelector("input[name=BlockBtnBuy]");
+                    if(element_blk_btn.value !=0) // savoir si il a deja ete deasactive
+                    {
+                        if(parseInt(values_opt_file.length) >= parseInt($( ".input_file" ).length))
+                        {
+                            element_blk_btn.value = 0;
+                            document.querySelector("[class=btn-add-cart-disabled]").disabled = false;
+                            document.querySelector("[class=btn-add-cart-disabled]").className = "btn-add-cart";
+                        }
+                    }
+                    console.log(values_opt_file);
+                }
+
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert(textStatus);
+            }
+        });
     }
-
-    form_data.append("num_files_limit",5); //todo
-    
-    // AJAX request
-    $.ajax({
-        url: 'upload_customer_img.php',
-        type: 'post',
-        data: form_data,
-        dataType: 'json',
-        contentType: false,
-        processData: false,
-        success: function(response) {
-            /*for (var index = 0; index < response.length; index++) {
-                var src = response[index];
-                // Add img element in <div id='preview'>
-                $('#preview').append('<img src="' + src +
-                    '" width="200px;" height="200px">');
-            }*/
-            if(response.length > 0){
-                alert(response);
-            }
-            else{
-                var element_blk_btn= document.querySelector("input[name=BlockBtnBuy]");
-                element_blk_btn.value = 0;
-                document.querySelector("[class=btn-add-cart-disabled]").disabled = false;
-                document.querySelector("[class=btn-add-cart-disabled]").className = "btn-add-cart";
-            }
-
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            alert(textStatus);
-        }
-    });
-
 });
 
 });
@@ -321,6 +331,7 @@ $('#submit').click(function() {
 //Premier passage, on recupere les options select pour ajax ajout
 var values_opt=[];
 var values_opt_input=[];
+var values_opt_file=[];
 $( document ).ready(function() {
     values_opt = $("select[name='specif_choice']").map(function(){return $(this).val();}).get(); 
     //values_saisie_opt = $("input[name='specif_choice']").map(function(){return $(this).val();}).get(); 
@@ -365,13 +376,16 @@ document.querySelectorAll('[id=id_specif_choice_input]').forEach(item => {
   })
 });
 
+
+
 //Action ajouter au panier
 function AddToCart() {
     formData = {
         'ref': $("button.btn-add-cart").attr("id"),
         'qte': parseInt($("#input_qte option:selected").text()),
         'arr_opt': (values_opt.length > 0 ? values_opt : "no"),
-        'arr_opt_input': (values_opt_input.length > 0 ? values_opt_input : "no")
+        'arr_opt_input': (values_opt_input.length > 0 ? values_opt_input : "no"),
+        'arr_opt_file': (values_opt_file.length > 0 ? values_opt_file : "no")
     };
 
     $.ajax({

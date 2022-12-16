@@ -124,6 +124,12 @@ require_once "Cart_Number_Update.php";
                                                 print_r("<li><span class='fa-li'><i class='	fas fa-pencil-alt fa-sm'></i></span>"); 
                                                 print_r("<p style='margin-top:0px;margin-bottom:0px;' >".$sp_panier["txt_saisi"]."</p>");
                                             }
+                                            if($row_spec["type"] == 2) //image
+                                            {
+                                                print_r('<img src="' .$sp_panier["txt_saisi"]. '" width="60px;" height="60px">' );
+                                                //print_r("<li><span class='fa-li'><i class='	fas fa-pencil-alt fa-sm'></i></span>"); 
+                                                //print_r("<p style='margin-top:0px;margin-bottom:0px;' >".$sp_panier["txt_saisi"]."</p>");
+                                            }
                                             print_r("</li>");
                                             print_r("</ul>");
                                             $opt_prix_add_total = ($opt_prix_add_total + floatval(($row_opt_panier["prix_add"]) * floatval(($prod_panier["quantity"]) )));
@@ -185,8 +191,11 @@ require_once "Cart_Number_Update.php";
                     }
             ?>
             <div class="cart-product-checkout-details">
-
-                <div id="relais-colis-widget-container" class="text_bold">Choisissez votre relais colis :</div>
+                <span class="text_bold">Choisissez votre mode de livraison :</span>
+                <div style="display:flex;align-items:center;justify-content:center;column-gap:20px;">
+                    <div id="relais-colis-widget-container" class="text_bold"></div>
+                    <div id="collisimo-container" class="text_bold"><img style='width:100px;cursor: pointer;min-width: 80px;background-color: #DDAF94;border-style: solid;align-items:center;justify-content:center;' src='img/colissimo-logo.svg'; /></div>
+                </div>
                 <div class="section_relais_select" style="display:none;">
                     <p class="name_relais"></p>
                     <p class="address_relais"></p>
