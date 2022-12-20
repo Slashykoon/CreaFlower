@@ -204,7 +204,7 @@ echo "<input id='ProdPrice' name='ProdPrice' type='hidden' value='".$row_produit
                     </div>
                     <button class="accordion">Livraison</button>
                     <div class="panel">
-                        <p>Nous proposons trois solutions :
+                        <p>Nous proposons deux solutions :
                         <ul class="fa-ul">
                             <li><span class="fa-li"><i class="fa-solid fa-box-open"></i></span>Relais colis – 4.50€</li>
                             <li><span class="fa-li"><i class="fa-solid fa-box-open"></i></span>Colissimo à domicile – 6.90€</li>
@@ -219,12 +219,10 @@ echo "<input id='ProdPrice' name='ProdPrice' type='hidden' value='".$row_produit
                         </ul>
                         </p>
 
-                        <p> Sur Crea'Flower, nous vous proposons de livrer votre commande à la date de votre choix pour un evenement particuliers. Vous
-                            pouvez sélectionner le jour souhaité directement sur la page panier.
                         <ul class="fa-ul">
                             <li><span class="fa-li"><i class="fa-solid fa-business-time"></i></span>
                                 Les délais sont exprimés en jours ouvrés et sont à compter à partir de la remise des
-                                commandes au transporteur. Nous remettons toutes les commandes passées avant 13h tous les jours (lundi / vendredi).
+                                commandes au transporteur.
                             </li>
                         </ul>
                         </p>

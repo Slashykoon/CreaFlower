@@ -181,20 +181,24 @@ require_once "Cart_Number_Update.php";
                             {
                                 //calcul du sous total 
                                 $sous_total = $sous_total + (float)$_produit["prix"]*(float)$prod_panier["quantity"] ;
-                                $livraison = 5.0;
+                                $livraison = 0.0; //5.0
                                 
                             }
                         }   
                         //calcul du sous total avec options prise en comtpes
                         $sous_total = $sous_total + $sum_opt_prix_total;
                         $total = $sous_total + $livraison ;
+                        $_SESSION['sous_total'] = $sous_total;
+                        $_SESSION['total'] = $total;
                     }
             ?>
             <div class="cart-product-checkout-details">
                 <span class="text_bold">Choisissez votre mode de livraison :</span>
-                <div style="display:flex;align-items:center;justify-content:center;column-gap:20px;">
-                    <div id="relais-colis-widget-container" class="text_bold"></div>
-                    <div id="collisimo-container" class="text_bold"><img style='width:100px;cursor: pointer;min-width: 80px;background-color: #DDAF94;border-style: solid;align-items:center;justify-content:center;' src='img/colissimo-logo.svg'; /></div>
+                <div style="display:flex;column-gap:20px;align-item:stretch;">
+                    <div id="relais-colis-widget-container" class="btn-not-select" style="display:flex;"></div>
+                    <div id="collisimo-container" class="btn-not-select"   style="display:flex;">
+                        <img style='width:100%;cursor: pointer;min-width: 80px;min-height:50px;background-color: #DDAF94;align-items:center;justify-content:center;' src='img/colissimo-logo.svg'; />
+                    </div>
                 </div>
                 <div class="section_relais_select" style="display:none;">
                     <p class="name_relais"></p>
@@ -237,9 +241,9 @@ require_once "Cart_Number_Update.php";
                 </form>
 
                 <div class="cart-details-totaux-section">
-                        <p style="margin-top:5px;margin-bottom:5px;">Sous total : <?php echo $sous_total; ?> €</p>  
-                        <p style="margin-top:5px;margin-bottom:5px;">Livraison : <?php echo $livraison; ?> €</p>
-                        <p style="margin-top:5px;margin-bottom:5px;">Total : <?php echo $total; ?> €</p>        
+                        <p class="detail-prix-sous-total" style="margin-top:5px;margin-bottom:5px;">Sous total : <?php echo $sous_total; ?> €</p>  
+                        <p class="detail-prix-livraison" style="margin-top:5px;margin-bottom:5px;">Livraison : <?php echo $livraison; ?> €</p>
+                        <p class="detail-prix-total" style="margin-top:5px;margin-bottom:5px;">Total : <?php echo $total; ?> €</p>        
                 </div>
                 <div>
                     <p style="margin-bottom:5px;font-style: italic;">Il n'est pas obligatoire de posséder un compte Paypal pour commander.</p>
@@ -279,7 +283,7 @@ require_once "Cart_Number_Update.php";
 
 <!--scripts customisés-->
 <script>
-
+var choix_livraison = 0;
 //Relais colis management
 callback = function(data) {
                 //console.log('data here', data)
@@ -316,6 +320,32 @@ function RedirectToCart() {
     window.location = 'cart_details.php';
 }
 
+//animation btn
+$('#relais-colis-widget-container').click(function() {
+    var ss_total = '<?php echo $_SESSION['sous_total'] ; ?>'
+
+    if ($('#collisimo-container').attr('class') == 'btn-select')
+    {
+        $('#collisimo-container').attr('class', 'btn-not-select');
+    }
+    $('#relais-colis-widget-container').attr('class', 'btn-select');
+    choix_livraison = 1;
+    document.querySelector(".detail-prix-livraison").innerHTML="Livraison : " + 4.50 + " €" ;
+    document.querySelector(".detail-prix-total").innerHTML="Total : " +  (parseFloat(ss_total) +4.50) + " €" ;
+
+});
+$('#collisimo-container').click(function() {
+    var ss_total = '<?php echo $_SESSION['sous_total'] ; ?>'
+    if ($('#relais-colis-widget-container').attr('class') == 'btn-select')
+    {
+        $('#relais-colis-widget-container').attr('class', 'btn-not-select');  
+    }
+    $('#collisimo-container').attr('class', 'btn-select');
+    choix_livraison = 2;
+    document.querySelector(".detail-prix-livraison").innerHTML="Livraison : " + 6.90 + " €" ;
+    document.querySelector(".detail-prix-total").innerHTML="Total : " + (parseFloat(ss_total) +6.90) + " €" ;
+});
+
 //Action de suppression d'un article
 $('.btn_supp_prod').click(function() {
     formData = {
@@ -346,11 +376,9 @@ function AddSelectedRelaisColis(){
         'prenom_client': document.querySelector("[name=prenom_client]").value,
         'email_client': document.querySelector("[name=email_client]").value,
         'adresse_client': document.querySelector("[name=adresse_client]").value,
-        'date_evt': document.querySelector("[name=datepicker_livraison]").value
-    };
-    console.log(document.querySelector("[name=datepicker_livraison]").value);
-
-    
+        'date_evt': document.querySelector("[name=datepicker_livraison]").value,
+        'choix_livraison':choix_livraison
+    }; 
     $.ajax({
         type: "POST",
         url: "AddToLivraisons.php",

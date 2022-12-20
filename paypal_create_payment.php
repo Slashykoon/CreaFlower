@@ -8,6 +8,7 @@ require_once "config/Paiements.php";
 require_once "config/Paniers.php";
 require_once "config/Produit_Panier.php";
 require_once "config/Sessions.php";
+require_once "config/Livraison.php";
 
 require_once "PayPalPayment.php";
 
@@ -20,6 +21,7 @@ $specification_panier = new Specifications_Panier();
 $paniers = new Paniers();
 $produit_panier = new Produit_Panier();
 $sessions = new Sessions();
+$livraisons = new Livraisons();
 
 $paiements = new Paiements();
 
@@ -121,26 +123,38 @@ if (!empty($_GET['ref'])) {
       $payment_data = array(
          'intent' => 'sale',
          'redirect_urls' => array(
-            'return_url' => 'http://ecommerce/index.php',
-            'cancel_url' => 'http://ecommerce/index.php',
+            'return_url' => 'http://crea-flower.fr/index.php',
+            'cancel_url' => 'http://crea-flower.fr/index.php',
             ),
          'payer' => array(
             'payment_method' => 'paypal'
             )
       );
 
+      //calcul du shipping
+      $_livraison = $livraisons->findwithPKPanier($ref);
+      $shipping = 4.50;
+      if ($_livraison["type_choisi"] == 1)
+      {
+         $shipping = 4.50;
+      }
+      if ($_livraison["type_choisi"] == 2)
+      {
+         $shipping = 6.90;
+      }
+
       // prepare basic payment details
       $payment_data['transactions'][0] = array(
                         'amount' => array(
-                           'total' => strval($sous_total+5.00),
+                           'total' => strval($sous_total + $shipping),
                            'currency' => 'EUR',
                            'details' => array(
                                  'subtotal' => strval($sous_total),
                                  'tax' => '0.00',
-                                 'shipping' => '5.00'
+                                 'shipping' => strval($shipping)
                                  )
                            ),
-                        'description' => 'Commande de produits artisanaux sur Celine Création'
+                        'description' => 'Commande de produits artisanaux sur Crea-flower.fr'
                         );
       // prepare all items
       foreach($arr_items as $arr_item_add)

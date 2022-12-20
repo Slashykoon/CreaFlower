@@ -20,14 +20,14 @@ $adresse_client = $_POST['adresse_client'];
 $email_client = $_POST['email_client'];
 
 $date_evt = $_POST['date_evt'];
+$choix_livraison = $_POST['choix_livraison'];
 
 $row_livraison = $livraisons->findwithPKPanier($fk_panier);
 if(empty($row_livraison))
 {
   if(isset($name_relais) && isset($address_relais) && isset($city_relais) && isset($fk_panier))
   {
-    $ret_insert_relais=$livraisons->add_relais_and_domicile($fk_panier,'1',$name_relais,$address_relais,$city_relais,$email_client,$nom_client,$prenom_client,$adresse_client,$date_evt); //on force le type car un choix dispo pour le moment
-    //$ret_insert_relais=$livraisons->add_relais($fk_panier,'1',$name_relais,$address_relais,$city_relais,'test'); //on force le type car un choix dispo pour le moment
+    $ret_insert_relais=$livraisons->add_relais_and_domicile($fk_panier,$choix_livraison,$name_relais,$address_relais,$city_relais,$email_client,$nom_client,$prenom_client,$adresse_client,$date_evt); //on force le type car un choix dispo pour le moment
     $text_retour="Le relais a bien été ajouté";
   }
   else
@@ -38,7 +38,7 @@ if(empty($row_livraison))
 else
 {
   //edit
-  $ret_insert_relais=$livraisons->edit_relais_and_domicile($fk_panier,'1',$name_relais,$address_relais,$city_relais,$email_client,$nom_client,$prenom_client,$adresse_client,$date_evt);
+  $ret_insert_relais=$livraisons->edit_relais_and_domicile($fk_panier,$choix_livraison,$name_relais,$address_relais,$city_relais,$email_client,$nom_client,$prenom_client,$adresse_client,$date_evt);
   $text_retour="Le relais a bien été modifié";
 }
 
