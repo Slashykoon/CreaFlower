@@ -16,12 +16,14 @@ $nom = $_POST['nom'];
 $description = $_POST['description'];
 $composition = $_POST['composition'];
 $dimensions = $_POST['dimensions'];
-$prix=$_POST['prix'];
-$dict_specif_opt=$_POST['specif_opt'];
-$rubrique=$_POST['rubrique'];
+$prix = $_POST['prix'];
+$dict_specif_opt = $_POST['specif_opt'];
+$rubrique = $_POST['rubrique'];
+
+$key_arrImgNameAndPos = $_POST['key_arrImgNameAndPos'];// {key:[imgname,position]}
 
 $TextReturn="";
-
+$ResultReq="";
 
   //AJOUTER
   if($cde_action == 1)
@@ -44,17 +46,48 @@ $TextReturn="";
       $dir = opendir($src); 
       // Make the destination directory if not exist
       @mkdir($dst); 
+
+      
+
+
+
       // Loop through the files in source directory
+
+      $position=0;
       foreach (scandir($src) as $file) { 
           if (( $file != '.' ) && ( $file != '..' )) { 
               if ( is_dir($src . '/' . $file) ) 
               { 
                   // Recursively calling custom copy function
                   // for sub directory 
-                  custom_copy($src . '/' . $file, $dst . '/' . $file); 
+
+                  $obj = json_decode($key_arrImgNameAndPos);
+                  foreach($obj as $mydata)
+                  {   
+                          if($mydata[0]=="uploads/".$file){
+                            $position=$mydata[1];
+                          }
+                  }  
+
+                  $tmpi= strval($position);
+                  $temp = explode(".",$file);
+                  $newfilename = $tmpi. '.' . end($temp);
+                  custom_copy($src . '/' . $file, $dst . '/' . $newfilename); 
               } 
               else { 
-                  copy($src . '/' . $file, $dst . '/' . $file); 
+                  //recupere la position pour renommer
+                  $obj = json_decode($key_arrImgNameAndPos);
+                  foreach($obj as $mydata)
+                  {   
+                          if($mydata[0]=="uploads/".$file){
+                            $position=$mydata[1];
+                          }
+                  }  
+
+                  $tmpi= strval($position);
+                  $temp = explode(".",$file);
+                  $newfilename = $tmpi. '.' . end($temp);
+                  copy($src . '/' . $file, $dst . '/' . $newfilename); 
               } 
           } 
       } 
@@ -88,7 +121,6 @@ $TextReturn="";
 
       }  
 
-
       $TextReturn="Article correctement ajouté !";
     }
     else
@@ -98,11 +130,20 @@ $TextReturn="";
   }
 
 
-//EDITER
+//CHARGER EDITION
 if($cde_action == 2)
+{
+  $TextReturn="Article correctement chargé !";
+  $ResultReq = $produits->findwithPK($id_article);
+}
+//EXECUTER EDITION
+if($cde_action == 4)
 {
   //todo
   $TextReturn="Article correctement modifié !";
+  $produits->edit($id_article,$nom,nl2br($description),nl2br($composition),nl2br($dimensions),$prix,$rubrique);
+  //$produits->findwithPK($id_article);
+  //$ResultReq = $produits->findwithPK($id_article);
 }
 
 //supprimer
@@ -129,8 +170,6 @@ if($cde_action == 3)
   
   $produits->delete($id_article );
   
-
-
   /*if (! is_dir($dirPath)) {
     throw new InvalidArgumentException("$dirPath must be a directory");
   }
@@ -152,7 +191,8 @@ if($cde_action == 3)
 
 
 $retour = array(
-  'ret' => $TextReturn
+  'ret' => $TextReturn ,
+  'datafromdb' => $ResultReq
 );
 
 header('Content-type: application/json');

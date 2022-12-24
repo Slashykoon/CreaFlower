@@ -52,11 +52,12 @@
 
 
 <div class="global-page">
-<h1 style="margin-top:15px;margin-bottom:25px;"><i class="fas fa-store"></i> Accueil</h1>
-    <div class="" style="min-height:800px;display:flex;flex-direction:column;  align-items: center;justify-content: center;">
+<h1 style="margin-top:15px;margin-bottom:25px;"><i class="fas fa-box-open"></i> Confirmation d'achat</h1>
+    <div class="" style="display:flex;flex-direction:column;  align-items: center;justify-content: center;">
+        <br/>
         <h1>Merci d'avoir passé commande chez Créa'Flower !</h2><br/>
-        <h3>La commande sera traitée, puis mise à jour lors de l'expédition chez le transporteur</h3>
-        <h3>Si un article nécessite un (des) telechargement(s) de photo(s), veuillez me (les) l'adresser par mail via le formulaire de contacte en mentionnant le numéro de facture</h3>
+        <h2>La commande sera traitée, puis mise à jour lors de l'expédition chez le transporteur</h2>
+        <img src="img/Merci.jpg" alt="Nature" class="responsive-img-50" >
     </div>
 </div>
 

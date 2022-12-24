@@ -67,13 +67,13 @@ class Produits extends Database
 
 
     // Modifier un élément
-    public function edit($_id = "",$_nom = "",$_description = "",$_composition = "",$_dimension = "",$_prix= 0.0,$_ref="")
+    public function edit($_id ,$_nom ,$_description,$_composition ,$_dimension ,$_prix,$_rubrique)
     {
         if ($_nom && $_id) {
             return $this->db->prepare("UPDATE $this->table
-                                        SET nom = :nom
+                                        SET nom = :nom,description = :description,composition = :composition,dimension = :dimension,prix = :prix , fk_rubrique=:fk_rubrique
                                         WHERE pk_pr = :id",
-                                        array("nom" => $_nom, "id" => $_id));
+                                        array("nom" => $_nom, "description"=>$_description,"composition"=>$_composition,"dimension"=>$_dimension,"prix"=>$_prix,"fk_rubrique"=>$_rubrique , "id" => $_id));
         }
     }
 

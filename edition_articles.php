@@ -147,8 +147,10 @@ $rows_rubriques = $rubriques->findAll();
 
                 <!-- Validation -->
                 <div class="d-grid mb-3">
-                    <button class="btn mt-3 btn-success" style="height: 3rem;" onclick="ActionOnProduct(1,1)"> <i class="	fas fa-edit"></i>
+                    <button class="btn mt-3 btn-success btn-add-article" style="height: 3rem;display:block;" onclick="ActionOnProduct(1,1)"> <i class="	fas fa-edit"></i>
                         Ajouter l'article (avec photos préalablement uploadées)</button>
+                    <button class="btn mt-3 btn-success btn-edit-article" style="height: 3rem;display:none;" onclick="ActionOnProduct(1,4)"> <i class="	fas fa-edit"></i>
+                        Modifier l'article</button>
                 </div>
 
             </div>
@@ -191,6 +193,7 @@ $rows_rubriques = $rubriques->findAll();
                 <div class="d-grid mb-3">
                     <button class="btn mt-3 btn-success btn-rub" style="height: 3rem;" onclick="ActionOnRubriques(1)"> <i class="	fas fa-edit"></i>
                         Ajouter la rubrique</button>
+
                 </div>
             </div>
         </form>
@@ -226,7 +229,7 @@ $rows_rubriques = $rubriques->findAll();
             foreach ($rows_produits as $produit)
             {
         ?>
-        <tr style="border: solid 2px;font-size:1.1em;">
+        <tr style="border: solid 2px;font-size:0.9em;">
             <td style="border: solid 2px;padding:4px;"><?= $produit->pk_pr; ?></td>
             <td style="border: solid 2px;padding:4px;"><?= $produit->nom; ?></td>
             <td style="border: solid 2px;padding:4px;"><?= $produit->description; ?></td>
@@ -276,7 +279,7 @@ $rows_rubriques = $rubriques->findAll();
                     // Ouvre le repertoire et recupère toute les photos
                     foreach(glob($dir) as $file)
                     {
-                        echo '<img src='.$file.' height=120 width=130 />';
+                        echo '<img src='.$file.' height=80 width=90 />';
                     }
                 ?>
             </td>
@@ -327,11 +330,12 @@ var name_opt ;
 var prixadd_opt ;
 var option_values ;
 
+var edit_mode=1;
 /*$('.btn-rub').prop('disabled', true);*/
 
 
 $('#exampleModalCenter').on('hidden.bs.modal', function() {
-    location.reload();
+    //location.reload();
 })
 
 
@@ -434,6 +438,7 @@ $(document).ready(function() {
 
         for (var index = 0; index < totalfiles; index++) {
             form_data.append("files[]", document.getElementById('files').files[index]);
+            console.log(document.getElementById('files').files[index].name);
         }
         
         // AJAX request
@@ -448,9 +453,16 @@ $(document).ready(function() {
                 for (var index = 0; index < response.length; index++) {
                     var src = response[index];
                     // Add img element in <div id='preview'>
-                    $('#preview').append('<img src="' + src +
-                        '" width="200px;" height="200px">');
+                    $('#preview').append('<img src="' + src + '" width="200px;" height="200px">');
+                    $('#preview').append("<select name='position_img_" + index + "' style='width:50px;height:200px;margin-left:0px;margin-right:5px;' id = '" + src +"'>");
+                    for (var n = 1; n <= 20; n++) {
+                        $("select[name=position_img_"+ index +"]").append("<option value="+ n +">"+ n +"</option>");
+                        
+                    }
+                    $('#preview').append("</select>");
                 }
+
+
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 alert(textStatus);
@@ -463,7 +475,14 @@ $(document).ready(function() {
 
 
 function ActionOnProduct(selVar, cde_action) {
-    console.log(dict_objsp_dict_arropt);
+    //console.log(dict_objsp_dict_arropt);
+    var array_keyname_valuepos = {};
+    $("select[name*='position_img']").each(function (i, el) {
+        //It'll be an array of elements
+        array_keyname_valuepos[el.name]=[el.id ,$(el).val()];
+    });
+    console.log(array_keyname_valuepos);
+
     formData = {
         'id_article': selVar,
         'cde_action': cde_action,
@@ -473,7 +492,8 @@ function ActionOnProduct(selVar, cde_action) {
         'dimensions': $('textarea[name=dimensions]').val(),
         'prix': $('input[name=prix]').val(),
         'rubrique': $('select[name=select_rubrique]').val(),
-        'specif_opt': JSON.stringify(dict_objsp_dict_arropt)
+        'specif_opt': JSON.stringify(dict_objsp_dict_arropt),
+        'key_arrImgNameAndPos': JSON.stringify(array_keyname_valuepos)
     };
 
     $.ajax({
@@ -484,6 +504,32 @@ function ActionOnProduct(selVar, cde_action) {
         success: function(data, textStatus, jqXHR) {
             $('#exampleModalBody').text(data.ret);
             $('#exampleModalCenter').modal('show')
+            if (cde_action == 2) //chargement pour modification
+            {
+                //console.log(data.datafromdb);
+                //edit_mode = 2;
+
+                $(".btn-edit-article").attr("onclick","ActionOnProduct(" + data.datafromdb.pk_pr + ",4)");
+
+                $('.btn-edit-article').css('display', 'block');
+                $('.btn-add-article').css('display', 'none');
+                
+                $('input[name=nom]').val(data.datafromdb.nom.replace(/(<|&lt;)br\s*\/*(>|&gt;)/g,' '));
+                $('textarea[name=description]').val(data.datafromdb.description.replace(/(<|&lt;)br\s*\/*(>|&gt;)/g,' '));
+                $('textarea[name=composition]').val(data.datafromdb.composition.replace(/(<|&lt;)br\s*\/*(>|&gt;)/g,' '));
+                $('textarea[name=dimensions]').val(data.datafromdb.dimension.replace(/(<|&lt;)br\s*\/*(>|&gt;)/g,' '));
+                $('input[name=prix]').val(data.datafromdb.prix);
+                $('select[name=select_rubrique]').val(data.datafromdb.fk_rubrique);
+
+            }
+            if (cde_action == 4) //execution modification
+            {
+                //edit_mode = 1;
+                console.log(formData);
+                $('.btn-edit-article').css('display', 'none');
+                $('.btn-add-article').css('display', 'block');
+
+            }
         },
         error: function(jqXHR, textStatus, errorThrown) {
             alert(textStatus);

@@ -248,9 +248,11 @@ require_once "Cart_Number_Update.php";
                 <div>
                     <p style="margin-bottom:5px;font-style: italic;">Il n'est pas obligatoire de posséder un compte Paypal pour commander.</p>
                 </div>
-                
+                <div>
+                    <p id="msg_unlock_pp" style="margin-bottom:5px;font-weight: bold;display:block;">Pour proceder au paiement, il est nécessaire de remplir les champs ci-dessus</p>
+                </div>
                 <!--Bouton Paypal-->
-                <div id="bouton-paypal" ></div>
+                <div id="bouton-paypal" style="display:none"></div>
             </div>
             <?php } ?>
         </div>
@@ -284,6 +286,7 @@ require_once "Cart_Number_Update.php";
 <!--scripts customisés-->
 <script>
 var choix_livraison = 0;
+var bValidationOK=true;
 //Relais colis management
 callback = function(data) {
                 //console.log('data here', data)
@@ -291,6 +294,7 @@ callback = function(data) {
                 document.querySelector("p.name_relais").innerHTML=data.name;
                 document.querySelector("p.address_relais").innerHTML=data.location.formattedAddressLine;
                 document.querySelector("p.city_relais").innerHTML=data.location.formattedCityLine;    
+                ActivatePP(Validate_user_data());
 }
 $('#relais-colis-widget-container').ready = generateHtmlButton(callback);
 
@@ -322,6 +326,7 @@ function RedirectToCart() {
 
 //animation btn
 $('#relais-colis-widget-container').click(function() {
+    
     var ss_total = '<?php echo $_SESSION['sous_total'] ; ?>'
 
     if ($('#collisimo-container').attr('class') == 'btn-select')
@@ -332,9 +337,11 @@ $('#relais-colis-widget-container').click(function() {
     choix_livraison = 1;
     document.querySelector(".detail-prix-livraison").innerHTML="Livraison : " + 4.50 + " €" ;
     document.querySelector(".detail-prix-total").innerHTML="Total : " +  (parseFloat(ss_total) +4.50) + " €" ;
-
+    ActivatePP(Validate_user_data());
 });
+
 $('#collisimo-container').click(function() {
+
     var ss_total = '<?php echo $_SESSION['sous_total'] ; ?>'
     if ($('#relais-colis-widget-container').attr('class') == 'btn-select')
     {
@@ -344,6 +351,8 @@ $('#collisimo-container').click(function() {
     choix_livraison = 2;
     document.querySelector(".detail-prix-livraison").innerHTML="Livraison : " + 6.90 + " €" ;
     document.querySelector(".detail-prix-total").innerHTML="Total : " + (parseFloat(ss_total) +6.90) + " €" ;
+    
+    ActivatePP(Validate_user_data());
 });
 
 //Action de suppression d'un article
@@ -394,6 +403,78 @@ function AddSelectedRelaisColis(){
 }
 
 
+function validateEmail(email){
+    var emailReg = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))/i);
+    return emailReg.test(email);
+}
+
+function Validate_user_data()
+{
+    mValidationOK=true;
+    if (!document.querySelector("[name=nom_client]").value){
+        mValidationOK= mValidationOK && false;
+    }
+    if (!document.querySelector("[name=prenom_client]").value){
+        mValidationOK= mValidationOK && false;
+    }
+    if (!document.querySelector("[name=email_client]").value){
+        mValidationOK= mValidationOK && false;
+    }
+    if(!validateEmail(document.querySelector("[name=email_client]").value))
+    {
+        mValidationOK= mValidationOK && false;
+    }
+    if (!document.querySelector("[name=adresse_client]").value){
+        mValidationOK= mValidationOK && false;
+    }
+    if (choix_livraison == 0){
+        mValidationOK= mValidationOK && false;
+    }
+    if (choix_livraison == 1){
+       
+        if(!document.querySelector("p.name_relais").innerHTML)
+        {
+            mValidationOK= mValidationOK && false;
+        }
+    }
+return mValidationOK
+
+}
+
+function ActivatePP(pvalid)
+{
+    if(!pvalid)
+    {
+        $("#bouton-paypal").css("display", "none");
+        
+        $("#msg_unlock_pp").css("display", "block");
+    }
+    else{
+        $("#bouton-paypal").css("display", "block");
+        $("#msg_unlock_pp").css("display", "none");
+    }
+}
+
+jQuery('input[name=nom_client]').on('input', function() {
+    bValidationOK=Validate_user_data();
+    //alert(bValidationOK);
+    ActivatePP(bValidationOK);
+});
+jQuery('input[name=prenom_client]').on('input', function() {
+
+    ActivatePP(Validate_user_data());
+    //alert(bValidationOK);
+});
+jQuery('input[name=email_client]').on('input', function() {
+    bValidationOK=Validate_user_data();
+    ActivatePP(bValidationOK);
+    //alert(bValidationOK);
+});
+jQuery('input[name=adresse_client]').on('input', function() {
+    bValidationOK=Validate_user_data();
+    ActivatePP(bValidationOK);
+    //alert(bValidationOK);
+});
 
 
 
@@ -415,10 +496,11 @@ if ($('input[name=DisablePaypalBtn]').val() == 0) //evite de charger le btn pour
             
         },
         payment: function() {
+
             //ajoute le point relais colis
             AddSelectedRelaisColis();
             // créer le paiement
-            //var CREATE_URL = 'paypal_create_payment.php?ref=8ekl6a8kpk706pmpi00b8hm0vj';
+    
             var CREATE_URL = 'paypal_create_payment.php?ref='+ $('input[name=CartId]').val();
             // On exécute notre requête pour créer le paiement
             return paypal.request.post(CREATE_URL).then(function(data) { //JSON data
@@ -430,6 +512,7 @@ if ($('input[name=DisablePaypalBtn]').val() == 0) //evite de charger le btn pour
                         return false;
                     }
                 });
+
         },
         onAuthorize: function(data, actions) {
             // On indique le chemin vers notre script PHP qui se chargera d'exécuter le paiement (appelé après approbation de l'utilisateur côté client).

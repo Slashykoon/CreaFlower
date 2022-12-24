@@ -106,6 +106,10 @@ if ($row_paiement)
               {
                 $content=$content.$row_opt_panier["nom_option"]." ".$temp_prix_add."<br/>";
               }
+              if($row_spec["type"] == 2) //image
+              {
+                $content=$content.'<img src="' .$sp_panier["txt_saisi"]. '" width="80px;" height="80px"><br/>';
+              }
               if($row_spec["type"] == 4 || $row_spec["type"] == 1) //saisi ou date
               {
                 $content=$content.$sp_panier["txt_saisi"]." ".$temp_prix_add."<br/>";
@@ -196,13 +200,13 @@ if ($row_paiement)
 
   if(!$mail->send()) {
       //METTRE ICI UNE PAGE OU ON INDIQUE QUE LE PAIMENT CEST PAS BIEN PASSSE
-      header("Location: http://ecommerce//index_error.php");
+      header("Location: http://crea-flower.fr//index_error.php");
       //echo 'Message could not be sent.';
       //echo 'Mailer Error: ' . $mail->ErrorInfo;
       //print json_encode(array('message' => 'Erreur: ' . $mail->ErrorInfo, 'code' => 1));
   } else {
       //METTRE ICI UNE PAGE OU ON INDIQUE QUE LE PAIMENT CEST BIEN PASSE
-      header("Location: http://ecommerce//Payment_accepted_redirection.php");
+      header("Location: http://crea-flower.fr//Payment_accepted_redirection.php");
       //print json_encode(array('message' => 'Email a été correctement envoyé!', 'code' => 1));
       //echo 'Message has been sent';
   }
