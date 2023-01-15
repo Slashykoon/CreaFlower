@@ -1,12 +1,34 @@
 <!DOCTYPE html>
 <html lang="fr">
 
+<!-- /|\/|\/|\/|\/|\/|\/|\/|\/|\/|\/|\/|\-->
+<!--     Site web by Tommy JEANBILLE     -->
+<!-- /|\/|\/|\/|\/|\/|\/|\/|\/|\/|\/|\/|\-->
+
 <head>
-    <title>Vente de cadres décorés</title>
+    <title>Panier - Vente de cadres décorés</title>
+    <link rel="icon" type="image/x-icon" href="/img/creaflower-icon.ico">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="Content-Language" content="fr">
+    <meta name="Description" content="Vente de cadres décorés avec fleurs séchées">
+    <meta name="Keywords" content="Vente de cadres décorés avec fleurs séchées">
+    <meta name="Subject" content="Vente de cadres décorés avec fleurs séchées">
+    <meta name="Copyright" content="Celine Levrechon">
+    <meta name="Author" content="Celine Levrechon">
+    <meta name="Publisher" content="Celine Levrechon">
+    <meta name="Geography" content="Nancy, France,54000">
+    <meta name="Category" content="decoration">
+
+    <meta property="og:title" content="Panier - Vente de cadres décorés">
+    <meta property="og:type" content="website">
+    <meta property="og:updated_time" content="2022-12-01 10:21:17">
+    <meta property="og:url" content="https://crea-flower.fr/">
+    <meta name="robots" content="follow,index">
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Vente de cadres de décoration">
-    <meta name="author" content="Tommy Jeanbille, Celine Levrechon">
+
+
     <link href="css/style.css" rel="stylesheet">
     <!-- Librairie JQuery pour requete AJAX-->
     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
@@ -21,7 +43,7 @@
     <script src="https://www.paypalobjects.com/api/checkout.js"></script>
 
     <!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/tomik23/autocomplete@1.8.3/dist/css/autocomplete.min.css"/>-->
-<script src="https://cdn.jsdelivr.net/gh/tomik23/autocomplete@1.8.3/dist/js/autocomplete.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/tomik23/autocomplete@1.8.3/dist/js/autocomplete.min.js"></script>
 
 </head>
 
@@ -59,8 +81,11 @@ require_once "Cart_Number_Update.php";
 
 
 <body style="background-color:#FDF8F5">
-    <div class="global-page">
-        <h1 style="margin-top:15px;margin-bottom:25px;"><i class="fas fa-tags"></i> Détails du panier</h1>
+    <div class="global-page" style="position:relative;" >
+
+        <!--<img src="img/1553459034.svg" class="img-decoration-up" alt="Nature"   style="">
+        <img src="img/1553459034.svg" class="img-decoration-down" alt="Nature"   style="">-->
+        <h1 style="margin-top:15px;margin-bottom:25px;"><i class="fas fa-shopping-cart"></i> Détails du panier</h1>
         <!--grid 2 col-->
         <div class="cart-products-grid">
             <!--flex 2 cols-->

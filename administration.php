@@ -5,8 +5,6 @@
     <title>ADMINISTRATION</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Vente de cadres de décoration">
-    <meta name="author" content="Tommy Jeanbille, Celine Levrechon">
 
     <!-- Librairie JQuery pour requete AJAX-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>

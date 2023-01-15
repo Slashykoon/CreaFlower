@@ -1,12 +1,33 @@
 <!DOCTYPE html>
 <html lang="fr">
 
+<!-- /|\/|\/|\/|\/|\/|\/|\/|\/|\/|\/|\/|\-->
+<!--     Site web by Tommy JEANBILLE     -->
+<!-- /|\/|\/|\/|\/|\/|\/|\/|\/|\/|\/|\/|\-->
+
 <head>
-    <title>Vente de cadres décorés</title>
+    <title>CGV - Vente de cadres décorés</title>
+    <link rel="icon" type="image/x-icon" href="/img/creaflower-icon.ico">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="Content-Language" content="fr">
+    <meta name="Description" content="Vente de cadres décorés avec fleurs séchées">
+    <meta name="Keywords" content="Vente de cadres décorés avec fleurs séchées">
+    <meta name="Subject" content="Vente de cadres décorés avec fleurs séchées">
+    <meta name="Copyright" content="Celine Levrechon">
+    <meta name="Author" content="Celine Levrechon">
+    <meta name="Publisher" content="Celine Levrechon">
+    <meta name="Geography" content="Nancy, France,54000">
+    <meta name="Category" content="decoration">
+
+    <meta property="og:title" content="CGV - Vente de cadres décorés">
+    <meta property="og:type" content="website">
+    <meta property="og:updated_time" content="2022-12-01 10:21:17">
+    <meta property="og:url" content="https://crea-flower.fr/cgv.php">
+    <meta name="robots" content="follow,index">
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Vente de cadres de décoration">
-    <meta name="author" content="Tommy Jeanbille, Celine Levrechon">
+
     <link href="css/style.css" rel="stylesheet">
     <!-- Librairie JQuery pour requete AJAX-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>

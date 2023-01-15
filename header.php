@@ -17,8 +17,16 @@ $rubriques = new Rubriques();
                 <span></span>
             </label>
             <ul class="menu__box">
+           
+            <img src="img/Logo_Crea_flower_2.png" height="110px" width="100px" alt="Nature"   style=" margin-left: auto;margin-right: auto;margin-bottom:10px;margin-top:0px;"/>
+     
+                <h2>Menu</h2>
+                <hr>
                 <li><a class="menu__item" href="index.php">Accueil</a></li>
                 <li><a class="menu__item" href="contact.php">Me contacter</a></li>
+                <br/>
+                <h2>Les Collections</h2>
+                <hr>
                 <?php
                     $rows_rubriques=$rubriques->findAll();
                     if($rows_rubriques)
@@ -71,6 +79,7 @@ $rubriques = new Rubriques();
             <h2><?= $rubrique->nom;?></h2>
         </a>
         <?php endforeach; } ?>
+        
     </div>
 
 </header>

@@ -1,12 +1,34 @@
 <!DOCTYPE html>
 <html lang="fr">
 
+<!-- /|\/|\/|\/|\/|\/|\/|\/|\/|\/|\/|\/|\-->
+<!--     Site web by Tommy JEANBILLE     -->
+<!-- /|\/|\/|\/|\/|\/|\/|\/|\/|\/|\/|\/|\-->
+
 <head>
-    <title>Vente de cadres décorés</title>
+    <title>Accueil - Vente de cadres décorés</title>
+    <link rel="icon" type="image/x-icon" href="/img/creaflower-icon.ico">
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="Content-Language" content="fr">
+    <meta name="Description" content="Vente de cadres décorés avec fleurs séchées">
+    <meta name="Keywords" content="Vente de cadres décorés avec fleurs séchées">
+    <meta name="Subject" content="Vente de cadres décorés avec fleurs séchées">
+    <meta name="Copyright" content="Celine Levrechon">
+    <meta name="Author" content="Celine Levrechon">
+    <meta name="Publisher" content="Celine Levrechon">
+    <meta name="Geography" content="Nancy, France,54000">
+    <meta name="Category" content="decoration">
+
+    <meta property="og:title" content="Accueil - Vente de cadres décorés">
+    <meta property="og:type" content="website">
+    <meta property="og:updated_time" content="2022-12-01 10:21:17">
+    <meta property="og:url" content="https://crea-flower.fr/">
+    <meta name="robots" content="follow,index">
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Vente de cadres de décoration">
-    <meta name="author" content="Tommy Jeanbille, Celine Levrechon">
+
     <link href="css/style.css" rel="stylesheet">
     <!-- Librairie JQuery pour requete AJAX-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -37,7 +59,6 @@
     $rubriques = new Rubriques();
     $sessions = new Sessions();
 
-
     require_once "Session_management.php";
     require_once "Cart_Number_Update.php";
 ?>
@@ -46,14 +67,20 @@
 <!-- Header -->
 <?php include('header.php') ?>
 
-<body style="background-color:#FDF8F5">
+<body style="background-color:#FDF8F5" >
 
 
-<div class="global-page" style="min-height:900px;">
-<h1 style="margin-top:15px;margin-bottom:25px;"><i class="fas fa-store"></i> Accueil</h1>
-    <div class="accueil-section">
+<div class="global-page" style="position:relative;" >
+
+<!--<img src="img/1553459034.svg" class="img-decoration-up" alt="Nature"   style="">
+<img src="img/1553459034.svg" class="img-decoration-down" alt="Nature"   style="">-->
+<!--<img src="img/fleur_rampante_2.png" class="img-decoration-middle-right" alt="Nature"   style="">-->
+
+<h1 style="margin-top:15px;margin-bottom:25px;"><i class="fas fa-leaf"></i> Accueil de Créa’ Flower</h1>
+    <div class="accueil-section" >
+    
         <div class="accueil-section-first">
-            <span >
+            <span class="p_margin">
                 <h2>Bienvenue sur Créa’ Flower, votre boutique en ligne d’objets artisanaux en fleurs séchées !</h2>
                 <p>Ici, vous trouverez différents objets tels que des porte-noms originaux pour votre mariage, un anniversaire ou le baptême de votre enfant, des cadres à personnaliser pour une naissance, ou encore des cadres avec photo pour déclarer votre amour. </br>
                 Tous ces objets sont faits main en Lorraine de manière artisanale et avec le plus grand soin.</br> 
@@ -68,7 +95,7 @@
                 <span>
                     <img src="img/flower2_accueil.jpg" alt="Nature" class="responsive-img" width="600" height="400">
                 </span>
-                <span >
+                <span class="p_margin">
                     <h2>Qui suis-je en quelque mots </h2> <p>je m’appelle Céline et j’ai toujours adoré les fleurs. Leurs couleurs, leurs odeurs, leur fragilité, il n’y en a pas une pareille ! Et puis j’ai découvert avec bonheur qu’il était possible de préserver la beauté de certaines fleurs dans le temps grâce au procédé des fleurs séchées.</br>
                     Après plusieurs années à avoir exercé un autre métier, il était temps pour moi de faire quelque chose qui me passionnait et était concret.</p>
                     <p>C’est pourquoi je me suis lancée dans ce beau projet de création d’objets en fleurs séchées, mais avec mon petit truc en plus : la possibilité de personnaliser vos objets afin qu’ils vous ressemblent le plus possible.</br>
@@ -77,6 +104,7 @@
                 </span>
         </div>
     </div>
+    <br/>
 </div>
 
 </body>

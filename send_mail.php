@@ -41,23 +41,7 @@ $row_paiement=$paiements->find($Payment_ID);
 if ($row_paiement)
 {
   header('Content-Type: application/json');
-  /*if ($name === ''){
-    print json_encode(array('message' => 'Nom ne peut pas être vide', 'code' => 0));
-    exit();
-  }*/
-  /*if ($email === ''){
-    print json_encode(array('message' => 'Email ne peut pas être vide', 'code' => 0));
-    exit();
-  } else {
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)){
-    print json_encode(array('message' => 'Format Email invalide', 'code' => 0));
-    exit();
-    }
-  }*/
-  /*if ($message === ''){
-    print json_encode(array('message' => 'Le message ne peut pas être vide', 'code' => 0));
-    exit();
-  }*/
+ 
   $row_panier=$paniers->findwithPK($row_paiement["produit"]);
   $rows_produits_panier=$produit_panier->findAllProduct_With_PanierID($row_paiement["produit"]);
 

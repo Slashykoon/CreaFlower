@@ -1,12 +1,33 @@
 <!DOCTYPE html>
 <html lang="fr">
 
+<!-- /|\/|\/|\/|\/|\/|\/|\/|\/|\/|\/|\/|\-->
+<!--     Site web by Tommy JEANBILLE     -->
+<!-- /|\/|\/|\/|\/|\/|\/|\/|\/|\/|\/|\/|\-->
+
 <head>
-    <title>Vente de cadres décorés</title>
+    <title>Détails - Vente de cadres décorés</title>
+    <link rel="icon" type="image/x-icon" href="/img/creaflower-icon.ico">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="Content-Language" content="fr">
+    <meta name="Description" content="Vente de cadres décorés avec fleurs séchées">
+    <meta name="Keywords" content="Vente de cadres décorés avec fleurs séchées">
+    <meta name="Subject" content="Vente de cadres décorés avec fleurs séchées">
+    <meta name="Copyright" content="Celine Levrechon">
+    <meta name="Author" content="Celine Levrechon">
+    <meta name="Publisher" content="Celine Levrechon">
+    <meta name="Geography" content="Nancy, France,54000">
+    <meta name="Category" content="decoration">
+
+    <meta property="og:title" content="Détails - Vente de cadres décorés">
+    <meta property="og:type" content="website">
+    <meta property="og:updated_time" content="2022-12-01 10:21:17">
+    <meta property="og:url" content="https://crea-flower.fr/">
+    <meta name="robots" content="follow,index">
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Vente de cadres de décoration">
-    <meta name="author" content="Tommy Jeanbille, Celine Levrechon">
+
     <link href="css/style.css" rel="stylesheet">
     <!-- Librairie JQuery pour requete AJAX-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -58,7 +79,10 @@ echo "<input id='ProdPrice' name='ProdPrice' type='hidden' value='".$row_produit
 
 
 <body style="background-color:#FDF8F5">
-    <div class="global-page">
+    <div class="global-page" style="position:relative;" >
+
+        <!--<img src="img/1553459034.svg" class="img-decoration-up" alt="Nature"   style="">
+        <img src="img/1553459034.svg" class="img-decoration-down" alt="Nature"   style="">-->
         <h1 style="margin-top:15px;margin-bottom:25px;"><i class="fas fa-tags"></i> Détails du produit</h1>
         <!--grid 2 col-->
         <div class="container-detail-product">
